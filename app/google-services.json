@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "137018660154",
+    "firebase_url": "https://ta3leemlive-9218f.firebaseio.com",
+    "project_id": "ta3leemlive-9218f",
+    "storage_bucket": "ta3leemlive-9218f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137018660154:android:5181117861c35e03b0ac03",
+        "android_client_info": {
+          "package_name": "com.t3leem_live"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137018660154-bvh8au0pm3m06vr1ruh0j2hia30s1rpa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.t3leem_live",
+            "certificate_hash": "0b354f3a0c02eaba29510595124a7d68aea8edf3"
+          }
+        },
+        {
+          "client_id": "137018660154-s1dbh4s4p4am0s4037l5np4tcld8jbs3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzB-pe6V27H_PzZCM-ND6Y8JxGOMYKlAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137018660154-s1dbh4s4p4am0s4037l5np4tcld8jbs3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

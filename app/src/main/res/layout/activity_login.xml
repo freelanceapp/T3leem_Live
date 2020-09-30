@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <variable
+            name="lang"
+            type="String" />
+        <variable
+            name="loginModel"
+            type="com.t3leem_live.models.LoginModel" />
+        <variable
+            name="loginListener"
+            type="com.t3leem_live.interfaces.Listeners.LoginListener" />
+    </data>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:fillViewport="true"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".activities_fragments.activity_on_boarding1.OnBoarding1Activity">
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="330dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/on_boarding_3"
+                android:scaleType="fitXY"
+                />
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image"
+                android:text="اهلا بعودتك مرة اخرى "
+                android:fontFamily="@font/font"
+                android:layout_gravity="center"
+                android:textSize="22sp"
+                />
+
+            <FrameLayout
+                android:id="@+id/flPhone"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/grey_gradient"
+                app:layout_constraintTop_toBottomOf="@id/tv1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias=".1"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+
+                >
+                <androidx.constraintlayout.widget.ConstraintLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+
+
+                    >
+
+
+                    <ImageView
+                        android:id="@+id/callIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:src="@drawable/ic_call"
+                        app:tint="@color/gray6"
+                        android:padding="5dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:hint="@string/code"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/gray7"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/callIcon"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="+20"
+                        android:onClick="@{()->loginListener.showCountryDialog()}"
+
+                        />
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="1px"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/tv_code"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:background="@color/gray4"
+
+                        />
+
+                    <EditText
+                        android:id="@+id/edt_phone"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:hint="@string/phone"
+                        android:inputType="phone"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/gray7"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/view2"
+                        app:layout_constraintStart_toEndOf="@id/view"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:background="@color/transparent"
+                        android:text="@={loginModel.phone}"
+                        error="@{loginModel.error_phone}"
+                        />
+
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_width="1px"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/gray4"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/imagePhoneCode"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/imagePhoneCode"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:padding="8dp"
+                        android:rotation='@{lang.equals("ar")?180:0}'
+                        android:src="@drawable/ic_right_arrow"
+                        app:tint="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:onClick="@{()->loginListener.showCountryDialog()}"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+
+
+
+             <Button
+                 android:id="@+id/btnNext"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 app:layout_constraintTop_toBottomOf="@id/flPhone"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 android:layout_marginTop="30dp"
+                 android:background="@drawable/button_gradient"
+                 android:textColor="@color/white"
+                 android:textSize="22sp"
+                 android:text="@string/next"
+                 android:fontFamily="@font/font"
+                 android:shadowDx="@android:integer/config_shortAnimTime"
+                 android:foreground="?attr/selectableItemBackgroundBorderless"
+                 android:layout_marginStart="30dp"
+                 android:layout_marginEnd="30dp"
+                 android:onClick="@{()->loginListener.validate()}"
+
+                 />
+
+            <TextView
+                android:id="@+id/tvForgetPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnNext"
+                android:text="@string/forget_password"
+                android:fontFamily="@font/font"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:textColor="@color/color1"
+                android:onClick="@{()->loginListener.forgetPassword()}"
+
+                />
+
+            <TextView
+                android:id="@+id/tvSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvForgetPassword"
+                android:fontFamily="@font/font"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:onClick="@{()->loginListener.navigateToSignUpActivity()}"
+
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+
+</layout>
