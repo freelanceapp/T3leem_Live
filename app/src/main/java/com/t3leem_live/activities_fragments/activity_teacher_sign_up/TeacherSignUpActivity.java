@@ -64,6 +64,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     private TeacherSignUpModel model;
     private List<StageModel> stageModelList;
     private StageSpinnerAdapter adapter;
+    private SimpleExoPlayer player;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -266,7 +267,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
 
     private void playVideo(Uri uri) {
 
-        SimpleExoPlayer player = new SimpleExoPlayer.Builder(this).build();
+        player = new SimpleExoPlayer.Builder(this).build();
         binding.player.setPlayer(player);
         DataSource.Factory factory = new DefaultDataSourceFactory(this,"Ta3leem_live");
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(uri);
@@ -284,5 +285,20 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     @Override
     public void onBackPressed() {
         navigateToSignUpChooserActivity();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        binding.player.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (player!=null){
+            player.stop();
+            player.release();
+        }
     }
 }
