@@ -2,6 +2,7 @@ package com.t3leem_live.services;
 
 import com.t3leem_live.models.PlaceGeocodeData;
 import com.t3leem_live.models.PlaceMapDetailsData;
+import com.t3leem_live.models.StageDataModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -22,5 +23,8 @@ public interface Service {
                                       @Query(value = "language") String language,
                                       @Query(value = "key") String key);
 
+
+    @GET("api/get-stages")
+    Call<StageDataModel> getStage();
 
 }

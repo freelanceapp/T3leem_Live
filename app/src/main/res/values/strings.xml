@@ -62,5 +62,18 @@
     <string name="inv_code">الكود غير صحيح</string>
     <string name="resend">اعد إرسال</string>
     <string name="resend_in">اعد إرسال فى</string>
+    <string name="teacher">انا مدرس</string>
+    <string name="student">انا طالب</string>
+    <string name="add_photo">اضف صورتك</string>
+    <string name="student_name">إسم الطالب</string>
+    <string name="welcome_again">اهلا بعودتك مرة اخرى</string>
+    <string name="stage">المرحلة</string>
+    <string name="stage2">المرحلة التعليمية</string>
+    <string name="father_phone">هاتف ولي الامر</string>
+    <string name="address">العنوان</string>
+    <string name="school_name">إسم المدرسة</string>
+    <string name="save">حفظ البيانات</string>
+    <string name="choose_stage">إختر المرحلة التعليمية</string>
+    <string name="add_video">أضف فيديو تعريفي</string>
 
 </resources>

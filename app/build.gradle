@@ -65,6 +65,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.5.0'
     implementation 'com.google.firebase:firebase-messaging:20.3.0'
     implementation 'com.chaos.view:pinview:1.4.3'
+    implementation 'com.mikhaellopez:circularimageview:4.2.0'
+    implementation 'com.google.android.exoplayer:exoplayer:2.11.1'
 
 
 }

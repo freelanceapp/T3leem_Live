@@ -7,7 +7,24 @@ public interface Listeners {
         void validate();
         void showCountryDialog();
         void forgetPassword();
-        void navigateToSignUpActivity();
+        void navigateToSignUpChooserActivity();
+    }
+
+    interface StudentSignUpListener{
+        void validate();
+        void showCountryDialog(int type);
+        void navigateToStudentHomeActivity();
+        void showImageChooserDialog();
+
+    }
+
+    interface TeacherSignUpListener{
+        void validate();
+        void showCountryDialog();
+        void navigateToTeacherHomeActivity();
+        void showImageChooserDialog();
+        void showVideoChooserDialog();
+
     }
 
 

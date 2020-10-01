@@ -5,12 +5,15 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_login.LoginActivity;
+import com.t3leem_live.activities_fragments.activity_student_sign_up.StudentSignUpActivity;
+import com.t3leem_live.activities_fragments.activity_teacher_sign_up.TeacherSignUpActivity;
 import com.t3leem_live.databinding.CountriesRowBinding;
 import com.t3leem_live.models.CountryModel;
 
@@ -21,12 +24,12 @@ public class CountriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private List<CountryModel> list;
     private Context context;
     private LayoutInflater inflater;
-    private LoginActivity activity;
+    private AppCompatActivity activity;
     public CountriesAdapter(List<CountryModel> list, Context context) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
-        activity = (LoginActivity) context;
+        activity = (AppCompatActivity) context;
 
 
     }
@@ -49,7 +52,19 @@ public class CountriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         myHolder.binding.setModel(list.get(position));
 
         myHolder.itemView.setOnClickListener(view -> {
-            activity.setItemData(list.get(myHolder.getAdapterPosition()));
+            if (activity instanceof LoginActivity){
+                LoginActivity loginActivity = (LoginActivity) activity;
+                loginActivity.setItemData(list.get(myHolder.getAdapterPosition()));
+
+            }else if (activity instanceof StudentSignUpActivity){
+                StudentSignUpActivity studentSignUpActivity = (StudentSignUpActivity) activity;
+                studentSignUpActivity.setItemData(list.get(myHolder.getAdapterPosition()));
+
+            }else if (activity instanceof TeacherSignUpActivity){
+                TeacherSignUpActivity teacherSignUpActivity = (TeacherSignUpActivity) activity;
+                teacherSignUpActivity.setItemData(list.get(myHolder.getAdapterPosition()));
+
+            }
 
         });
     }

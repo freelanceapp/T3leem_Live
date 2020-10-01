@@ -42,7 +42,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/image"
-                android:text="اهلا بعودتك مرة اخرى "
+                android:text="@string/welcome_again"
                 android:fontFamily="@font/font"
                 android:layout_gravity="center"
                 android:textSize="22sp"
@@ -222,7 +222,7 @@
                 android:fontFamily="@font/font"
                 android:layout_gravity="center"
                 android:textSize="18sp"
-                android:onClick="@{()->loginListener.navigateToSignUpActivity()}"
+                android:onClick="@{()->loginListener.navigateToSignUpChooserActivity()}"
 
                 />
 

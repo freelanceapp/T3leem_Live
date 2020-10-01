@@ -2,7 +2,7 @@ package com.t3leem_live.tags;
 
 public class Tags {
 
-    public static String base_url = "";
+    public static String base_url = "http://teach.creativeshare.sa/";
     public static final String IMAGE_URL= base_url+"storage/";
     public static final String session_login = "login";
     public static final String session_logout = "logout";
