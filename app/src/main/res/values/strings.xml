@@ -18,7 +18,7 @@
     <string name="notifications">الإشعارات</string>
     <string name="wait">انتظر</string>
     <string name="home">الرئيسية</string>
-    <string name="profile">الملف الشخصي</string>
+    <string name="profile">حسابي</string>
     <string name="more">المذيد</string>
     <string name="field_required">الحقل مطلوب</string>
     <string name="inv_email">البريد الالكتروني غير صحيح</string>
@@ -75,5 +75,15 @@
     <string name="save">حفظ البيانات</string>
     <string name="choose_stage">إختر المرحلة التعليمية</string>
     <string name="add_video">أضف فيديو تعريفي</string>
+    <string name="class1">الصف</string>
+    <string name="choose_class">إختر الصف</string>
+    <string name="password">كلمة المرور</string>
+    <string name="password_short">كلمة المرور قصيرة جدا</string>
+    <string name="phone_exist">رقم الهاتف موجود من قبل</string>
+    <string name="email_exist">البريد الإلكتروني موجود من قبل</string>
+    <string name="user_not_exist">المستخدم غير موجود</string>
+    <string name="library">المكتبة</string>
+    <string name="live">مباشر</string>
+    <string name="my_rate">تقييمي</string>
 
 </resources>

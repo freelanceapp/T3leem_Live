@@ -3,9 +3,17 @@ package com.t3leem_live.services;
 import com.t3leem_live.models.PlaceGeocodeData;
 import com.t3leem_live.models.PlaceMapDetailsData;
 import com.t3leem_live.models.StageDataModel;
+import com.t3leem_live.models.UserModel;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface Service {
@@ -26,5 +34,52 @@ public interface Service {
 
     @GET("api/get-stages")
     Call<StageDataModel> getStage();
+
+    @GET("api/get-classes-by-stage_id")
+    Call<StageDataModel> getClassByStageId(@Query(value = "stage_id") int stage_id);
+
+
+    @FormUrlEncoded
+    @POST("api/register")
+    Call<UserModel> loginStudent(@Field("phone_code") String phone_code,
+                                 @Field("phone") String phone
+
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/register")
+    Call<UserModel> signUpStudentWithoutImage(@Field("name") String name,
+                                              @Field("email") String email,
+                                              @Field("phone_code") String phone_code,
+                                              @Field("phone") String phone,
+                                              @Field("password") String password,
+                                              @Field("parent_phone") String parent_phone,
+                                              @Field("address") String address,
+                                              @Field("school_name") String school_name,
+                                              @Field("stage_id") int stage_id,
+                                              @Field("class_id") int class_id,
+                                              @Field("software_type") String software_type,
+                                              @Field("user_type") String user_type
+
+
+    );
+
+    @Multipart
+    @POST("api/register")
+    Call<UserModel> signUpStudentWithImage(@Part("name") RequestBody name,
+                                           @Part("email") RequestBody email,
+                                           @Part("phone_code") RequestBody phone_code,
+                                           @Part("phone") RequestBody phone,
+                                           @Part("password") RequestBody password,
+                                           @Part("parent_phone") RequestBody parent_phone,
+                                           @Part("address") RequestBody address,
+                                           @Part("school_name") RequestBody school_name,
+                                           @Part("stage_id") RequestBody stage_id,
+                                           @Part("class_id") RequestBody class_id,
+                                           @Part("software_type") RequestBody software_type,
+                                           @Part("user_type") RequestBody user_type,
+                                           @Part MultipartBody.Part logo
+    );
 
 }

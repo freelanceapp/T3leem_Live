@@ -2,13 +2,14 @@ package com.t3leem_live.models;
 
 import java.io.Serializable;
 
-public class StageModel implements Serializable {
+public class StageClassModel implements Serializable {
     private int id;
     private String title;
     private String title_en;
     private String desc;
     private String icon;
     private String background;
+    private String stage_id;
 
     public int getId() {
         return id;
@@ -44,5 +45,9 @@ public class StageModel implements Serializable {
 
     public void setTitle_en(String title_en) {
         this.title_en = title_en;
+    }
+
+    public String getStage_id() {
+        return stage_id;
     }
 }

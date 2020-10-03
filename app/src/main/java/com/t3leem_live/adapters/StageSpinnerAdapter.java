@@ -11,18 +11,18 @@ import androidx.databinding.DataBindingUtil;
 
 import com.t3leem_live.R;
 import com.t3leem_live.databinding.SpinnerRowBinding;
-import com.t3leem_live.models.StageModel;
+import com.t3leem_live.models.StageClassModel;
 
 import java.util.List;
 
 import io.paperdb.Paper;
 
 public class StageSpinnerAdapter extends BaseAdapter {
-    private List<StageModel> list;
+    private List<StageClassModel> list;
     private Context context;
     private String lang;
     private LayoutInflater inflater;
-    public StageSpinnerAdapter(List<StageModel> list, Context context) {
+    public StageSpinnerAdapter(List<StageClassModel> list, Context context) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -49,11 +49,11 @@ public class StageSpinnerAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         @SuppressLint("ViewHolder") SpinnerRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.spinner_row,viewGroup,false);
-        StageModel stageModel = list.get(i);
+        StageClassModel stageClassModel = list.get(i);
         if (lang.equals("ar")){
-            binding.setTitle(stageModel.getTitle());
+            binding.setTitle(stageClassModel.getTitle());
         }else {
-            binding.setTitle(stageModel.getTitle_en());
+            binding.setTitle(stageClassModel.getTitle_en());
 
         }
         return binding.getRoot();

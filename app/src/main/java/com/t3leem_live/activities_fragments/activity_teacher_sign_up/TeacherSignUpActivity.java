@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,7 +17,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -28,17 +28,16 @@ import com.t3leem_live.activities_fragments.activity_sign_up_chooser.SignUpChoos
 import com.t3leem_live.activities_fragments.activity_student_sign_up.StudentSignUpActivity;
 import com.t3leem_live.adapters.CountriesAdapter;
 import com.t3leem_live.adapters.StageSpinnerAdapter;
-import com.t3leem_live.databinding.ActivityStudentSignUpBinding;
 import com.t3leem_live.databinding.ActivityTeacherSignUpBinding;
 import com.t3leem_live.databinding.DialogCountriesBinding;
 import com.t3leem_live.interfaces.Listeners;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.CountryModel;
 import com.t3leem_live.models.StageDataModel;
-import com.t3leem_live.models.StageModel;
-import com.t3leem_live.models.StudentSignUpModel;
+import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.TeacherSignUpModel;
 import com.t3leem_live.remote.Api;
+import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
 
 import java.io.IOException;
@@ -62,8 +61,9 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     private String phone_code = "+20";
     private Uri imageUri = null,videoUri=null;
     private TeacherSignUpModel model;
-    private List<StageModel> stageModelList;
-    private StageSpinnerAdapter adapter;
+    private List<StageClassModel> stageModelList;
+    private List<StageClassModel> classModelList;
+    private StageSpinnerAdapter adapter,classAdapter;
     private SimpleExoPlayer player;
 
     @Override
@@ -83,11 +83,18 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
 
     private void initView() {
         stageModelList = new ArrayList<>();
-        StageModel stageModel = new StageModel();
-        stageModel.setId(0);
-        stageModel.setTitle("إختر المرحلة");
-        stageModel.setTitle_en("Choose Stage");
-        stageModelList.add(stageModel);
+        StageClassModel stageClassModel = new StageClassModel();
+        stageClassModel.setId(0);
+        stageClassModel.setTitle("إختر المرحلة");
+        stageClassModel.setTitle_en("Choose Stage");
+        stageModelList.add(stageClassModel);
+
+        classModelList = new ArrayList<>();
+        StageClassModel classModel = new StageClassModel();
+        classModel.setId(0);
+        classModel.setTitle("إختر الصف");
+        classModel.setTitle_en("Choose Class");
+        classModelList.add(classModel);
 
         countryModelList = new ArrayList<>(Arrays.asList(countries));
         Paper.init(this);
@@ -105,8 +112,39 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         binding.spinnerStage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                StageModel stageModel1 = stageModelList.get(i);
-                model.setStage_id(stageModel1.getId());
+                if (i==0){
+                    binding.spinnerClass.setSelection(0);
+                    model.setStage_id(0);
+                    model.setClass_id(0);
+
+                }else {
+                    StageClassModel stageClassModel1 = stageModelList.get(i);
+                    model.setStage_id(stageClassModel1.getId());
+                    getClasses(stageClassModel1.getId());
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        classAdapter = new StageSpinnerAdapter(classModelList,this);
+        binding.spinnerClass.setAdapter(classAdapter);
+        binding.spinnerClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i==0){
+                    model.setClass_id(0);
+
+                }else {
+                    StageClassModel stageClassModel1 = classModelList.get(i);
+                    model.setClass_id(stageClassModel1.getId());
+
+                }
+
             }
 
             @Override
@@ -166,7 +204,71 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
 
     }
 
-    private void createCountriesDialog() {
+    private void getClasses(int stage_id)
+    {
+        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        Api.getService(Tags.base_url)
+                .getClassByStageId(stage_id)
+                .enqueue(new Callback<StageDataModel>() {
+                    @Override
+                    public void onResponse(Call<StageDataModel> call, Response<StageDataModel> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()) {
+
+                            classModelList.clear();
+                            StageClassModel classModel = new StageClassModel();
+                            classModel.setId(0);
+                            classModel.setTitle("إختر الصف");
+                            classModel.setTitle_en("Choose Class");
+                            classModelList.add(classModel);
+                            classModelList.addAll(response.body().getData());
+                            runOnUiThread(() -> {
+                                classAdapter.notifyDataSetChanged();
+                                binding.spinnerClass.setSelection(0);
+                            });
+
+                        } else {
+                            dialog.dismiss();
+                            try {
+                                Log.e("error", response.code() + "__" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (response.code() == 500) {
+                                Toast.makeText(TeacherSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(TeacherSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<StageDataModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(TeacherSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(TeacherSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+
+    }
+    private void createCountriesDialog()
+    {
 
         dialog = new AlertDialog.Builder(this)
                 .create();

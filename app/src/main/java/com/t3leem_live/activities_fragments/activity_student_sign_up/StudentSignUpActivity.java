@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,10 +28,12 @@ import com.t3leem_live.interfaces.Listeners;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.CountryModel;
 import com.t3leem_live.models.StageDataModel;
-import com.t3leem_live.models.StageModel;
+import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.StudentSignUpModel;
 import com.t3leem_live.models.UserModel;
+import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
+import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
 
 import java.io.IOException;
@@ -40,6 +43,8 @@ import java.util.Collections;
 import java.util.List;
 
 import io.paperdb.Paper;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,8 +61,11 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     private Uri uri = null;
     private StudentSignUpModel model;
     private int type;
-    private List<StageModel> stageModelList;
-    private StageSpinnerAdapter adapter;
+    private List<StageClassModel> stageModelList;
+    private List<StageClassModel> classModelList;
+    private StageSpinnerAdapter adapter,classAdapter;
+    private Preferences preferences;
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -75,12 +83,20 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
 
     private void initView() {
+        preferences = Preferences.getInstance();
         stageModelList = new ArrayList<>();
-        StageModel stageModel = new StageModel();
-        stageModel.setId(0);
-        stageModel.setTitle("إختر المرحلة");
-        stageModel.setTitle_en("Choose Stage");
-        stageModelList.add(stageModel);
+        StageClassModel stageClassModel = new StageClassModel();
+        stageClassModel.setId(0);
+        stageClassModel.setTitle("إختر المرحلة");
+        stageClassModel.setTitle_en("Choose Stage");
+        stageModelList.add(stageClassModel);
+
+        classModelList = new ArrayList<>();
+        StageClassModel classModel = new StageClassModel();
+        classModel.setId(0);
+        classModel.setTitle("إختر الصف");
+        classModel.setTitle_en("Choose Class");
+        classModelList.add(classModel);
 
         countryModelList = new ArrayList<>(Arrays.asList(countries));
         Paper.init(this);
@@ -99,8 +115,17 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         binding.spinnerStage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                StageModel stageModel1 = stageModelList.get(i);
-                model.setStage_id(stageModel1.getId());
+                if (i==0){
+                    binding.spinnerClass.setSelection(0);
+                    model.setStage_id(0);
+                    model.setClass_id(0);
+
+                }else {
+                    StageClassModel stageClassModel1 = stageModelList.get(i);
+                    model.setStage_id(stageClassModel1.getId());
+                    getClasses(stageClassModel1.getId());
+                }
+
             }
 
             @Override
@@ -109,11 +134,36 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
             }
         });
 
+        classAdapter = new StageSpinnerAdapter(classModelList,this);
+        binding.spinnerClass.setAdapter(classAdapter);
+        binding.spinnerClass.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i==0){
+                    model.setClass_id(0);
+
+                }else {
+                    StageClassModel stageClassModel1 = classModelList.get(i);
+                    model.setClass_id(stageClassModel1.getId());
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
         getStage();
+
+
     }
 
-    private void getStage() {
-
+    private void getStage()
+    {
         Api.getService(Tags.base_url)
                 .getStage()
                 .enqueue(new Callback<StageDataModel>() {
@@ -159,8 +209,72 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                 });
 
     }
+    private void getClasses(int stage_id)
+    {
+        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
 
-    private void createCountriesDialog() {
+        Api.getService(Tags.base_url)
+                .getClassByStageId(stage_id)
+                .enqueue(new Callback<StageDataModel>() {
+                    @Override
+                    public void onResponse(Call<StageDataModel> call, Response<StageDataModel> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()) {
+
+                            classModelList.clear();
+                            StageClassModel classModel = new StageClassModel();
+                            classModel.setId(0);
+                            classModel.setTitle("إختر الصف");
+                            classModel.setTitle_en("Choose Class");
+                            classModelList.add(classModel);
+                            classModelList.addAll(response.body().getData());
+                            runOnUiThread(() -> {
+                                classAdapter.notifyDataSetChanged();
+                                binding.spinnerClass.setSelection(0);
+
+                            });
+
+                        } else {
+                            dialog.dismiss();
+                            try {
+                                Log.e("error", response.code() + "__" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (response.code() == 500) {
+                                Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(StudentSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<StageDataModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+
+    }
+    private void createCountriesDialog()
+    {
 
         dialog = new AlertDialog.Builder(this)
                 .create();
@@ -174,14 +288,14 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         dialog.setCanceledOnTouchOutside(false);
         dialog.setView(binding.getRoot());
     }
-
-    private void sortCountries() {
+    private void sortCountries()
+    {
         Collections.sort(countryModelList, (country1, country2) -> {
             return country1.getName().trim().compareToIgnoreCase(country2.getName().trim());
         });
     }
-
-    public void setItemData(CountryModel countryModel) {
+    public void setItemData(CountryModel countryModel)
+    {
         dialog.dismiss();
         if (type==1){
             phone_code = countryModel.getDialCode();
@@ -210,12 +324,138 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
 
 
-    private void signUpWithoutImage() {
+    private void signUpWithoutImage()
+    {
+        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        Api.getService(Tags.base_url)
+                .signUpStudentWithoutImage(model.getName(),model.getEmail(),model.getPhone_code(),model.getPhone(),model.getPassword(),model.getFather_phone_code()+model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),"android","student")
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()&&response.body()!=null)
+                        {
+                            preferences.create_update_userdata(StudentSignUpActivity.this,response.body());
 
+                        }else
+                        {
+                            if (response.code()==500)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==409)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==406)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, R.string.email_exist, Toast.LENGTH_SHORT).show();
+
+
+                            }
+                            else
+                            {
+                                Toast.makeText(StudentSignUpActivity.this,getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+
+                            try {
+                                Log.e("error",response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }catch (Exception e)
+                        {
+                            Log.e("Error",e.getMessage()+"__");
+                        }
+                    }
+                });
     }
 
     private void signUpWithImage() {
+        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        RequestBody name_part = Common.getRequestBodyText(model.getName());
+        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code());
+        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
+        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
+        RequestBody password_part = Common.getRequestBodyText(model.getPassword());
+        RequestBody father_phone_part = Common.getRequestBodyText(model.getFather_phone_code()+model.getFather_phone());
+        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
+        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
+        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
+        RequestBody class_id_part = Common.getRequestBodyText(String.valueOf(model.getClass_id()));
 
+        RequestBody software_part = Common.getRequestBodyText("android");
+        RequestBody user_type_part = Common.getRequestBodyText("student");
+
+        MultipartBody.Part image = Common.getMultiPart(this,uri,"logo");
+
+
+        Api.getService(Tags.base_url)
+                .signUpStudentWithImage(name_part,email_part,phone_code_part,phone_part,password_part,father_phone_part,address_part,school_name_part,stage_id_part,class_id_part,software_part,user_type_part,image)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()&&response.body()!=null)
+                        {
+                            preferences.create_update_userdata(StudentSignUpActivity.this,response.body());
+
+
+                        }else
+                        {
+                            if (response.code()==500)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==409)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==406)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, R.string.email_exist, Toast.LENGTH_SHORT).show();
+
+
+                            }else
+                            {
+                                Toast.makeText(StudentSignUpActivity.this,getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }catch (Exception e)
+                        {
+                            Log.e("Error",e.getMessage()+"__");
+                        }
+                    }
+                });
     }
 
     @Override

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 public class StageDataModel implements Serializable {
-    private List<StageModel> data;
+    private List<StageClassModel> data;
 
-    public List<StageModel> getData() {
+    public List<StageClassModel> getData() {
         return data;
     }
 }

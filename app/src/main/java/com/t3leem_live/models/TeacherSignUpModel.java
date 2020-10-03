@@ -18,12 +18,15 @@ public class TeacherSignUpModel extends BaseObservable {
     private String phone_code;
     private String phone;
     private String email;
+    private String password;
     private int stage_id;
+    private int class_id;
     private String address;
     private String school_name;
 
     public ObservableField<String> error_name = new ObservableField<>();
     public ObservableField<String> error_email = new ObservableField<>();
+    public ObservableField<String> error_password = new ObservableField<>();
     public ObservableField<String> error_phone = new ObservableField<>();
     public ObservableField<String> error_address = new ObservableField<>();
     public ObservableField<String> error_school_name = new ObservableField<>();
@@ -34,8 +37,10 @@ public class TeacherSignUpModel extends BaseObservable {
                 !phone_code.isEmpty() &&
                 !phone.trim().isEmpty() &&
                 !email.trim().isEmpty() &&
+                password.trim().length()>6 &&
                 Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches() &&
                 stage_id!=0&&
+                class_id!=0&&
                 !address.trim().isEmpty() &&
                 !school_name.trim().isEmpty()
 
@@ -45,6 +50,7 @@ public class TeacherSignUpModel extends BaseObservable {
             error_email.set(null);
             error_address.set(null);
             error_school_name.set(null);
+            error_password.set(null);
             return true;
         } else {
 
@@ -77,6 +83,10 @@ public class TeacherSignUpModel extends BaseObservable {
                 Toast.makeText(context, R.string.choose_stage, Toast.LENGTH_SHORT).show();
             }
 
+            if (class_id==0){
+                Toast.makeText(context, R.string.choose_class, Toast.LENGTH_SHORT).show();
+            }
+
             if (address.isEmpty()){
                 error_address.set(context.getString(R.string.field_required));
             }else {
@@ -103,6 +113,7 @@ public class TeacherSignUpModel extends BaseObservable {
         phone_code = "";
         phone = "";
         email = "";
+        password="";
         stage_id = 0;
         address = "";
         school_name = "";
@@ -165,6 +176,25 @@ public class TeacherSignUpModel extends BaseObservable {
         this.email = email;
         notifyPropertyChanged(BR.email);
 
+    }
+
+
+    @Bindable
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+        notifyPropertyChanged(BR.password);
+    }
+
+    public int getClass_id() {
+        return class_id;
+    }
+
+    public void setClass_id(int class_id) {
+        this.class_id = class_id;
     }
 
     public int getStage_id() {

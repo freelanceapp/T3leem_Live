@@ -17,7 +17,9 @@ public class StudentSignUpModel extends BaseObservable {
     private String phone_code;
     private String phone;
     private String email;
+    private String password;
     private int stage_id;
+    private int class_id;
     private String father_phone_code;
     private String father_phone;
     private String address;
@@ -25,6 +27,7 @@ public class StudentSignUpModel extends BaseObservable {
 
     public ObservableField<String> error_name = new ObservableField<>();
     public ObservableField<String> error_email = new ObservableField<>();
+    public ObservableField<String> error_password = new ObservableField<>();
     public ObservableField<String> error_phone = new ObservableField<>();
     public ObservableField<String> error_father_phone = new ObservableField<>();
     public ObservableField<String> error_address = new ObservableField<>();
@@ -36,10 +39,12 @@ public class StudentSignUpModel extends BaseObservable {
                 !phone_code.isEmpty() &&
                 !phone.trim().isEmpty() &&
                 !email.trim().isEmpty() &&
+                password.trim().length()>=6 &&
                 Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches() &&
                 !father_phone_code.trim().isEmpty() &&
                 !father_phone.trim().isEmpty() &&
                 stage_id!=0&&
+                class_id!=0&&
                 !address.trim().isEmpty() &&
                 !school_name.trim().isEmpty()
 
@@ -50,24 +55,25 @@ public class StudentSignUpModel extends BaseObservable {
             error_father_phone.set(null);
             error_address.set(null);
             error_school_name.set(null);
+            error_password.set(null);
             return true;
         } else {
 
-            if (name.isEmpty()){
+            if (name.trim().isEmpty()){
                 error_name.set(context.getString(R.string.field_required));
             }else {
                 error_name.set(null);
 
             }
 
-            if (phone.isEmpty()){
+            if (phone.trim().isEmpty()){
                 error_phone.set(context.getString(R.string.field_required));
             }else {
                 error_phone.set(null);
 
             }
 
-            if (email.isEmpty()){
+            if (email.trim().isEmpty()){
                 error_email.set(context.getString(R.string.field_required));
             }if (!Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()){
                 error_email.set(context.getString(R.string.inv_email));
@@ -76,7 +82,14 @@ public class StudentSignUpModel extends BaseObservable {
 
             }
 
-            if (father_phone.isEmpty()){
+            if (password.trim().length()<6){
+                error_password.set(context.getString(R.string.password_short));
+            }else {
+                error_password.set(null);
+
+            }
+
+            if (father_phone.trim().isEmpty()){
                 error_father_phone.set(context.getString(R.string.field_required));
             }else {
                 error_father_phone.set(null);
@@ -87,14 +100,18 @@ public class StudentSignUpModel extends BaseObservable {
                 Toast.makeText(context, R.string.choose_stage, Toast.LENGTH_SHORT).show();
             }
 
-            if (address.isEmpty()){
+            if (class_id==0){
+                Toast.makeText(context, R.string.choose_class, Toast.LENGTH_SHORT).show();
+            }
+
+            if (address.trim().isEmpty()){
                 error_address.set(context.getString(R.string.field_required));
             }else {
                 error_address.set(null);
 
             }
 
-            if (school_name.isEmpty()){
+            if (school_name.trim().isEmpty()){
                 error_school_name.set(context.getString(R.string.field_required));
             }else {
                 error_school_name.set(null);
@@ -112,7 +129,9 @@ public class StudentSignUpModel extends BaseObservable {
         phone_code = "";
         phone = "";
         email = "";
+        password ="";
         stage_id = 0;
+        class_id=0;
         father_phone_code = "";
         father_phone = "";
         address = "";
@@ -170,12 +189,30 @@ public class StudentSignUpModel extends BaseObservable {
 
     }
 
+    @Bindable
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+        notifyPropertyChanged(BR.password);
+    }
+
     public int getStage_id() {
         return stage_id;
     }
 
     public void setStage_id(int stage_id) {
         this.stage_id = stage_id;
+    }
+
+    public int getClass_id() {
+        return class_id;
+    }
+
+    public void setClass_id(int class_id) {
+        this.class_id = class_id;
     }
 
     @Bindable

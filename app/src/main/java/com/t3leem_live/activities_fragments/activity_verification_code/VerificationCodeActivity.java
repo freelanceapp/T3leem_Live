@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseException;
@@ -19,12 +22,19 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.t3leem_live.R;
 import com.t3leem_live.databinding.ActivityVerificationCodeBinding;
 import com.t3leem_live.language.Language;
+import com.t3leem_live.models.UserModel;
+import com.t3leem_live.preferences.Preferences;
+import com.t3leem_live.remote.Api;
 import com.t3leem_live.share.Common;
+import com.t3leem_live.tags.Tags;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.paperdb.Paper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class VerificationCodeActivity extends AppCompatActivity {
     private ActivityVerificationCodeBinding binding;
@@ -37,6 +47,7 @@ public class VerificationCodeActivity extends AppCompatActivity {
     private String verificationId;
     private String smsCode = "";
     private boolean fromSplash = true;
+    private Preferences preferences;
 
 
     @Override
@@ -65,6 +76,7 @@ public class VerificationCodeActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        preferences = Preferences.getInstance();
         mAuth = FirebaseAuth.getInstance();
         Paper.init(this);
         lang = Paper.book().read("lang", "ar");
@@ -150,8 +162,53 @@ public class VerificationCodeActivity extends AppCompatActivity {
     }
 
     private void login() {
+        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+        Api.getService(Tags.base_url)
+                .loginStudent(phone_code, phone)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        dialog.dismiss();
+
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            preferences.create_update_userdata(VerificationCodeActivity.this, response.body());
 
 
+                        } else {
+                            dialog.dismiss();
+                            if (response.code() == 500) {
+                                Toast.makeText(VerificationCodeActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+
+                            } else if (response.code() == 401) {
+                                Toast.makeText(VerificationCodeActivity.this, R.string.user_not_exist, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                           dialog.dismiss();
+
+                            if (t.getMessage() != null) {
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(VerificationCodeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
     }
 
 
