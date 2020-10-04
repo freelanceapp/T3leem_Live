@@ -38,6 +38,8 @@ public interface Service {
     @GET("api/get-classes-by-stage_id")
     Call<StageDataModel> getClassByStageId(@Query(value = "stage_id") int stage_id);
 
+    @GET("api/get-libraries")
+    Call<StageDataModel> getLibraries();
 
     @FormUrlEncoded
     @POST("api/register")

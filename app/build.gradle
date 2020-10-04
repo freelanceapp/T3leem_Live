@@ -67,6 +67,8 @@ dependencies {
     implementation 'com.chaos.view:pinview:1.4.3'
     implementation 'com.mikhaellopez:circularimageview:4.2.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.1'
+    implementation 'com.ethanhua:skeleton:1.1.2'
+    implementation 'io.supercharge:shimmerlayout:2.1.0'
 
 
 }

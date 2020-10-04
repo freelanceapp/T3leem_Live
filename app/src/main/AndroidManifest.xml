@@ -24,7 +24,22 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:targetApi="m">
-        <activity android:name=".activities_fragments.activity_student_home.StudentHomeActivity"></activity>
+        <activity android:name=".activities_fragments.activity_classes.ClassesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            />
+        <activity
+            android:name=".activities_fragments.activity_student_home.StudentHomeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities_fragments.activity_teacher_sign_up.TeacherSignUpActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -64,13 +79,7 @@
             android:name=".activities_fragments.activity_splash.SplashActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"></activity>
     </application>
 
 </manifest>

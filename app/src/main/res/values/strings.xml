@@ -85,5 +85,10 @@
     <string name="library">المكتبة</string>
     <string name="live">مباشر</string>
     <string name="my_rate">تقييمي</string>
+    <string name="explain_education">شرح كامل لمراحل التعليم</string>
+    <string name="effictive_edu">نظام التعليم التفاعلي</string>
+    <string name="choose_edu_system">إختر نظامك التعليمي...</string>
+    <string name="read_in_lib">إقرأ في المكتبة العامة</string>
+    <string name="all_edu_stage">جميع مراحل التعليم</string>
 
 </resources>
