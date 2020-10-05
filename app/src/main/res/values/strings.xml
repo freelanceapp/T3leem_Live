@@ -90,5 +90,17 @@
     <string name="choose_edu_system">إختر نظامك التعليمي...</string>
     <string name="read_in_lib">إقرأ في المكتبة العامة</string>
     <string name="all_edu_stage">جميع مراحل التعليم</string>
+    <string name="department">القسم</string>
+    <string name="choose_department">إختر القسم</string>
+    <string name="no_subject">لا يوجد مواد لعرضها</string>
+    <string name="update_profile">تحديث المعلومات الشخصية</string>
+    <string name="mol5s_tqarir">ملخص التقارير العامة</string>
+    <string name="charge_details">تفاصيل رصيدي</string>
+    <string name="friend_chat">مراسلة اصدقائي</string>
+    <string name="teacher_chat">مراسلة المدرسين</string>
+    <string name="win_friend_invitation">إكسب بدعوه الاصدقاء</string>
+    <string name="service_help">خدمات المساعدة</string>
+    <string name="company_info">معلومات عن الشركة</string>
+    <string name="complain">الشكاوي والاقتراحات</string>
 
 </resources>

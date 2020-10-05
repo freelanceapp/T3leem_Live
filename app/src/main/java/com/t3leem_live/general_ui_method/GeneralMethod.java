@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
+import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.t3leem_live.R;
 import com.t3leem_live.tags.Tags;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -99,6 +100,11 @@ public class GeneralMethod {
     }
 
 
+    @BindingAdapter("rate")
+    public static void rate(SimpleRatingBar ratingBar, double rate) {
+        ratingBar.setRating((float) rate);
+
+    }
 }
 
 

@@ -38,13 +38,16 @@ public interface Service {
     @GET("api/get-classes-by-stage_id")
     Call<StageDataModel> getClassByStageId(@Query(value = "stage_id") int stage_id);
 
+    @GET("api/get-department-by-class-id")
+    Call<StageDataModel> getDepartmentByClassId(@Query(value = "class_id") int class_id);
+
     @GET("api/get-libraries")
     Call<StageDataModel> getLibraries();
 
     @FormUrlEncoded
-    @POST("api/register")
-    Call<UserModel> loginStudent(@Field("phone_code") String phone_code,
-                                 @Field("phone") String phone
+    @POST("api/login")
+    Call<UserModel> login(@Field("phone_code") String phone_code,
+                          @Field("phone") String phone
 
 
     );
@@ -61,6 +64,7 @@ public interface Service {
                                               @Field("school_name") String school_name,
                                               @Field("stage_id") int stage_id,
                                               @Field("class_id") int class_id,
+                                              @Field("department_id") int department_id,
                                               @Field("software_type") String software_type,
                                               @Field("user_type") String user_type
 
@@ -79,9 +83,17 @@ public interface Service {
                                            @Part("school_name") RequestBody school_name,
                                            @Part("stage_id") RequestBody stage_id,
                                            @Part("class_id") RequestBody class_id,
+                                           @Part("department_id") RequestBody department_id,
                                            @Part("software_type") RequestBody software_type,
                                            @Part("user_type") RequestBody user_type,
                                            @Part MultipartBody.Part logo
     );
+
+    @GET("api/get-subjects-by-class-id-or-department-id")
+    Call<StageDataModel> getSubject(@Query(value = "stage_id") int stage_id,
+                                    @Query(value = "class_id") int class_id,
+                                    @Query(value = "department_id") String department_id
+    );
+
 
 }

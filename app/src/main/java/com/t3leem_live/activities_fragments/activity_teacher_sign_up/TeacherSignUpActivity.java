@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_sign_up_chooser.SignUpChooserActivity;
 import com.t3leem_live.activities_fragments.activity_student_sign_up.StudentSignUpActivity;
+import com.t3leem_live.activities_fragments.activity_verification_code.VerificationCodeActivity;
 import com.t3leem_live.adapters.CountriesAdapter;
 import com.t3leem_live.adapters.StageSpinnerAdapter;
 import com.t3leem_live.databinding.ActivityTeacherSignUpBinding;
@@ -63,7 +64,8 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     private TeacherSignUpModel model;
     private List<StageClassModel> stageModelList;
     private List<StageClassModel> classModelList;
-    private StageSpinnerAdapter adapter,classAdapter;
+    private List<StageClassModel> departmentList;
+    private StageSpinnerAdapter adapter,classAdapter,departmentAdapter;
     private SimpleExoPlayer player;
 
     @Override
@@ -82,6 +84,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
 
 
     private void initView() {
+
         stageModelList = new ArrayList<>();
         StageClassModel stageClassModel = new StageClassModel();
         stageClassModel.setId(0);
@@ -95,6 +98,14 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         classModel.setTitle("إختر الصف");
         classModel.setTitle_en("Choose Class");
         classModelList.add(classModel);
+
+        departmentList = new ArrayList<>();
+
+        StageClassModel departmentModel = new StageClassModel();
+        departmentModel.setId(0);
+        departmentModel.setTitle("إختر القسم");
+        departmentModel.setTitle_en("Choose Department");
+        departmentList.add(departmentModel);
 
         countryModelList = new ArrayList<>(Arrays.asList(countries));
         Paper.init(this);
@@ -116,6 +127,8 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                     binding.spinnerClass.setSelection(0);
                     model.setStage_id(0);
                     model.setClass_id(0);
+                    model.setDepartment_id(0);
+                    binding.llDepartment.setVisibility(View.GONE);
 
                 }else {
                     StageClassModel stageClassModel1 = stageModelList.get(i);
@@ -138,11 +151,36 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i==0){
                     model.setClass_id(0);
+                    model.setDepartment_id(0);
+                    binding.llDepartment.setVisibility(View.GONE);
+                    binding.spinnerDepartment.setSelection(0);
 
                 }else {
                     StageClassModel stageClassModel1 = classModelList.get(i);
                     model.setClass_id(stageClassModel1.getId());
+                    getDepartment(stageClassModel1.getId());
+                }
 
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        departmentAdapter = new StageSpinnerAdapter(departmentList,this);
+        binding.spinnerDepartment.setAdapter(departmentAdapter);
+        binding.spinnerDepartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i==0){
+                    model.setDepartment_id(0);
+
+                }else {
+                    StageClassModel stageClassModel1 = departmentList.get(i);
+                    model.setDepartment_id(stageClassModel1.getId());
                 }
 
             }
@@ -156,7 +194,8 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         getStage();
     }
 
-    private void getStage() {
+    private void getStage()
+    {
 
         Api.getService(Tags.base_url)
                 .getStage()
@@ -203,7 +242,6 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                 });
 
     }
-
     private void getClasses(int stage_id)
     {
         ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
@@ -267,6 +305,70 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                 });
 
     }
+    private void getDepartment(int classId)
+    {
+        Api.getService(Tags.base_url)
+                .getDepartmentByClassId(classId)
+                .enqueue(new Callback<StageDataModel>() {
+                    @Override
+                    public void onResponse(Call<StageDataModel> call, Response<StageDataModel> response) {
+                        if (response.isSuccessful()) {
+                            departmentList.clear();
+                            StageClassModel departmentModel = new StageClassModel();
+                            departmentModel.setId(0);
+                            departmentModel.setTitle("إختر القسم");
+                            departmentModel.setTitle_en("Choose Department");
+                            departmentList.add(departmentModel);
+
+                            departmentList.addAll(response.body().getData());
+
+                            if (departmentList.size()>0){
+                                binding.llDepartment.setVisibility(View.VISIBLE);
+                                model.setHasDepartment(true);
+                            }else {
+                                binding.llDepartment.setVisibility(View.GONE);
+                                model.setHasDepartment(false);
+
+                            }
+                            runOnUiThread(() -> {
+                                departmentAdapter.notifyDataSetChanged();
+                                binding.spinnerDepartment.setSelection(0);
+
+                            });
+                        } else {
+                            try {
+                                Log.e("error", response.code() + "__" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (response.code() == 500) {
+                                Toast.makeText(TeacherSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(TeacherSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<StageDataModel> call, Throwable t) {
+                        try {
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(TeacherSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(TeacherSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+
+    }
     private void createCountriesDialog()
     {
 
@@ -282,32 +384,33 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         dialog.setCanceledOnTouchOutside(false);
         dialog.setView(binding.getRoot());
     }
-
-    private void sortCountries() {
+    private void sortCountries()
+    {
         Collections.sort(countryModelList, (country1, country2) -> {
             return country1.getName().trim().compareToIgnoreCase(country2.getName().trim());
         });
     }
-
-    public void setItemData(CountryModel countryModel) {
+    public void setItemData(CountryModel countryModel)
+    {
         dialog.dismiss();
         phone_code = countryModel.getDialCode();
         model.setPhone_code(phone_code);
         binding.tvCode.setText(phone_code);
     }
-
     @Override
-    public void validate() {
+    public void validate()
+    {
         if (model.isDataValid(this)){
-
-            if (imageUri==null){
-                signUpWithoutImage();
-            }else {
-                signUpWithImage();
-            }
+            navigateToVerificationActivity();
         }
     }
 
+    private void navigateToVerificationActivity() {
+        Intent intent = new Intent(this, VerificationCodeActivity.class);
+        intent.putExtra("phone_code",model.getPhone_code());
+        intent.putExtra("phone",model.getPhone());
+        startActivityForResult(intent,300);
+    }
 
 
     private void signUpWithoutImage() {
@@ -363,6 +466,12 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                 binding.setModel(model);
                 binding.player.setVisibility(View.VISIBLE);
                 playVideo(videoUri);
+            }
+        }else if (requestCode==300&&resultCode==RESULT_OK){
+            if (imageUri==null){
+                signUpWithoutImage();
+            }else {
+                signUpWithImage();
             }
         }
     }

@@ -149,7 +149,9 @@ public class VerificationCodeActivity extends AppCompatActivity {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
             mAuth.signInWithCredential(credential)
                     .addOnSuccessListener(authResult -> {
-                        login();
+                        setResult(RESULT_OK);
+                        finish();
+
                     }).addOnFailureListener(e -> {
                 if (e.getMessage() != null) {
                     Common.CreateDialogAlert(this, e.getMessage());
@@ -161,55 +163,7 @@ public class VerificationCodeActivity extends AppCompatActivity {
 
     }
 
-    private void login() {
-        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.show();
-        Api.getService(Tags.base_url)
-                .loginStudent(phone_code, phone)
-                .enqueue(new Callback<UserModel>() {
-                    @Override
-                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-                        dialog.dismiss();
 
-                        if (response.isSuccessful() && response.body() != null) {
-
-                            preferences.create_update_userdata(VerificationCodeActivity.this, response.body());
-
-
-                        } else {
-                            dialog.dismiss();
-                            if (response.code() == 500) {
-                                Toast.makeText(VerificationCodeActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-
-                            } else if (response.code() == 401) {
-                                Toast.makeText(VerificationCodeActivity.this, R.string.user_not_exist, Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<UserModel> call, Throwable t) {
-                        try {
-                           dialog.dismiss();
-
-                            if (t.getMessage() != null) {
-
-                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    Toast.makeText(VerificationCodeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        } catch (Exception e) {
-                            Log.e("Error", e.getMessage() + "__");
-                        }
-                    }
-                });
-    }
 
 
     private void startCounter() {

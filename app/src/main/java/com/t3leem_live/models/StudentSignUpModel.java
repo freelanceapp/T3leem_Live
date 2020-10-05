@@ -1,6 +1,7 @@
 package com.t3leem_live.models;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Toast;
 
@@ -20,10 +21,12 @@ public class StudentSignUpModel extends BaseObservable {
     private String password;
     private int stage_id;
     private int class_id;
+    private int department_id;
     private String father_phone_code;
     private String father_phone;
     private String address;
     private String school_name;
+    private boolean isHasDepartment;
 
     public ObservableField<String> error_name = new ObservableField<>();
     public ObservableField<String> error_email = new ObservableField<>();
@@ -35,20 +38,23 @@ public class StudentSignUpModel extends BaseObservable {
 
 
     public boolean isDataValid(Context context) {
-        if (!name.trim().isEmpty() &&
+
+        if (!name.isEmpty() &&
                 !phone_code.isEmpty() &&
-                !phone.trim().isEmpty() &&
-                !email.trim().isEmpty() &&
-                password.trim().length()>=6 &&
-                Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches() &&
-                !father_phone_code.trim().isEmpty() &&
-                !father_phone.trim().isEmpty() &&
+                !phone.isEmpty() &&
+                !email.isEmpty() &&
+                password.length()>=6 &&
+                Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+                !father_phone_code.isEmpty() &&
+                !father_phone.isEmpty() &&
                 stage_id!=0&&
                 class_id!=0&&
-                !address.trim().isEmpty() &&
-                !school_name.trim().isEmpty()
+                !address.isEmpty() &&
+                !school_name.isEmpty()
 
         ) {
+
+
             error_phone.set(null);
             error_name.set(null);
             error_email.set(null);
@@ -56,7 +62,20 @@ public class StudentSignUpModel extends BaseObservable {
             error_address.set(null);
             error_school_name.set(null);
             error_password.set(null);
-            return true;
+
+            if (isHasDepartment){
+                if (department_id==0){
+                    Toast.makeText(context, R.string.choose_department, Toast.LENGTH_SHORT).show();
+                    return false;
+
+                }else {
+                    return true;
+
+                }
+            }else {
+                return true;
+
+            }
         } else {
 
             if (name.trim().isEmpty()){
@@ -82,8 +101,11 @@ public class StudentSignUpModel extends BaseObservable {
 
             }
 
-            if (password.trim().length()<6){
+            if (password.isEmpty()){
+                error_password.set(context.getString(R.string.field_required));
+            }else if (password.length()< 6){
                 error_password.set(context.getString(R.string.password_short));
+
             }else {
                 error_password.set(null);
 
@@ -132,10 +154,12 @@ public class StudentSignUpModel extends BaseObservable {
         password ="";
         stage_id = 0;
         class_id=0;
+        department_id = 0;
         father_phone_code = "";
         father_phone = "";
         address = "";
         school_name = "";
+        isHasDepartment = false;
     }
 
     public String getImageUri() {
@@ -215,6 +239,14 @@ public class StudentSignUpModel extends BaseObservable {
         this.class_id = class_id;
     }
 
+    public int getDepartment_id() {
+        return department_id;
+    }
+
+    public void setDepartment_id(int department_id) {
+        this.department_id = department_id;
+    }
+
     @Bindable
     public String getFather_phone_code() {
         return father_phone_code;
@@ -258,5 +290,13 @@ public class StudentSignUpModel extends BaseObservable {
         this.school_name = school_name;
         notifyPropertyChanged(BR.school_name);
 
+    }
+
+    public boolean isHasDepartment() {
+        return isHasDepartment;
+    }
+
+    public void setHasDepartment(boolean hasDepartment) {
+        isHasDepartment = hasDepartment;
     }
 }

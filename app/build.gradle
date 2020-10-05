@@ -69,6 +69,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.11.1'
     implementation 'com.ethanhua:skeleton:1.1.2'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
+    implementation 'com.github.FlyingPumba:SimpleRatingBar:v0.1.5'
 
 
 }

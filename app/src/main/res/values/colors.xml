@@ -23,10 +23,6 @@
     <color name="color15">#FDF1E2</color>
     <color name="color16">#E2C6FE</color>
 
-
-
-
-
     <color name="white">#fff</color>
     <color name="black">#000000</color>
     <color name="gray0">#fafafa</color>
@@ -39,4 +35,7 @@
     <color name="gray7">#a0a0a0</color>
     <color name="transparent">#00000000</color>
     <color name="color_red">#ef0607</color>
+    <color name="rate_color">#FFD800</color>
+    <color name="yellow">#FBC02D</color>
+
 </resources>

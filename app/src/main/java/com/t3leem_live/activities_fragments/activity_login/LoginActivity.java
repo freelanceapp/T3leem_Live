@@ -1,20 +1,25 @@
 package com.t3leem_live.activities_fragments.activity_login;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.widget.Toast;
 
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_sign_up_chooser.SignUpChooserActivity;
+import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
 import com.t3leem_live.activities_fragments.activity_verification_code.VerificationCodeActivity;
 import com.t3leem_live.adapters.CountriesAdapter;
 import com.t3leem_live.databinding.ActivityLoginBinding;
@@ -23,7 +28,11 @@ import com.t3leem_live.interfaces.Listeners;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.CountryModel;
 import com.t3leem_live.models.LoginModel;
+import com.t3leem_live.models.UserModel;
+import com.t3leem_live.preferences.Preferences;
+import com.t3leem_live.remote.Api;
 import com.t3leem_live.share.Common;
+import com.t3leem_live.tags.Tags;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +40,9 @@ import java.util.Collections;
 import java.util.List;
 
 import io.paperdb.Paper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements Listeners.LoginListener {
     private ActivityLoginBinding binding;
@@ -41,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
     private AlertDialog dialog;
     private String phone_code="+20";
     private LoginModel loginModel;
+    Preferences preferences;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -57,6 +70,7 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
     }
 
     private void initView() {
+        preferences = Preferences.getInstance();
         loginModel = new LoginModel();
         binding.tvSignUp.setText(Html.fromHtml(getString(R.string.sign_up1)));
         countryModelList = new ArrayList<>(Arrays.asList(countries));
@@ -118,8 +132,7 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
         Intent intent = new Intent(this, VerificationCodeActivity.class);
         intent.putExtra("phone_code",phone_code);
         intent.putExtra("phone",loginModel.getPhone());
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent,100);
 
     }
 
@@ -154,4 +167,72 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
         startActivity(intent);
         finish();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==100&&resultCode==RESULT_OK){
+            login();
+        }
+    }
+
+    private void login()
+    {
+        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+        Api.getService(Tags.base_url)
+                .login(phone_code,loginModel.getPhone())
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        dialog.dismiss();
+
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            preferences.create_update_userdata(LoginActivity.this, response.body());
+                            if (response.body().getData().getUser_type().equals("student")){
+                                Intent intent = new Intent(LoginActivity.this, StudentHomeActivity.class);
+                                startActivity(intent);
+                                finish();
+
+                            }else {
+
+                            }
+
+                        } else {
+                            dialog.dismiss();
+                            if (response.code() == 500) {
+                                Toast.makeText(LoginActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+
+                            } else if (response.code() == 401) {
+                                Toast.makeText(LoginActivity.this, R.string.user_not_exist, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LoginActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+
+                            if (t.getMessage() != null) {
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(LoginActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+    }
+
+
 }

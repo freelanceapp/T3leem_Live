@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_sign_up_chooser.SignUpChooserActivity;
+import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
+import com.t3leem_live.activities_fragments.activity_verification_code.VerificationCodeActivity;
 import com.t3leem_live.adapters.CountriesAdapter;
 import com.t3leem_live.adapters.StageSpinnerAdapter;
 import com.t3leem_live.databinding.ActivityStudentSignUpBinding;
@@ -63,7 +65,8 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     private int type;
     private List<StageClassModel> stageModelList;
     private List<StageClassModel> classModelList;
-    private StageSpinnerAdapter adapter,classAdapter;
+    private List<StageClassModel> departmentList;
+    private StageSpinnerAdapter adapter,classAdapter,departmentAdapter;
     private Preferences preferences;
 
 
@@ -98,6 +101,14 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         classModel.setTitle_en("Choose Class");
         classModelList.add(classModel);
 
+        departmentList = new ArrayList<>();
+
+        StageClassModel departmentModel = new StageClassModel();
+        departmentModel.setId(0);
+        departmentModel.setTitle("إختر القسم");
+        departmentModel.setTitle_en("Choose Department");
+        departmentList.add(departmentModel);
+
         countryModelList = new ArrayList<>(Arrays.asList(countries));
         Paper.init(this);
         lang = Paper.book().read("lang", "ar");
@@ -119,6 +130,8 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                     binding.spinnerClass.setSelection(0);
                     model.setStage_id(0);
                     model.setClass_id(0);
+                    model.setDepartment_id(0);
+                    binding.llDepartment.setVisibility(View.GONE);
 
                 }else {
                     StageClassModel stageClassModel1 = stageModelList.get(i);
@@ -141,11 +154,36 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i==0){
                     model.setClass_id(0);
+                    model.setDepartment_id(0);
+                    binding.llDepartment.setVisibility(View.GONE);
+                    binding.spinnerDepartment.setSelection(0);
 
                 }else {
                     StageClassModel stageClassModel1 = classModelList.get(i);
                     model.setClass_id(stageClassModel1.getId());
+                    getDepartment(stageClassModel1.getId());
+                }
 
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        departmentAdapter = new StageSpinnerAdapter(departmentList,this);
+        binding.spinnerDepartment.setAdapter(departmentAdapter);
+        binding.spinnerDepartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i==0){
+                    model.setDepartment_id(0);
+
+                }else {
+                    StageClassModel stageClassModel1 = departmentList.get(i);
+                    model.setDepartment_id(stageClassModel1.getId());
                 }
 
             }
@@ -161,6 +199,8 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
 
     }
+
+
 
     private void getStage()
     {
@@ -273,6 +313,72 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                 });
 
     }
+
+    private void getDepartment(int classId)
+    {
+        Api.getService(Tags.base_url)
+                .getDepartmentByClassId(classId)
+                .enqueue(new Callback<StageDataModel>() {
+                    @Override
+                    public void onResponse(Call<StageDataModel> call, Response<StageDataModel> response) {
+                        if (response.isSuccessful()) {
+                            departmentList.clear();
+                            StageClassModel departmentModel = new StageClassModel();
+                            departmentModel.setId(0);
+                            departmentModel.setTitle("إختر القسم");
+                            departmentModel.setTitle_en("Choose Department");
+                            departmentList.add(departmentModel);
+
+                            departmentList.addAll(response.body().getData());
+
+                            if (departmentList.size()>0){
+                                binding.llDepartment.setVisibility(View.VISIBLE);
+                                model.setHasDepartment(true);
+                            }else {
+                                binding.llDepartment.setVisibility(View.GONE);
+                                model.setHasDepartment(false);
+
+                            }
+                            runOnUiThread(() -> {
+                                departmentAdapter.notifyDataSetChanged();
+                                binding.spinnerDepartment.setSelection(0);
+
+                            });
+                        } else {
+                            try {
+                                Log.e("error", response.code() + "__" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (response.code() == 500) {
+                                Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(StudentSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<StageDataModel> call, Throwable t) {
+                        try {
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+
+    }
+
     private void createCountriesDialog()
     {
 
@@ -313,15 +419,17 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     @Override
     public void validate() {
         if (model.isDataValid(this)){
-
-            if (uri==null){
-                signUpWithoutImage();
-            }else {
-                signUpWithImage();
-            }
+            navigateToVerificationCodeActivity();
         }
     }
 
+    private void navigateToVerificationCodeActivity() {
+        Intent intent = new Intent(this, VerificationCodeActivity.class);
+        intent.putExtra("phone_code",model.getPhone_code());
+        intent.putExtra("phone",model.getPhone());
+        startActivityForResult(intent,200);
+
+    }
 
 
     private void signUpWithoutImage()
@@ -330,7 +438,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .signUpStudentWithoutImage(model.getName(),model.getEmail(),model.getPhone_code(),model.getPhone(),model.getPassword(),model.getFather_phone_code()+model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),"android","student")
+                .signUpStudentWithoutImage(model.getName(),model.getEmail(),model.getPhone_code(),model.getPhone(),model.getPassword(),model.getFather_phone_code()+model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),model.getDepartment_id(),"android","student")
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -338,6 +446,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                         if (response.isSuccessful()&&response.body()!=null)
                         {
                             preferences.create_update_userdata(StudentSignUpActivity.this,response.body());
+                            navigateToStudentHomeActivity();
 
                         }else
                         {
@@ -400,6 +509,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
         RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
         RequestBody class_id_part = Common.getRequestBodyText(String.valueOf(model.getClass_id()));
+        RequestBody department_id_part = Common.getRequestBodyText(String.valueOf(model.getDepartment_id()));
 
         RequestBody software_part = Common.getRequestBodyText("android");
         RequestBody user_type_part = Common.getRequestBodyText("student");
@@ -408,7 +518,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
 
         Api.getService(Tags.base_url)
-                .signUpStudentWithImage(name_part,email_part,phone_code_part,phone_part,password_part,father_phone_part,address_part,school_name_part,stage_id_part,class_id_part,software_part,user_type_part,image)
+                .signUpStudentWithImage(name_part,email_part,phone_code_part,phone_part,password_part,father_phone_part,address_part,school_name_part,stage_id_part,class_id_part,department_id_part,software_part,user_type_part,image)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -416,8 +526,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                         if (response.isSuccessful()&&response.body()!=null)
                         {
                             preferences.create_update_userdata(StudentSignUpActivity.this,response.body());
-
-
+                            navigateToStudentHomeActivity();
                         }else
                         {
                             if (response.code()==500)
@@ -466,7 +575,9 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
     @Override
     public void navigateToStudentHomeActivity() {
-
+        Intent intent = new Intent(this, StudentHomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -487,6 +598,12 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                 model.setImageUri(uri.toString());
                 binding.setModel(model);
                 Picasso.get().load(uri).into(binding.image);
+            }
+        }else if (requestCode==200&&resultCode==RESULT_OK){
+            if (uri==null){
+                signUpWithImage();
+            }else {
+                signUpWithoutImage();
             }
         }
     }

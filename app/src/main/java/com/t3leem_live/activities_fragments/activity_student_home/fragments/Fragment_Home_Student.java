@@ -26,6 +26,8 @@ import com.t3leem_live.adapters.StageAdapter;
 import com.t3leem_live.databinding.FragmentHomeStudentBinding;
 import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.StageDataModel;
+import com.t3leem_live.models.UserModel;
+import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.tags.Tags;
 
@@ -33,6 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.paperdb.Paper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,6 +46,9 @@ public class Fragment_Home_Student extends Fragment {
     private List<StageClassModel> stageClassModelList;
     private StudentHomeActivity activity;
     private SkeletonScreen skeletonScreen;
+    private UserModel userModel;
+    private Preferences preferences;
+    private String lang;
 
     public static Fragment_Home_Student newInstance(){
         return new Fragment_Home_Student();
@@ -56,7 +62,13 @@ public class Fragment_Home_Student extends Fragment {
     }
 
     private void initView() {
+
         activity = (StudentHomeActivity) getActivity();
+        preferences = Preferences.getInstance();
+        userModel = preferences.getUserData(activity);
+        Paper.init(activity);
+        lang = Paper.book().read("lang","ar");
+
         stageClassModelList = new ArrayList<>();
         adapter = new StageAdapter(stageClassModelList,activity,this);
         binding.recView.setLayoutManager(new GridLayoutManager(activity,2));
@@ -69,13 +81,55 @@ public class Fragment_Home_Student extends Fragment {
                 .shimmer(true)
                 .show();
 
-        getStage();
+        if (userModel!=null){
+            getSubjects();
+
+        }
     }
 
-    private void getStage()
+    private void getSubjects()
     {
+        int stage_id =0;
+        int class_id =0;
+        String department_id=null;
+        String data="";
+        if (userModel.getData().getStage_fk()!=null){
+            stage_id = userModel.getData().getStage_fk().getId();
+            if (lang.equals("ar")){
+                data += userModel.getData().getStage_fk().getTitle();
+
+            }else {
+                data += userModel.getData().getStage_fk().getTitle_en();
+
+            }
+        }
+        if (userModel.getData().getClass_fk()!=null){
+            class_id = userModel.getData().getClass_fk().getId();
+            data +=",";
+            if (lang.equals("ar")){
+                data += userModel.getData().getClass_fk().getTitle();
+
+            }else {
+                data += userModel.getData().getClass_fk().getTitle_en();
+
+            }
+        }
+
+        if (userModel.getData().getDepartment_fk()!=null){
+            department_id = String.valueOf(userModel.getData().getDepartment_fk().getId());
+
+            data +=",";
+            if (lang.equals("ar")){
+                data += userModel.getData().getDepartment_fk().getTitle();
+
+            }else {
+                data += userModel.getData().getDepartment_fk().getTitle_en();
+
+            }
+        }
+        binding.tvStageClassDepartment.setText(data);
         Api.getService(Tags.base_url)
-                .getStage()
+                .getSubject(stage_id,class_id,department_id)
                 .enqueue(new Callback<StageDataModel>() {
                     @Override
                     public void onResponse(Call<StageDataModel> call, Response<StageDataModel> response) {
@@ -83,8 +137,13 @@ public class Fragment_Home_Student extends Fragment {
                         if (response.isSuccessful()) {
                             stageClassModelList.clear();
                             stageClassModelList.addAll(response.body().getData());
-                            Log.e("size",stageClassModelList.size()+"_");
                             adapter.notifyDataSetChanged();
+                            if (stageClassModelList.size()>0){
+                                binding.tvNoSubject.setVisibility(View.GONE);
+                            }else {
+                                binding.tvNoSubject.setVisibility(View.VISIBLE);
+
+                            }
                         } else {
                             skeletonScreen.hide();
 

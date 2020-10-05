@@ -21,8 +21,11 @@ public class TeacherSignUpModel extends BaseObservable {
     private String password;
     private int stage_id;
     private int class_id;
+    private int department_id;
     private String address;
     private String school_name;
+    private boolean isHasDepartment;
+
 
     public ObservableField<String> error_name = new ObservableField<>();
     public ObservableField<String> error_email = new ObservableField<>();
@@ -33,16 +36,16 @@ public class TeacherSignUpModel extends BaseObservable {
 
 
     public boolean isDataValid(Context context) {
-        if (!name.trim().isEmpty() &&
+        if (!name.isEmpty() &&
                 !phone_code.isEmpty() &&
-                !phone.trim().isEmpty() &&
-                !email.trim().isEmpty() &&
-                password.trim().length()>6 &&
-                Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches() &&
+                !phone.isEmpty() &&
+                !email.isEmpty() &&
+                password.length()>6 &&
+                Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
                 stage_id!=0&&
                 class_id!=0&&
-                !address.trim().isEmpty() &&
-                !school_name.trim().isEmpty()
+                !address.isEmpty() &&
+                !school_name.isEmpty()
 
         ) {
             error_phone.set(null);
@@ -51,7 +54,20 @@ public class TeacherSignUpModel extends BaseObservable {
             error_address.set(null);
             error_school_name.set(null);
             error_password.set(null);
-            return true;
+
+            if (isHasDepartment){
+                if (department_id==0){
+                    Toast.makeText(context, R.string.choose_department, Toast.LENGTH_SHORT).show();
+                    return false;
+
+                }else {
+                    return true;
+
+                }
+            }else {
+                return true;
+
+            }
         } else {
 
             if (name.isEmpty()){
@@ -77,6 +93,15 @@ public class TeacherSignUpModel extends BaseObservable {
 
             }
 
+            if (password.isEmpty()){
+                error_password.set(context.getString(R.string.field_required));
+            }else if (password.length()< 6){
+                error_password.set(context.getString(R.string.password_short));
+
+            }else {
+                error_password.set(null);
+
+            }
 
 
             if (stage_id==0){
@@ -115,8 +140,11 @@ public class TeacherSignUpModel extends BaseObservable {
         email = "";
         password="";
         stage_id = 0;
+        department_id = 0;
         address = "";
         school_name = "";
+        isHasDepartment = false;
+
     }
 
     public String getImageUri() {
@@ -229,5 +257,21 @@ public class TeacherSignUpModel extends BaseObservable {
         this.school_name = school_name;
         notifyPropertyChanged(BR.school_name);
 
+    }
+
+    public int getDepartment_id() {
+        return department_id;
+    }
+
+    public void setDepartment_id(int department_id) {
+        this.department_id = department_id;
+    }
+
+    public boolean isHasDepartment() {
+        return isHasDepartment;
+    }
+
+    public void setHasDepartment(boolean hasDepartment) {
+        isHasDepartment = hasDepartment;
     }
 }

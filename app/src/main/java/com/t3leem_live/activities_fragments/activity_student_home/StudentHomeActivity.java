@@ -6,13 +6,16 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.t3leem_live.R;
+import com.t3leem_live.activities_fragments.activity_login.LoginActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Home_Student;
 import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Library_Student;
+import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Profile_Student;
 import com.t3leem_live.databinding.ActivityStudentHomeBinding;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.UserModel;
@@ -25,6 +28,7 @@ public class StudentHomeActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private Fragment_Home_Student fragment_home_student;
     private Fragment_Library_Student fragment_library_student;
+    private Fragment_Profile_Student fragment_profile_student;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -81,12 +85,12 @@ public class StudentHomeActivity extends AppCompatActivity {
                     displayFragmentLibraryStudent();
                     break;
                 case 2:
-
                     break;
                 case 3:
                     break;
 
                 case 4:
+                    displayFragmentProfileStudent();
                     break;
 
             }
@@ -111,6 +115,9 @@ public class StudentHomeActivity extends AppCompatActivity {
         if (fragment_library_student != null && fragment_library_student.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_library_student).commit();
         }
+        if (fragment_profile_student != null && fragment_profile_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_profile_student).commit();
+        }
         if (fragment_home_student.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_home_student).commit();
         } else {
@@ -130,6 +137,9 @@ public class StudentHomeActivity extends AppCompatActivity {
         if (fragment_home_student != null && fragment_home_student.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_home_student).commit();
         }
+        if (fragment_profile_student != null && fragment_profile_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_profile_student).commit();
+        }
         if (fragment_library_student.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_library_student).commit();
         } else {
@@ -141,4 +151,47 @@ public class StudentHomeActivity extends AppCompatActivity {
     }
 
 
+    public void displayFragmentProfileStudent() {
+        if (fragment_profile_student == null) {
+            fragment_profile_student = Fragment_Profile_Student.newInstance();
+        }
+
+        if (fragment_home_student != null && fragment_home_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_home_student).commit();
+        }
+        if (fragment_library_student != null && fragment_library_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_library_student).commit();
+        }
+        if (fragment_profile_student.isAdded()) {
+            fragmentManager.beginTransaction().show(fragment_profile_student).commit();
+        } else {
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_profile_student, "fragment_profile_student").addToBackStack("fragment_profile_student").commit();
+
+        }
+
+        updateBottomNavigationPosition(4);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        if (fragment_home_student!=null&&fragment_home_student.isAdded()&&fragment_home_student.isVisible()){
+            if (userModel==null){
+                navigateToLoginActivity();
+            }else {
+                finish();
+            }
+        }else {
+            displayFragmentHomeStudent();
+        }
+
+
+    }
+
+    private void navigateToLoginActivity() {
+        Intent  intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

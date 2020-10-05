@@ -10,6 +10,7 @@ public class StageClassModel implements Serializable {
     private String icon;
     private String background;
     private String stage_id;
+    private String department_id;
 
     public int getId() {
         return id;
@@ -49,5 +50,9 @@ public class StageClassModel implements Serializable {
 
     public String getStage_id() {
         return stage_id;
+    }
+
+    public String getDepartment_id() {
+        return department_id;
     }
 }

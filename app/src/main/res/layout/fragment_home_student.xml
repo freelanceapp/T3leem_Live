@@ -81,6 +81,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
+                android:id="@+id/tvStageClassDepartment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="@id/imageLogo"
@@ -90,15 +91,29 @@
                 android:fontFamily="@font/font"
                 android:textSize="16sp"
                 android:textColor="@color/black"
-                android:text="@string/choose_edu_system"
                 android:layout_marginTop="10dp"
 
                 />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recView"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/tvNoSubject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/font"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
+                    android:text="@string/no_subject"
+                    android:visibility="gone"
+                    />
+            </FrameLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
