@@ -64,7 +64,7 @@ public interface Service {
                                               @Field("school_name") String school_name,
                                               @Field("stage_id") int stage_id,
                                               @Field("class_id") int class_id,
-                                              @Field("department_id") int department_id,
+                                              @Field("department_id") String department_id,
                                               @Field("software_type") String software_type,
                                               @Field("user_type") String user_type
 

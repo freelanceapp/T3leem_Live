@@ -22,6 +22,7 @@ import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_classes.ClassesActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
 import com.t3leem_live.activities_fragments.activity_student_sign_up.StudentSignUpActivity;
+import com.t3leem_live.activities_fragments.activity_subject_tutorial.SubjectTutorialActivity;
 import com.t3leem_live.adapters.StageAdapter;
 import com.t3leem_live.databinding.FragmentHomeStudentBinding;
 import com.t3leem_live.models.StageClassModel;
@@ -184,7 +185,7 @@ public class Fragment_Home_Student extends Fragment {
     }
 
     public void setItemData(StageClassModel classModel) {
-        Intent intent = new Intent(activity, ClassesActivity.class);
+        Intent intent = new Intent(activity, SubjectTutorialActivity.class);
         intent.putExtra("data",classModel);
         startActivity(intent);
     }

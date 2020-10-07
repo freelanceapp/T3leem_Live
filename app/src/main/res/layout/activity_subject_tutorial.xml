@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="subject"
+            type="String" />
+        <variable
+            name="className"
+            type="String" />
+    </data>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:background="@color/color1">
+
+                <ImageView
+                    android:id="@+id/imageLogo"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:padding="5dp"
+                    android:src="@drawable/logo_circle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias=".05"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSubject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/font"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toEndOf="@id/imageLogo"
+                    app:layout_constraintTop_toTopOf="@id/imageLogo"
+                    android:text="@{subject}"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/font"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toEndOf="@id/imageLogo"
+                    app:layout_constraintTop_toBottomOf="@id/tvSubject"
+                    android:text="@{className}"
+                    />
+
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/upstairs_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias=".95"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias=".5" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/llVideo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@drawable/small_gradient1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_video_camera"
+                        app:tint="@color/white"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/font"
+                        android:text="@string/videos"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:id="@+id/llNote"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@drawable/small_gradient2"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_book"
+                        app:tint="@color/white"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/font"
+                        android:text="@string/notes"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:id="@+id/llLiveVideo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@drawable/small_gradient3"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_online_video"
+                        app:tint="@color/white"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:fontFamily="@font/font"
+                        android:text="@string/live_lesson"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="5dp"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:id="@+id/llQuiz"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@drawable/small_gradient4"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_quiz"
+                        app:tint="@color/white"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/font"
+                        android:text="@string/quiz"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+
+                />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

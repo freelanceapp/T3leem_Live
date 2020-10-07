@@ -130,7 +130,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                     binding.spinnerClass.setSelection(0);
                     model.setStage_id(0);
                     model.setClass_id(0);
-                    model.setDepartment_id(0);
+                    model.setDepartment_id("");
                     binding.llDepartment.setVisibility(View.GONE);
 
                 }else {
@@ -154,7 +154,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i==0){
                     model.setClass_id(0);
-                    model.setDepartment_id(0);
+                    model.setDepartment_id("");
                     binding.llDepartment.setVisibility(View.GONE);
                     binding.spinnerDepartment.setSelection(0);
 
@@ -179,11 +179,11 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i==0){
-                    model.setDepartment_id(0);
+                    model.setDepartment_id("");
 
                 }else {
                     StageClassModel stageClassModel1 = departmentList.get(i);
-                    model.setDepartment_id(stageClassModel1.getId());
+                    model.setDepartment_id(String.valueOf(stageClassModel1.getId()));
                 }
 
             }

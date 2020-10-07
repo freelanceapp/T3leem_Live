@@ -21,7 +21,7 @@ public class TeacherSignUpModel extends BaseObservable {
     private String password;
     private int stage_id;
     private int class_id;
-    private int department_id;
+    private String department_id;
     private String address;
     private String school_name;
     private boolean isHasDepartment;
@@ -56,7 +56,7 @@ public class TeacherSignUpModel extends BaseObservable {
             error_password.set(null);
 
             if (isHasDepartment){
-                if (department_id==0){
+                if (department_id.isEmpty()){
                     Toast.makeText(context, R.string.choose_department, Toast.LENGTH_SHORT).show();
                     return false;
 
@@ -140,7 +140,7 @@ public class TeacherSignUpModel extends BaseObservable {
         email = "";
         password="";
         stage_id = 0;
-        department_id = 0;
+        department_id ="";
         address = "";
         school_name = "";
         isHasDepartment = false;
@@ -259,11 +259,11 @@ public class TeacherSignUpModel extends BaseObservable {
 
     }
 
-    public int getDepartment_id() {
+    public String getDepartment_id() {
         return department_id;
     }
 
-    public void setDepartment_id(int department_id) {
+    public void setDepartment_id(String department_id) {
         this.department_id = department_id;
     }
 

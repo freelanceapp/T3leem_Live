@@ -21,7 +21,7 @@ public class StudentSignUpModel extends BaseObservable {
     private String password;
     private int stage_id;
     private int class_id;
-    private int department_id;
+    private String department_id;
     private String father_phone_code;
     private String father_phone;
     private String address;
@@ -64,7 +64,7 @@ public class StudentSignUpModel extends BaseObservable {
             error_password.set(null);
 
             if (isHasDepartment){
-                if (department_id==0){
+                if (department_id.isEmpty()){
                     Toast.makeText(context, R.string.choose_department, Toast.LENGTH_SHORT).show();
                     return false;
 
@@ -154,7 +154,7 @@ public class StudentSignUpModel extends BaseObservable {
         password ="";
         stage_id = 0;
         class_id=0;
-        department_id = 0;
+        department_id = "";
         father_phone_code = "";
         father_phone = "";
         address = "";
@@ -239,11 +239,11 @@ public class StudentSignUpModel extends BaseObservable {
         this.class_id = class_id;
     }
 
-    public int getDepartment_id() {
+    public String getDepartment_id() {
         return department_id;
     }
 
-    public void setDepartment_id(int department_id) {
+    public void setDepartment_id(String department_id) {
         this.department_id = department_id;
     }
 
