@@ -91,7 +91,7 @@
                 <LinearLayout
                     android:id="@+id/llVideo"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:background="@drawable/small_gradient1"
@@ -117,7 +117,7 @@
                         android:fontFamily="@font/font"
                         android:text="@string/videos"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:clickable="false"
                         android:longClickable="false"
                         />
@@ -130,7 +130,7 @@
                 <LinearLayout
                     android:id="@+id/llNote"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:background="@drawable/small_gradient2"
@@ -155,7 +155,7 @@
                         android:fontFamily="@font/font"
                         android:text="@string/notes"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="12sp"
                         android:clickable="false"
                         android:longClickable="false"
                         />
@@ -168,7 +168,7 @@
                 <LinearLayout
                     android:id="@+id/llLiveVideo"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:background="@drawable/small_gradient3"
@@ -206,7 +206,7 @@
                 <LinearLayout
                     android:id="@+id/llQuiz"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:background="@drawable/small_gradient4"
@@ -234,18 +234,37 @@
                         android:textSize="13sp"
                         android:clickable="false"
                         android:longClickable="false"
+
                         />
                 </LinearLayout>
 
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recView"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
 
-                />
+                    />
+                <TextView
+                    android:id="@+id/tvNoSummary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="150dp"
+                    android:text="@string/no_summary"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/font"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    />
+            </FrameLayout>
+
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

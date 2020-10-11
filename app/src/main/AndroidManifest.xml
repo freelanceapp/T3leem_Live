@@ -24,11 +24,12 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:targetApi="m">
-        <activity android:name=".activities_fragments.activity_subject_tutorial.SubjectTutorialActivity"
+        <activity android:name=".activities_fragments.activity_videos.VideosActivity"></activity>
+        <activity
+            android:name=".activities_fragments.activity_subject_tutorial.SubjectTutorialActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
-            />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activities_fragments.activity_classes.ClassesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -38,7 +39,7 @@
             android:name=".activities_fragments.activity_student_home.StudentHomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activities_fragments.activity_teacher_sign_up.TeacherSignUpActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

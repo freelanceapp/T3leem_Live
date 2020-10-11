@@ -33,9 +33,12 @@
     <color name="gray5">#c3c3c3</color>
     <color name="gray6">#b0afbb</color>
     <color name="gray7">#a0a0a0</color>
+    <color name="gray8">#222222</color>
+    <color name="gray9">#393939</color>
     <color name="transparent">#00000000</color>
     <color name="color_red">#ef0607</color>
     <color name="rate_color">#FFD800</color>
     <color name="yellow">#FBC02D</color>
+    <color name="black_trans">#88000000</color>
 
 </resources>

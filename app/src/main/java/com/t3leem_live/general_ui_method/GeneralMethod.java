@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.t3leem_live.R;
 import com.t3leem_live.tags.Tags;
@@ -105,6 +107,40 @@ public class GeneralMethod {
         ratingBar.setRating((float) rate);
 
     }
+
+    @BindingAdapter("video_frame")
+    public static void chat_video_frame(View view, String endPoint) {
+        if (view instanceof CircleImageView) {
+            CircleImageView imageView = (CircleImageView) view;
+            if (endPoint!=null){
+                RequestOptions requestOptions = new RequestOptions().frame(5000000);
+                Glide.with(imageView.getContext()).load(Uri.parse(Tags.IMAGE_URL+endPoint))
+                        .apply(requestOptions)
+                        .into(imageView);
+            }
+
+
+        } else if (view instanceof RoundedImageView) {
+            RoundedImageView imageView = (RoundedImageView) view;
+            if (endPoint!=null){
+                RequestOptions requestOptions = new RequestOptions().frame(5000000);
+                Glide.with(imageView.getContext()).load(Uri.parse(Tags.IMAGE_URL+endPoint))
+                        .apply(requestOptions)
+                        .into(imageView);
+            }
+        } else if (view instanceof ImageView) {
+            ImageView imageView = (ImageView) view;
+            if (endPoint!=null){
+                RequestOptions requestOptions = new RequestOptions().frame(5000000);
+                Glide.with(imageView.getContext()).load(Uri.parse(Tags.IMAGE_URL+endPoint))
+                        .apply(requestOptions)
+                        .into(imageView);
+            }
+
+        }
+
+    }
+
 }
 
 

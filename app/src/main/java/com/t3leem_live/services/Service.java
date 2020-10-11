@@ -3,7 +3,9 @@ package com.t3leem_live.services;
 import com.t3leem_live.models.PlaceGeocodeData;
 import com.t3leem_live.models.PlaceMapDetailsData;
 import com.t3leem_live.models.StageDataModel;
+import com.t3leem_live.models.SummaryDataModel;
 import com.t3leem_live.models.UserModel;
+import com.t3leem_live.models.VideoLessonsDataModel;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -95,5 +97,20 @@ public interface Service {
                                     @Query(value = "department_id") String department_id
     );
 
+    @GET("api/get-summary-by-subject-id")
+    Call<SummaryDataModel> getSummary(@Query(value = "stage_id") int stage_id,
+                                      @Query(value = "class_id") int class_id,
+                                      @Query(value = "department_id") String department_id,
+                                      @Query(value = "subject_id") int subject_id
+    );
 
+
+    @GET("api/get-tutorials-details-by-subject-id")
+    Call<VideoLessonsDataModel> getVideos(@Query(value = "stage_id") String stage_id,
+                                          @Query(value = "class_id") String class_id,
+                                          @Query(value = "department_id") String department_id,
+                                          @Query(value = "subject_id") String subject_id,
+                                          @Query(value = "document_type") String document_type
+
+    );
 }

@@ -453,7 +453,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                             if (response.code()==500)
                             {
                                 Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==409)
+                            }else if (response.code()==407)
                             {
                                 Toast.makeText(StudentSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
                             }else if (response.code()==406)
@@ -532,7 +532,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                             if (response.code()==500)
                             {
                                 Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==409)
+                            }else if (response.code()==407)
                             {
                                 Toast.makeText(StudentSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
                             }else if (response.code()==406)

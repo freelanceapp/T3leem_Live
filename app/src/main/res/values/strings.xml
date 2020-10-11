@@ -106,5 +106,8 @@
     <string name="notes">المذكرات</string>
     <string name="live_lesson">دروس مباشرة</string>
     <string name="quiz">أسئلة</string>
+    <string name="egp">ج.م</string>
+    <string name="no_summary">لا يوجد ملخصات لعرضها</string>
+    <string name="no_videos">لا توجد فيديوهات لعرضها</string>
 
 </resources>
