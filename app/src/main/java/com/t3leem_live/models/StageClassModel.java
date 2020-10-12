@@ -9,6 +9,7 @@ public class StageClassModel implements Serializable {
     private String desc;
     private String icon;
     private String background;
+    private String file_doc;
     private String stage_id;
     private String class_id;
     private String subject_id;
@@ -64,5 +65,9 @@ public class StageClassModel implements Serializable {
 
     public String getSubject_id() {
         return subject_id;
+    }
+
+    public String getFile_doc() {
+        return file_doc;
     }
 }

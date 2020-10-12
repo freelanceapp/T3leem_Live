@@ -15,6 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/black"
+
         >
         <net.cachapa.expandablelayout.ExpandableLayout
             android:id="@+id/expandableLayout"
@@ -38,11 +39,24 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:controller_layout_id="@layout/exoplayer_controler_ui"
+                    app:fastforward_increment="1500"
+                    app:rewind_increment="1500"
+                    app:auto_show="false"
                     >
 
+                    <ProgressBar
+                        android:id="@+id/progBarBuffering"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:indeterminateTint="@color/gray8"
+                        android:alpha=".3"
+                        android:layout_gravity="center"
 
+                        />
 
                 </com.google.android.exoplayer2.ui.PlayerView>
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,7 +105,8 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:src="@drawable/ic_video_camera"
-                    app:tint="@color/white"
+                    app:tint="@color/gray6"
+                    android:alpha=".1"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -100,6 +115,7 @@
                     android:textSize="22sp"
                     android:textColor="@color/white"
                     android:text="@string/no_videos"
+                    android:alpha=".2"
                     />
 
             </LinearLayout>

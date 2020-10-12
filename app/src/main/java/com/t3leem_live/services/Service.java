@@ -113,4 +113,9 @@ public interface Service {
                                           @Query(value = "document_type") String document_type
 
     );
+
+    @GET("api/get-library-details-by-id")
+    Call<StageDataModel> getBooks(@Query(value = "library_id") int library_id
+
+    );
 }

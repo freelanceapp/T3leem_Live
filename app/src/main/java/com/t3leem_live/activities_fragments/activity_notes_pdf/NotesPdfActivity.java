@@ -1,4 +1,4 @@
-package com.t3leem_live.activities_fragments.activity_subject_tutorial;
+package com.t3leem_live.activities_fragments.activity_notes_pdf;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,16 +15,18 @@ import android.widget.Toast;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_notes_pdf.NotesPdfActivity;
+import com.t3leem_live.activities_fragments.activity_subject_tutorial.SubjectTutorialActivity;
 import com.t3leem_live.activities_fragments.activity_videos.VideosActivity;
+import com.t3leem_live.adapters.NotesPdfAdapter;
 import com.t3leem_live.adapters.SummaryAdapter;
-import com.t3leem_live.databinding.ActivitySubjectTutorialBinding;
+import com.t3leem_live.databinding.ActivityNotesPdfBinding;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.StageClassModel;
-import com.t3leem_live.models.StageDataModel;
 import com.t3leem_live.models.SummaryDataModel;
 import com.t3leem_live.models.SummaryModel;
 import com.t3leem_live.models.UserModel;
+import com.t3leem_live.models.VideoLessonsDataModel;
+import com.t3leem_live.models.VideoLessonsModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.tags.Tags;
@@ -37,13 +40,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SubjectTutorialActivity extends AppCompatActivity {
-    private ActivitySubjectTutorialBinding binding;
+public class NotesPdfActivity extends AppCompatActivity {
+    private ActivityNotesPdfBinding binding;
     private UserModel userModel;
     private Preferences preferences;
     private StageClassModel stageClassModel;
-    private List<SummaryModel> summaryModelList;
-    private SummaryAdapter adapter;
+    private List<VideoLessonsModel> videoLessonsModelList;
+    private NotesPdfAdapter adapter;
     private String lang;
     private SkeletonScreen skeletonScreen;
 
@@ -57,7 +60,7 @@ public class SubjectTutorialActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_subject_tutorial);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_notes_pdf);
         getDataFromIntent();
         initView();
 
@@ -69,7 +72,7 @@ public class SubjectTutorialActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        summaryModelList = new ArrayList<>();
+        videoLessonsModelList = new ArrayList<>();
         preferences  = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         Paper.init(this);
@@ -80,8 +83,7 @@ public class SubjectTutorialActivity extends AppCompatActivity {
             binding.setSubject(stageClassModel.getTitle_en());
 
         }
-
-        adapter = new SummaryAdapter(summaryModelList,this);
+        adapter = new NotesPdfAdapter(videoLessonsModelList,this);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
         binding.recView.setAdapter(adapter);
 
@@ -93,82 +95,30 @@ public class SubjectTutorialActivity extends AppCompatActivity {
                 .shimmer(true)
                 .show();
 
-
-        binding.llVideo.setOnClickListener(view -> {
-            Intent intent = new Intent(this, VideosActivity.class);
-            intent.putExtra("data",stageClassModel);
-            startActivity(intent);
-        });
-
-        binding.llNote.setOnClickListener(view -> {
-            Intent intent = new Intent(this, NotesPdfActivity.class);
-            intent.putExtra("data",stageClassModel);
-            startActivity(intent);
-        });
-        updateUiUserClassName();
-        getSummary();
+        getPdf();
 
     }
 
 
-
-    private void updateUiUserClassName()
-    {
-        String data="";
-        if (userModel.getData().getStage_fk()!=null){
-            if (lang.equals("ar")){
-                data += userModel.getData().getStage_fk().getTitle();
-
-            }else {
-                data += userModel.getData().getStage_fk().getTitle_en();
-
-            }
-        }
-        if (userModel.getData().getClass_fk()!=null){
-            data +=",";
-            if (lang.equals("ar")){
-                data += userModel.getData().getClass_fk().getTitle();
-
-            }else {
-                data += userModel.getData().getClass_fk().getTitle_en();
-
-            }
-        }
-
-        if (userModel.getData().getDepartment_fk()!=null){
-
-            data +=",";
-            if (lang.equals("ar")){
-                data += userModel.getData().getDepartment_fk().getTitle();
-
-            }else {
-                data += userModel.getData().getDepartment_fk().getTitle_en();
-
-            }
-        }
-
-        binding.setClassName(data);
-    }
-
-    private void getSummary()
+    private void getPdf()
     {
 
         Api.getService(Tags.base_url)
-                .getSummary(Integer.parseInt(stageClassModel.getStage_id()),Integer.parseInt(stageClassModel.getClass_id()),stageClassModel.getDepartment_id(),stageClassModel.getId())
-                .enqueue(new Callback<SummaryDataModel>() {
+                .getVideos(stageClassModel.getStage_id(),stageClassModel.getClass_id(),stageClassModel.getDepartment_id(),String.valueOf(stageClassModel.getId()),"pdf")
+                .enqueue(new Callback<VideoLessonsDataModel>() {
                     @Override
-                    public void onResponse(Call<SummaryDataModel> call, Response<SummaryDataModel> response) {
+                    public void onResponse(Call<VideoLessonsDataModel> call, Response<VideoLessonsDataModel> response) {
                         skeletonScreen.hide();
                         if (response.isSuccessful()) {
 
                             if (response.body()!=null&&response.body().getData()!=null){
-                                summaryModelList.clear();
-                                summaryModelList.addAll(response.body().getData());
-                                adapter.notifyDataSetChanged();
-                                if (summaryModelList.size()>0){
-                                    binding.tvNoSummary.setVisibility(View.GONE);
+                                videoLessonsModelList.clear();
+                                videoLessonsModelList.addAll(response.body().getData());
+                                if (videoLessonsModelList.size()>0){
+                                    binding.tvNoPdf.setVisibility(View.GONE);
+                                    adapter.notifyDataSetChanged();
                                 }else {
-                                    binding.tvNoSummary.setVisibility(View.VISIBLE);
+                                    binding.tvNoPdf.setVisibility(View.VISIBLE);
 
                                 }
                             }
@@ -183,15 +133,15 @@ public class SubjectTutorialActivity extends AppCompatActivity {
                             }
 
                             if (response.code() == 500) {
-                                Toast.makeText(SubjectTutorialActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NotesPdfActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(SubjectTutorialActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NotesPdfActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<SummaryDataModel> call, Throwable t) {
+                    public void onFailure(Call<VideoLessonsDataModel> call, Throwable t) {
                         try {
                             skeletonScreen.hide();
 
@@ -199,9 +149,9 @@ public class SubjectTutorialActivity extends AppCompatActivity {
                                 Log.e("error", t.getMessage() + "__");
 
                                 if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    Toast.makeText(SubjectTutorialActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NotesPdfActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(SubjectTutorialActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NotesPdfActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         } catch (Exception e) {
@@ -210,4 +160,8 @@ public class SubjectTutorialActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+
+
 }

@@ -18,6 +18,7 @@ import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_classes.ClassesActivity;
+import com.t3leem_live.activities_fragments.activity_library_details.LibraryDetailsActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
 import com.t3leem_live.adapters.LibraryAdapter;
 import com.t3leem_live.adapters.StageAdapter;
@@ -123,7 +124,7 @@ public class Fragment_Library_Student extends Fragment {
     }
 
     public void setItemData(StageClassModel classModel) {
-        Intent intent = new Intent(activity, ClassesActivity.class);
+        Intent intent = new Intent(activity, LibraryDetailsActivity.class);
         intent.putExtra("data",classModel);
         startActivity(intent);
     }

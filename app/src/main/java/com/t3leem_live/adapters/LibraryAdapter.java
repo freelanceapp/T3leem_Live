@@ -63,7 +63,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         myHolder.itemView.setOnClickListener(view -> {
             StageClassModel classModel2 = list.get(holder.getAdapterPosition());
-
+            fragment_library_student.setItemData(classModel2);
         });
 
 

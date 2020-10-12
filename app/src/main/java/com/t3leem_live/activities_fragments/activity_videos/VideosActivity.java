@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ethanhua.skeleton.Skeleton;
@@ -75,21 +76,21 @@ public class VideosActivity extends AppCompatActivity {
     private VideoAdapter adapter;
     private String lang;
     private SimpleExoPlayer player;
-    private int currentWindow =0;
+    private int currentWindow = 0;
     private long currentPosition = 0;
     private boolean playWhenReady = true;
     private Uri uri = null;
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(Language.updateResources(newBase,"ar"));
+        super.attachBaseContext(Language.updateResources(newBase, "ar"));
 
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_videos);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_videos);
         getDataFromIntent();
         initView();
 
@@ -102,13 +103,15 @@ public class VideosActivity extends AppCompatActivity {
 
     private void initView() {
         videoLessonsModelList = new ArrayList<>();
-        preferences  = Preferences.getInstance();
+        preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         Paper.init(this);
-        lang = Paper.book().read("lang","ar");
+        lang = Paper.book().read("lang", "ar");
         binding.setLang(lang);
-        binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this,R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-        adapter = new VideoAdapter(videoLessonsModelList,this);
+        binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+        binding.progBarBuffering.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.gray5), PorterDuff.Mode.SRC_IN);
+
+        adapter = new VideoAdapter(videoLessonsModelList, this);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
         binding.recView.setAdapter(adapter);
 
@@ -118,18 +121,17 @@ public class VideosActivity extends AppCompatActivity {
     }
 
 
-    private void getVideos()
-    {
+    private void getVideos() {
 
         Api.getService(Tags.base_url)
-                .getVideos(stageClassModel.getStage_id(),stageClassModel.getClass_id(),stageClassModel.getDepartment_id(),String.valueOf(stageClassModel.getId()),"video")
+                .getVideos(stageClassModel.getStage_id(), stageClassModel.getClass_id(), stageClassModel.getDepartment_id(), String.valueOf(stageClassModel.getId()), "video")
                 .enqueue(new Callback<VideoLessonsDataModel>() {
                     @Override
                     public void onResponse(Call<VideoLessonsDataModel> call, Response<VideoLessonsDataModel> response) {
                         binding.progBar.setVisibility(View.GONE);
                         if (response.isSuccessful()) {
 
-                            if (response.body()!=null&&response.body().getData()!=null){
+                            if (response.body() != null && response.body().getData() != null) {
                                 videoLessonsModelList.clear();
                                 videoLessonsModelList.addAll(response.body().getData());
                                 videoLessonsModelList.addAll(response.body().getData());
@@ -137,15 +139,16 @@ public class VideosActivity extends AppCompatActivity {
                                 videoLessonsModelList.addAll(response.body().getData());
 
                                 adapter.notifyDataSetChanged();
-                                if (videoLessonsModelList.size()>0){
+                                if (videoLessonsModelList.size() > 0) {
+                                    binding.recView.setVisibility(View.VISIBLE);
                                     binding.expandableLayout.expand(true);
                                     VideoLessonsModel videoLessonsModel = videoLessonsModelList.get(0);
                                     binding.setModel(videoLessonsModel);
-                                    uri = Uri.parse(Tags.IMAGE_URL+videoLessonsModel.getFile_doc());
+                                    uri = Uri.parse(Tags.IMAGE_URL + videoLessonsModel.getFile_doc());
                                     initPlayer(uri);
                                     binding.llNoVideos.setVisibility(View.GONE);
-                                }else {
-
+                                } else {
+                                    binding.recView.setVisibility(View.GONE);
                                     binding.llNoVideos.setVisibility(View.VISIBLE);
 
                                 }
@@ -191,44 +194,69 @@ public class VideosActivity extends AppCompatActivity {
 
     public void playVideo(VideoLessonsModel videoLessonsModel) {
         binding.setModel(videoLessonsModel);
-        if (!binding.expandableLayout.isExpanded()){
+        if (!binding.expandableLayout.isExpanded()) {
             binding.expandableLayout.expand(true);
         }
-        uri = Uri.parse(Tags.IMAGE_URL+videoLessonsModel.getFile_doc());
+        uri = Uri.parse(Tags.IMAGE_URL + videoLessonsModel.getFile_doc());
         initPlayer(uri);
     }
 
 
-
     private void initPlayer(Uri uri) {
-
-        if (player==null){
+        if (player == null) {
             DefaultTrackSelector trackSelector = new DefaultTrackSelector();
             trackSelector.setParameters(trackSelector.buildUponParameters().setMaxVideoSizeSd());
             player = ExoPlayerFactory.newSimpleInstance(this);
             binding.player.setPlayer(player);
             MediaSource mediaSource = buildMediaSource(uri);
 
-            player.seekTo(currentWindow,currentPosition);
+            player.seekTo(currentWindow, currentPosition);
             player.setPlayWhenReady(playWhenReady);
             player.prepare(mediaSource);
-        }else {
+        } else {
             currentWindow = 0;
-            currentPosition =0;
+            currentPosition = 0;
             MediaSource mediaSource = buildMediaSource(uri);
 
-            player.seekTo(currentWindow,currentPosition);
+            player.seekTo(currentWindow, currentPosition);
             player.setPlayWhenReady(playWhenReady);
             player.prepare(mediaSource);
         }
 
+        player.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                if (playWhenReady) {
+                    if (playbackState == Player.STATE_BUFFERING) {
+                        binding.progBarBuffering.setVisibility(View.VISIBLE);
+                    }else if (playbackState==Player.STATE_READY){
+                        binding.progBarBuffering.setVisibility(View.GONE);
 
+                    }else if (playbackState == Player.STATE_ENDED) {
+                        binding.progBarBuffering.setVisibility(View.GONE);
+                        currentWindow = 0;
+                        currentPosition = 0;
+                        initPlayer(uri);
+                    } else if (playbackState == Player.TIMELINE_CHANGE_REASON_RESET){
+                        binding.progBarBuffering.setVisibility(View.VISIBLE);
 
+                    }else {
+                        binding.progBarBuffering.setVisibility(View.GONE);
 
+                    }
+                }
+            }
+
+            @Override
+            public void onTimelineChanged(Timeline timeline, int reason) {
+                //progressBar.setVisibility(View.GONE);
+            }
+        });
 
 
     }
-    private MediaSource buildMediaSource(Uri uri){
+
+    private MediaSource buildMediaSource(Uri uri) {
         String userAgent = "exoPlayer_Ta3leem";
 
 
@@ -243,18 +271,18 @@ public class VideosActivity extends AppCompatActivity {
 
             DefaultDashChunkSource.Factory factory = new DefaultDashChunkSource.Factory(new DefaultHttpDataSourceFactory(userAgent));
 
-            return new DashMediaSource.Factory(factory,new DefaultDataSourceFactory(this,userAgent)).createMediaSource(uri);
+            return new DashMediaSource.Factory(factory, new DefaultDataSourceFactory(this, userAgent)).createMediaSource(uri);
         }
 
     }
 
-    private void releasePlayer(){
-        if (player!=null){
+    private void releasePlayer() {
+        if (player != null) {
             playWhenReady = player.getPlayWhenReady();
             currentWindow = player.getCurrentWindowIndex();
             currentPosition = player.getCurrentPosition();
             player.release();
-            player =null;
+            player = null;
 
         }
     }
@@ -263,8 +291,8 @@ public class VideosActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (Util.SDK_INT>=24){
-            if (uri!=null){
+        if (Util.SDK_INT >= 24) {
+            if (uri != null) {
                 initPlayer(uri);
 
             }
@@ -274,8 +302,8 @@ public class VideosActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Util.SDK_INT<24||player==null){
-            if (uri!=null){
+        if (Util.SDK_INT < 24 || player == null) {
+            if (uri != null) {
                 initPlayer(uri);
 
             }
@@ -286,17 +314,16 @@ public class VideosActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (Util.SDK_INT>=24){
+        if (Util.SDK_INT >= 24) {
             releasePlayer();
         }
     }
 
 
-
     @Override
     protected void onPause() {
         super.onPause();
-        if (Util.SDK_INT<24){
+        if (Util.SDK_INT < 24) {
             releasePlayer();
         }
     }

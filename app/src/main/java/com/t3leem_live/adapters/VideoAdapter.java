@@ -142,13 +142,19 @@ public class VideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         @Override
         protected String doInBackground(Uri... uris) {
+            String duration="";
+            try {
+                MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                retriever.setDataSource(String.valueOf(uris[0]), new HashMap<String, String>());
+                String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                long timeInMilliSec = Long.parseLong(time);
+                retriever.release();
+                duration=convertMillieToHMmSs(timeInMilliSec); //use this duration
 
-            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.setDataSource(String.valueOf(uris[0]), new HashMap<String, String>());
-            String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-            long timeInMilliSec = Long.parseLong(time);
-            retriever.release();
-            String duration=convertMillieToHMmSs(timeInMilliSec); //use this duration
+            }catch (Exception e){
+
+            }
+
 
             return duration;
         }

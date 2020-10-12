@@ -16,6 +16,7 @@ public class VideoLessonsModel implements Serializable {
     private String file_doc;
     private String desc;
     private boolean status = false;
+    private UserModel.User teacher_fk;
 
 
     public int getId() {
@@ -72,5 +73,9 @@ public class VideoLessonsModel implements Serializable {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public UserModel.User getTeacher_fk() {
+        return teacher_fk;
     }
 }
