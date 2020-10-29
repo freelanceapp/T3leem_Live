@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_classes.ClassesActivity;
+import com.t3leem_live.activities_fragments.activity_home_teacher.fragments.Fragment_Library_Teacher;
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Library_Student;
 import com.t3leem_live.databinding.ClassRowBinding;
@@ -27,14 +29,14 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Context context;
     private LayoutInflater inflater;
     private String lang;
-    private Fragment_Library_Student fragment_library_student;
+    private Fragment fragment;
     private int [] background = {R.color.color11,R.color.color12,R.color.color13,R.color.color14,R.color.color15,R.color.color16};
 
-    public LibraryAdapter(List<StageClassModel> list, Context context,Fragment_Library_Student fragment_library_student) {
+    public LibraryAdapter(List<StageClassModel> list, Context context,Fragment fragment) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
-        this.fragment_library_student = fragment_library_student;
+        this.fragment = fragment;
         Paper.init(context);
         lang = Paper.book().read("lang","ar");
 
@@ -63,7 +65,14 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         myHolder.itemView.setOnClickListener(view -> {
             StageClassModel classModel2 = list.get(holder.getAdapterPosition());
-            fragment_library_student.setItemData(classModel2);
+            if (fragment instanceof  Fragment_Library_Student){
+                Fragment_Library_Student fragment_library_student = (Fragment_Library_Student) fragment;
+                fragment_library_student.setItemData(classModel2);
+
+            }else if (fragment instanceof Fragment_Library_Teacher){
+                Fragment_Library_Teacher fragment_library_teacher = (Fragment_Library_Teacher) fragment;
+                fragment_library_teacher.setItemData(classModel2);
+            }
         });
 
 

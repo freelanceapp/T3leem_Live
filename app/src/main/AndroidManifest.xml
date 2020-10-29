@@ -9,7 +9,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
@@ -24,11 +26,23 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:targetApi="m">
-        <activity android:name=".activities_fragments.activity_view.ViewActivity"
+        <activity
+            android:name=".activities_fragments.activity_teacher_exams.TeacherExamsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
-            />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".activities_fragments.activity_home_teacher.TeacherHomeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
+
+        </activity>
+        <activity
+            android:name=".activities_fragments.activity_view.ViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activities_fragments.activity_library_details.LibraryDetailsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -63,6 +77,7 @@
             android:name=".activities_fragments.activity_teacher_sign_up.TeacherSignUpActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
+            android:turnScreenOn="true"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activities_fragments.activity_student_sign_up.StudentSignUpActivity"

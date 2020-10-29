@@ -3,11 +3,18 @@ package com.t3leem_live.activities_fragments.activity_student_home;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -16,10 +23,23 @@ import com.t3leem_live.activities_fragments.activity_login.LoginActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Home_Student;
 import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Library_Student;
 import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Profile_Student;
+import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Rate_Student;
 import com.t3leem_live.databinding.ActivityStudentHomeBinding;
 import com.t3leem_live.language.Language;
+import com.t3leem_live.models.StudentRateDataModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
+import com.t3leem_live.remote.Api;
+import com.t3leem_live.share.Common;
+import com.t3leem_live.tags.Tags;
+
+import java.io.IOException;
+import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class StudentHomeActivity extends AppCompatActivity {
     private ActivityStudentHomeBinding binding;
@@ -27,8 +47,10 @@ public class StudentHomeActivity extends AppCompatActivity {
     private UserModel userModel;
     private FragmentManager fragmentManager;
     private Fragment_Home_Student fragment_home_student;
+    private Fragment_Rate_Student fragment_rate_student;
     private Fragment_Library_Student fragment_library_student;
     private Fragment_Profile_Student fragment_profile_student;
+    private int current_pos = 0;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -41,9 +63,7 @@ public class StudentHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_student_home);
         initView();
-        if (savedInstanceState == null) {
-            displayFragmentHomeStudent();
-        }
+
 
     }
 
@@ -51,10 +71,12 @@ public class StudentHomeActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
+        displayFragmentHomeStudent();
         setUpBottomNavigation();
     }
 
-    private void setUpBottomNavigation() {
+    private void setUpBottomNavigation()
+    {
 
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(getString(R.string.home), R.drawable.ic_nav_home);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem(getString(R.string.library), R.drawable.ic_nav_library);
@@ -85,8 +107,10 @@ public class StudentHomeActivity extends AppCompatActivity {
                     displayFragmentLibraryStudent();
                     break;
                 case 2:
+
                     break;
                 case 3:
+                    displayFragmentRateStudent();
                     break;
 
                 case 4:
@@ -107,6 +131,7 @@ public class StudentHomeActivity extends AppCompatActivity {
 
     }
 
+
     public void displayFragmentHomeStudent() {
         if (fragment_home_student == null) {
             fragment_home_student = Fragment_Home_Student.newInstance();
@@ -117,6 +142,10 @@ public class StudentHomeActivity extends AppCompatActivity {
         }
         if (fragment_profile_student != null && fragment_profile_student.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_profile_student).commit();
+        }
+
+        if (fragment_rate_student != null && fragment_rate_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_rate_student).commit();
         }
         if (fragment_home_student.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_home_student).commit();
@@ -140,6 +169,10 @@ public class StudentHomeActivity extends AppCompatActivity {
         if (fragment_profile_student != null && fragment_profile_student.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_profile_student).commit();
         }
+        if (fragment_rate_student != null && fragment_rate_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_rate_student).commit();
+        }
+
         if (fragment_library_student.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_library_student).commit();
         } else {
@@ -162,6 +195,9 @@ public class StudentHomeActivity extends AppCompatActivity {
         if (fragment_library_student != null && fragment_library_student.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_library_student).commit();
         }
+        if (fragment_rate_student != null && fragment_rate_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_rate_student).commit();
+        }
         if (fragment_profile_student.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_profile_student).commit();
         } else {
@@ -173,9 +209,90 @@ public class StudentHomeActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onBackPressed() {
+    public void displayFragmentRateStudent() {
+        if (fragment_rate_student == null) {
+            fragment_rate_student = Fragment_Rate_Student.newInstance();
+        }
 
+        if (fragment_library_student != null && fragment_library_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_library_student).commit();
+        }
+        if (fragment_profile_student != null && fragment_profile_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_profile_student).commit();
+        }
+
+        if (fragment_home_student != null && fragment_home_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_home_student).commit();
+        }
+        if (fragment_rate_student.isAdded()) {
+            fragmentManager.beginTransaction().show(fragment_rate_student).commit();
+        } else {
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_rate_student, "fragment_rate_student").addToBackStack("fragment_rate_student").commit();
+
+        }
+
+        updateBottomNavigationPosition(0);
+    }
+
+    public void logout()
+    {
+        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        Api.getService(Tags.base_url)
+                .logout("Bearer "+userModel.getData().getToken())
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()) {
+
+                        } else {
+                            dialog.dismiss();
+                            try {
+                                Log.e("error", response.code() + "__" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (response.code() == 500) {
+                                Toast.makeText(StudentHomeActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(StudentHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(StudentHomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(StudentHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+
+        preferences.clear(this);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (notificationManager!=null){
+            notificationManager.cancel(Tags.not_tag,Tags.not_id);
+        }
+        navigateToLoginActivity();
+    }
+    @Override
+    public void onBackPressed()
+    {
         if (fragment_home_student!=null&&fragment_home_student.isAdded()&&fragment_home_student.isVisible()){
             if (userModel==null){
                 navigateToLoginActivity();
@@ -185,6 +302,7 @@ public class StudentHomeActivity extends AppCompatActivity {
         }else {
             displayFragmentHomeStudent();
         }
+
 
 
     }

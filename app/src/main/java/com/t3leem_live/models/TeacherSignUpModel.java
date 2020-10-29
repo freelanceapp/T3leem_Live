@@ -1,6 +1,7 @@
 package com.t3leem_live.models;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.Patterns;
 import android.widget.Toast;
 
@@ -20,11 +21,9 @@ public class TeacherSignUpModel extends BaseObservable {
     private String email;
     private String password;
     private int stage_id;
-    private int class_id;
-    private String department_id;
     private String address;
+    private String degree;
     private String school_name;
-    private boolean isHasDepartment;
 
 
     public ObservableField<String> error_name = new ObservableField<>();
@@ -33,19 +32,23 @@ public class TeacherSignUpModel extends BaseObservable {
     public ObservableField<String> error_phone = new ObservableField<>();
     public ObservableField<String> error_address = new ObservableField<>();
     public ObservableField<String> error_school_name = new ObservableField<>();
+    public ObservableField<String> error_degree = new ObservableField<>();
 
 
     public boolean isDataValid(Context context) {
+        Log.e("name",name+"__");
+
         if (!name.isEmpty() &&
                 !phone_code.isEmpty() &&
                 !phone.isEmpty() &&
                 !email.isEmpty() &&
-                password.length()>6 &&
+                password.length()>=6 &&
                 Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
                 stage_id!=0&&
-                class_id!=0&&
+                !degree.isEmpty() &&
                 !address.isEmpty() &&
-                !school_name.isEmpty()
+                !school_name.isEmpty()&&
+                !videoUri.isEmpty()
 
         ) {
             error_phone.set(null);
@@ -54,20 +57,9 @@ public class TeacherSignUpModel extends BaseObservable {
             error_address.set(null);
             error_school_name.set(null);
             error_password.set(null);
+            error_degree.set(null);
 
-            if (isHasDepartment){
-                if (department_id.isEmpty()){
-                    Toast.makeText(context, R.string.choose_department, Toast.LENGTH_SHORT).show();
-                    return false;
-
-                }else {
-                    return true;
-
-                }
-            }else {
-                return true;
-
-            }
+            return true;
         } else {
 
             if (name.isEmpty()){
@@ -108,14 +100,18 @@ public class TeacherSignUpModel extends BaseObservable {
                 Toast.makeText(context, R.string.choose_stage, Toast.LENGTH_SHORT).show();
             }
 
-            if (class_id==0){
-                Toast.makeText(context, R.string.choose_class, Toast.LENGTH_SHORT).show();
-            }
 
             if (address.isEmpty()){
                 error_address.set(context.getString(R.string.field_required));
             }else {
                 error_address.set(null);
+
+            }
+
+            if (degree.isEmpty()){
+                error_degree.set(context.getString(R.string.field_required));
+            }else {
+                error_degree.set(null);
 
             }
 
@@ -125,6 +121,10 @@ public class TeacherSignUpModel extends BaseObservable {
                 error_school_name.set(null);
 
             }
+            if (videoUri.isEmpty()){
+                Toast.makeText(context, R.string.intro_vid, Toast.LENGTH_SHORT).show();
+            }
+
             return false;
 
         }
@@ -140,10 +140,9 @@ public class TeacherSignUpModel extends BaseObservable {
         email = "";
         password="";
         stage_id = 0;
-        department_id ="";
+        degree ="";
         address = "";
         school_name = "";
-        isHasDepartment = false;
 
     }
 
@@ -217,13 +216,6 @@ public class TeacherSignUpModel extends BaseObservable {
         notifyPropertyChanged(BR.password);
     }
 
-    public int getClass_id() {
-        return class_id;
-    }
-
-    public void setClass_id(int class_id) {
-        this.class_id = class_id;
-    }
 
     public int getStage_id() {
         return stage_id;
@@ -258,20 +250,13 @@ public class TeacherSignUpModel extends BaseObservable {
         notifyPropertyChanged(BR.school_name);
 
     }
-
-    public String getDepartment_id() {
-        return department_id;
+    @Bindable
+    public String getDegree() {
+        return degree;
     }
 
-    public void setDepartment_id(String department_id) {
-        this.department_id = department_id;
-    }
-
-    public boolean isHasDepartment() {
-        return isHasDepartment;
-    }
-
-    public void setHasDepartment(boolean hasDepartment) {
-        isHasDepartment = hasDepartment;
+    public void setDegree(String degree) {
+        this.degree = degree;
+        notifyPropertyChanged(BR.degree);
     }
 }

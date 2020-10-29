@@ -2,17 +2,24 @@ package com.t3leem_live.services;
 
 import com.t3leem_live.models.PlaceGeocodeData;
 import com.t3leem_live.models.PlaceMapDetailsData;
+import com.t3leem_live.models.SliderDataModel;
 import com.t3leem_live.models.StageDataModel;
+import com.t3leem_live.models.StudentRateDataModel;
 import com.t3leem_live.models.SummaryDataModel;
+import com.t3leem_live.models.TeacherExamDataModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.models.VideoLessonsDataModel;
 
+import org.androidannotations.annotations.rest.Get;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -91,6 +98,39 @@ public interface Service {
                                            @Part MultipartBody.Part logo
     );
 
+    @Multipart
+    @POST("api/register-teacher")
+    Call<UserModel> signUpTeacherWithImage(@Part("name") RequestBody name,
+                                           @Part("email") RequestBody email,
+                                           @Part("phone_code") RequestBody phone_code,
+                                           @Part("phone") RequestBody phone,
+                                           @Part("password") RequestBody password,
+                                           @Part("address") RequestBody address,
+                                           @Part("school_name") RequestBody school_name,
+                                           @Part("stage_id") RequestBody stage_id,
+                                           @Part("teacher_degree") RequestBody teacher_degree,
+                                           @Part("software_type") RequestBody software_type,
+                                           @Part("user_type") RequestBody user_type,
+                                           @Part MultipartBody.Part logo,
+                                           @Part MultipartBody.Part video
+    );
+
+    @Multipart
+    @POST("api/register-teacher")
+    Call<UserModel> signUpTeacherWithoutImage(@Part("name") RequestBody name,
+                                              @Part("email") RequestBody email,
+                                              @Part("phone_code") RequestBody phone_code,
+                                              @Part("phone") RequestBody phone,
+                                              @Part("password") RequestBody password,
+                                              @Part("address") RequestBody address,
+                                              @Part("school_name") RequestBody school_name,
+                                              @Part("stage_id") RequestBody stage_id,
+                                              @Part("teacher_degree") RequestBody teacher_degree,
+                                              @Part("software_type") RequestBody software_type,
+                                              @Part("user_type") RequestBody user_type,
+                                              @Part MultipartBody.Part video
+    );
+
     @GET("api/get-subjects-by-class-id-or-department-id")
     Call<StageDataModel> getSubject(@Query(value = "stage_id") int stage_id,
                                     @Query(value = "class_id") int class_id,
@@ -115,7 +155,21 @@ public interface Service {
     );
 
     @GET("api/get-library-details-by-id")
-    Call<StageDataModel> getBooks(@Query(value = "library_id") int library_id
+    Call<StageDataModel> getBooks(@Query(value = "library_id") int library_id);
 
-    );
+    @GET("api/student-rates")
+    Call<StudentRateDataModel> getStudentRate(@Query(value = "student_id") int student_id);
+
+    @POST("api/logout")
+    Call<ResponseBody> logout(@Header("Authorization") String bearer_token);
+
+    @GET("api/sliders")
+    Call<SliderDataModel> getSlider();
+
+    @GET("api/Get-teacher-Exams")
+    Call<TeacherExamDataModel> getTeacherExams(@Header("Authorization") String bearer_token,
+                                               @Query(value = "teacher_id") int teacher_id);
+
+
+
 }

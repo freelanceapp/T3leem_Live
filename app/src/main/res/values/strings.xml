@@ -112,5 +112,15 @@
     <string name="no_pdf">لا توجد مذكرات لعرضها</string>
     <string name="no_books">لا توجد مراجع لعرضها</string>
     <string name="view">مشاهدة</string>
+    <string name="intro_vid">قم برفع الفيديو التعريفي الخاص بك</string>
+    <string name="teacher_name">إسم المدرس</string>
+    <string name="no_rates">No Rates</string>
+    <string name="student_chat">مراسلة الطلاب</string>
+    <string name="job_degree">الدرجة الوظيفية</string>
+    <string name="degree">الدرجة</string>
+    <string name="from">من:</string>
+    <string name="to">إلى:</string>
+    <string name="show_results">عرض الاجابات</string>
+    <string name="no_exams">لا توجد إختبارات لعرضها</string>
 
 </resources>

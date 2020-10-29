@@ -64,6 +64,8 @@ public class Fragment_Profile_Student extends Fragment {
         Paper.init(activity);
         lang = Paper.book().read("lang","ar");
         updateUiUserData();
+
+        binding.logout.setOnClickListener(view -> activity.logout());
     }
 
     private void updateUiUserData() {

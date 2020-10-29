@@ -247,10 +247,7 @@ public class VideosActivity extends AppCompatActivity {
                 }
             }
 
-            @Override
-            public void onTimelineChanged(Timeline timeline, int reason) {
-                //progressBar.setVisibility(View.GONE);
-            }
+
         });
 
 

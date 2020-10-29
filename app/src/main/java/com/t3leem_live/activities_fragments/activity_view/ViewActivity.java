@@ -80,10 +80,12 @@ public class ViewActivity extends AppCompatActivity {
             }
         });
 
+        Log.e("url",url);
         if (url.contains(".pdf")){
             String u = "https://docs.google.com/gview?embedded=true&url="+url;
             binding.webView.loadUrl(u,new HashMap<>());
         }else {
+            binding.webView.loadUrl(url);
 
         }
 
