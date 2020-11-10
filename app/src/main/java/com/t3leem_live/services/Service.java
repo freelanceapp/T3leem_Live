@@ -2,11 +2,14 @@ package com.t3leem_live.services;
 
 import com.t3leem_live.models.PlaceGeocodeData;
 import com.t3leem_live.models.PlaceMapDetailsData;
+import com.t3leem_live.models.SettingDataModel;
 import com.t3leem_live.models.SliderDataModel;
 import com.t3leem_live.models.StageDataModel;
 import com.t3leem_live.models.StudentRateDataModel;
 import com.t3leem_live.models.SummaryDataModel;
 import com.t3leem_live.models.TeacherExamDataModel;
+import com.t3leem_live.models.TeacherGroupDataModel;
+import com.t3leem_live.models.TeachersDataModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.models.VideoLessonsDataModel;
 
@@ -171,5 +174,88 @@ public interface Service {
                                                @Query(value = "teacher_id") int teacher_id);
 
 
+    @GET("api/get_stage_teachers")
+    Call<TeachersDataModel> getStudentTeachers(@Query(value = "pagination_status") String pagination_status,
+                                               @Query(value = "per_link_") int per_link,
+                                               @Query(value = "page") int page,
+                                               @Query(value = "stage_id") int stage_id
+    );
+
+
+    @GET("api/get-teacher-groups")
+    Call<TeacherGroupDataModel> getStudentTeachersGroups(@Query(value = "stage_id") int stage_id,
+                                                         @Query(value = "class_id") int class_id,
+                                                         @Query(value = "department_id") String department_id,
+                                                         @Query(value = "subject_id") int subject_id,
+                                                         @Query(value = "student_id") int student_id
+    );
+
+
+    @FormUrlEncoded
+    @POST("api/add-student-book")
+    Call<ResponseBody> studentGroupReservation(@Field("student_id") int student_id,
+                                               @Field("teacher_group_id") int teacher_group_id,
+                                               @Field("subject_id") int subject_id
+
+
+    );
+
+
+    @GET("api/Get-exams-by-subject-id")
+    Call<TeacherExamDataModel> getStudentExams(@Header("Authorization") String bearer_token,
+                                               @Query(value = "subject_id") int subject_id);
+
+
+    @FormUrlEncoded
+    @POST("api/contact-us")
+    Call<ResponseBody> contactUs(@Header("Authorization") String bearer_token,
+                                 @Field("name") String name,
+                                 @Field("email") String email,
+                                 @Field("subject") String subject,
+                                 @Field("message") String message
+
+
+    );
+
+
+    @GET("api/settings")
+    Call<SettingDataModel> getSetting();
+
+    @FormUrlEncoded
+    @POST("api/update-profile")
+    Call<UserModel> updateStudentProfileWithoutImage(@Field("name") String name,
+                                                     @Field("email") String email,
+                                                     @Field("phone_code") String phone_code,
+                                                     @Field("phone") String phone,
+                                                     @Field("password") String password,
+                                                     @Field("parent_phone") String parent_phone,
+                                                     @Field("address") String address,
+                                                     @Field("school_name") String school_name,
+                                                     @Field("stage_id") int stage_id,
+                                                     @Field("class_id") int class_id,
+                                                     @Field("department_id") String department_id,
+                                                     @Field("software_type") String software_type,
+                                                     @Field("user_type") String user_type
+
+
+    );
+
+    @Multipart
+    @POST("api/update-profile")
+    Call<UserModel> updateStudentProfileWithImage(@Part("name") RequestBody name,
+                                                  @Part("email") RequestBody email,
+                                                  @Part("phone_code") RequestBody phone_code,
+                                                  @Part("phone") RequestBody phone,
+                                                  @Part("password") RequestBody password,
+                                                  @Part("parent_phone") RequestBody parent_phone,
+                                                  @Part("address") RequestBody address,
+                                                  @Part("school_name") RequestBody school_name,
+                                                  @Part("stage_id") RequestBody stage_id,
+                                                  @Part("class_id") RequestBody class_id,
+                                                  @Part("department_id") RequestBody department_id,
+                                                  @Part("software_type") RequestBody software_type,
+                                                  @Part("user_type") RequestBody user_type,
+                                                  @Part MultipartBody.Part logo
+    );
 
 }

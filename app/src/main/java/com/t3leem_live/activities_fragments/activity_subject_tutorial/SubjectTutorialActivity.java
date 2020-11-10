@@ -15,6 +15,8 @@ import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_notes_pdf.NotesPdfActivity;
+import com.t3leem_live.activities_fragments.activity_student_exam.StudentExamActivity;
+import com.t3leem_live.activities_fragments.activity_student_teachers.StudentTeachersActivity;
 import com.t3leem_live.activities_fragments.activity_videos.VideosActivity;
 import com.t3leem_live.adapters.SummaryAdapter;
 import com.t3leem_live.databinding.ActivitySubjectTutorialBinding;
@@ -44,7 +46,7 @@ public class SubjectTutorialActivity extends AppCompatActivity {
     private StageClassModel stageClassModel;
     private List<SummaryModel> summaryModelList;
     private SummaryAdapter adapter;
-    private String lang;
+    private String lang ="ar";
     private SkeletonScreen skeletonScreen;
 
 
@@ -102,6 +104,18 @@ public class SubjectTutorialActivity extends AppCompatActivity {
 
         binding.llNote.setOnClickListener(view -> {
             Intent intent = new Intent(this, NotesPdfActivity.class);
+            intent.putExtra("data",stageClassModel);
+            startActivity(intent);
+        });
+
+        binding.llLiveVideo.setOnClickListener(view -> {
+            Intent intent = new Intent(this, StudentTeachersActivity.class);
+            intent.putExtra("data",stageClassModel);
+            startActivity(intent);
+        });
+
+        binding.llQuiz.setOnClickListener(view -> {
+            Intent intent = new Intent(this, StudentExamActivity.class);
             intent.putExtra("data",stageClassModel);
             startActivity(intent);
         });

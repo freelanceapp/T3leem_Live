@@ -61,7 +61,7 @@
                             android:layout_gravity="top"
                             app:civ_border_color="@color/colorPrimary"
                             app:civ_border_width="1dp"
-                            user_image="@{model.data.image}"
+                            user_image="@{model.data.logo}"
 
                             />
 
@@ -95,21 +95,6 @@
                                 android:textColor="@color/white"
                                 android:textSize="18sp" />
 
-                            <com.iarcuschin.simpleratingbar.SimpleRatingBar
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintStart_toStartOf="@id/tv1"
-                                app:layout_constraintTop_toBottomOf="@id/tv1"
-                                app:srb_isIndicator="true"
-                                app:srb_numberOfStars="5"
-                                app:srb_starBackgroundColor="@color/color1"
-                                app:srb_starBorderWidth="1"
-                                app:srb_starSize="18dp"
-                                app:srb_starsSeparation="8dp"
-                                android:layout_marginTop="5dp"
-                                app:srb_borderColor="@color/white"
-                                app:srb_fillColor="@color/rate_color"
-                                />
 
 
                         </LinearLayout>
@@ -134,6 +119,7 @@
                     android:paddingEnd="20dp"
                     >
                     <LinearLayout
+                        android:id="@+id/llUpdateProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -344,6 +330,7 @@
                         android:layout_marginTop="8dp"
                         />
                     <LinearLayout
+                        android:id="@+id/llContactUs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -379,6 +366,7 @@
                         android:layout_marginTop="8dp"
                         />
                     <LinearLayout
+                        android:id="@+id/llAbout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"

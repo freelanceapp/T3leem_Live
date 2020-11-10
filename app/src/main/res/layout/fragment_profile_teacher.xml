@@ -61,7 +61,7 @@
                             android:layout_gravity="top"
                             app:civ_border_color="@color/colorPrimary"
                             app:civ_border_width="1dp"
-                            user_image="@{model.data.image}"
+                            user_image="@{model.data.logo}"
 
                             />
 
@@ -93,7 +93,9 @@
                                 android:fontFamily="@font/font"
                                 android:lines="1"
                                 android:textColor="@color/white"
-                                android:textSize="18sp" />
+                                android:textSize="18sp"
+                                android:text="@{model.data.stage_fk.title}"
+                                />
 
                             <com.iarcuschin.simpleratingbar.SimpleRatingBar
                                 android:layout_width="wrap_content"
@@ -109,6 +111,7 @@
                                 android:layout_marginTop="5dp"
                                 app:srb_borderColor="@color/white"
                                 app:srb_fillColor="@color/rate_color"
+                                android:visibility="gone"
                                 />
 
 
@@ -276,6 +279,7 @@
                         />
 
                     <LinearLayout
+                        android:id="@+id/llContactUs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"

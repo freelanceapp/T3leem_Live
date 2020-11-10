@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.t3leem_live.R;
+import com.t3leem_live.activities_fragments.activity_home_teacher.TeacherHomeActivity;
 import com.t3leem_live.activities_fragments.activity_sign_up_chooser.SignUpChooserActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
 import com.t3leem_live.activities_fragments.activity_verification_code.VerificationCodeActivity;
@@ -147,7 +148,8 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
         if (loginModel.isDataValid(this))
         {
             Common.CloseKeyBoard(this,binding.edtPhone);
-            navigateToVerificationCodeActivity();
+            login();
+            //navigateToVerificationCodeActivity();
         }
     }
 
@@ -183,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .login(phone_code,loginModel.getPhone())
+                .login(phone_code.replace("+","00"),loginModel.getPhone())
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -192,14 +194,15 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
                         if (response.isSuccessful() && response.body() != null) {
 
                             preferences.create_update_userdata(LoginActivity.this, response.body());
+                            Intent intent;
                             if (response.body().getData().getUser_type().equals("student")){
-                                Intent intent = new Intent(LoginActivity.this, StudentHomeActivity.class);
-                                startActivity(intent);
-                                finish();
+                                intent = new Intent(LoginActivity.this, StudentHomeActivity.class);
 
                             }else {
-
+                                intent = new Intent(LoginActivity.this, TeacherHomeActivity.class);
                             }
+                            startActivity(intent);
+                            finish();
 
                         } else {
                             dialog.dismiss();

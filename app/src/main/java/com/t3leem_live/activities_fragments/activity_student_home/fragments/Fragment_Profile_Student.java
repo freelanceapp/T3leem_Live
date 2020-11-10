@@ -1,5 +1,6 @@
 package com.t3leem_live.activities_fragments.activity_student_home.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,8 +18,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
+import com.t3leem_live.activities_fragments.activity_about_app.AboutAppActivity;
 import com.t3leem_live.activities_fragments.activity_classes.ClassesActivity;
+import com.t3leem_live.activities_fragments.activity_contact_us.ContactUsActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
+import com.t3leem_live.activities_fragments.activity_student_sign_up.StudentSignUpActivity;
 import com.t3leem_live.adapters.LibraryAdapter;
 import com.t3leem_live.databinding.FragmentLibraryStudentBinding;
 import com.t3leem_live.databinding.FragmentProfileStudentBinding;
@@ -66,6 +70,20 @@ public class Fragment_Profile_Student extends Fragment {
         updateUiUserData();
 
         binding.logout.setOnClickListener(view -> activity.logout());
+        binding.llContactUs.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, ContactUsActivity.class);
+            startActivity(intent);
+        });
+
+        binding.llAbout.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, AboutAppActivity.class);
+            startActivity(intent);
+        });
+
+        binding.llUpdateProfile.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, StudentSignUpActivity.class);
+            startActivityForResult(intent,100);
+        });
     }
 
     private void updateUiUserData() {
@@ -105,4 +123,13 @@ public class Fragment_Profile_Student extends Fragment {
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode ==100&&resultCode== Activity.RESULT_OK){
+            userModel = preferences.getUserData(activity);
+            binding.setModel(userModel);
+            updateUiUserData();
+        }
+    }
 }

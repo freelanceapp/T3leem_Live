@@ -1,5 +1,7 @@
 package com.t3leem_live.activities_fragments.activity_student_home;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -231,7 +233,26 @@ public class StudentHomeActivity extends AppCompatActivity {
 
         }
 
-        updateBottomNavigationPosition(0);
+        updateBottomNavigationPosition(3);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        List<Fragment> fragmentList = fragmentManager.getFragments();
+        for (Fragment fragment:fragmentList){
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        List<Fragment> fragmentList = fragmentManager.getFragments();
+        for (Fragment fragment:fragmentList){
+            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     public void logout()
@@ -247,7 +268,12 @@ public class StudentHomeActivity extends AppCompatActivity {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         dialog.dismiss();
                         if (response.isSuccessful()) {
-
+                            preferences.clear(StudentHomeActivity.this);
+                            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                            if (notificationManager!=null){
+                                notificationManager.cancel(Tags.not_tag,Tags.not_id);
+                            }
+                            navigateToLoginActivity();
                         } else {
                             dialog.dismiss();
                             try {
@@ -283,12 +309,7 @@ public class StudentHomeActivity extends AppCompatActivity {
                     }
                 });
 
-        preferences.clear(this);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (notificationManager!=null){
-            notificationManager.cancel(Tags.not_tag,Tags.not_id);
-        }
-        navigateToLoginActivity();
+
     }
     @Override
     public void onBackPressed()

@@ -1,14 +1,19 @@
 package com.t3leem_live.activities_fragments.activity_teacher_sign_up;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,11 +73,12 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     private Uri imageUri = null, videoUri = null;
     private TeacherSignUpModel model;
     private List<StageClassModel> stageModelList;
-    private List<StageClassModel> classModelList;
-    private List<StageClassModel> departmentList;
     private StageSpinnerAdapter adapter;
     private SimpleExoPlayer player;
     private Preferences preferences;
+    private final String read_permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+    private final int image_read_req = 100;
+    private final int video_read_req = 200;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -89,28 +95,13 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
 
 
     private void initView() {
-        preferences= Preferences.getInstance();
+        preferences = Preferences.getInstance();
         stageModelList = new ArrayList<>();
         StageClassModel stageClassModel = new StageClassModel();
         stageClassModel.setId(0);
         stageClassModel.setTitle("إختر المرحلة");
         stageClassModel.setTitle_en("Choose Stage");
         stageModelList.add(stageClassModel);
-
-        classModelList = new ArrayList<>();
-        StageClassModel classModel = new StageClassModel();
-        classModel.setId(0);
-        classModel.setTitle("إختر الصف");
-        classModel.setTitle_en("Choose Class");
-        classModelList.add(classModel);
-
-        departmentList = new ArrayList<>();
-
-        StageClassModel departmentModel = new StageClassModel();
-        departmentModel.setId(0);
-        departmentModel.setTitle("إختر القسم");
-        departmentModel.setTitle_en("Choose Department");
-        departmentList.add(departmentModel);
 
         countryModelList = new ArrayList<>(Arrays.asList(countries));
         Paper.init(this);
@@ -145,6 +136,23 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         });
 
         getStage();
+    }
+
+    private void checkPermission(int req) {
+        if (ContextCompat.checkSelfPermission(this, read_permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{read_permission}, req);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            if (req == image_read_req) {
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "إختر صورة"), req);
+
+            } else {
+                intent.setType("video/*");
+                startActivityForResult(Intent.createChooser(intent, "إختر فيديو"), req);
+
+            }
+        }
     }
 
     private void getStage() {
@@ -226,7 +234,12 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     @Override
     public void validate() {
         if (model.isDataValid(this)) {
-            navigateToVerificationActivity();
+            if (imageUri == null) {
+                signUpWithoutImage();
+            } else {
+                signUpWithImage();
+            }
+            // navigateToVerificationActivity();
         }
     }
 
@@ -243,7 +256,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         dialog.setCancelable(false);
         dialog.show();
         RequestBody name_part = Common.getRequestBodyText(model.getName());
-        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code());
+        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
         RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
         RequestBody email_part = Common.getRequestBodyText(model.getEmail());
         RequestBody password_part = Common.getRequestBodyText(model.getPassword());
@@ -257,7 +270,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
 
 
         Api.getService(Tags.base_url)
-                .signUpTeacherWithoutImage(name_part, email_part, phone_code_part, phone_part, password_part,address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,video)
+                .signUpTeacherWithoutImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part, video)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -304,7 +317,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         dialog.setCancelable(false);
         dialog.show();
         RequestBody name_part = Common.getRequestBodyText(model.getName());
-        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code());
+        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
         RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
         RequestBody email_part = Common.getRequestBodyText(model.getEmail());
         RequestBody password_part = Common.getRequestBodyText(model.getPassword());
@@ -319,7 +332,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
 
 
         Api.getService(Tags.base_url)
-                .signUpTeacherWithImage(name_part, email_part, phone_code_part, phone_part, password_part,address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,image,video)
+                .signUpTeacherWithImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part, image, video)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -376,24 +389,40 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
 
     @Override
     public void showImageChooserDialog() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent, "إختر صورة"), 100);
+        checkPermission(image_read_req);
     }
 
     @Override
     public void showVideoChooserDialog() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("video/*");
-        startActivityForResult(Intent.createChooser(intent, "إختر فيديو"), 200);
-
+        checkPermission(video_read_req);
     }
 
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == image_read_req && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "إختر صورة"), requestCode);
+
+            }
+        } else if (requestCode == video_read_req) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("video/*");
+                startActivityForResult(Intent.createChooser(intent, "إختر فيديو"), requestCode);
+
+
+            }
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+        if (requestCode == image_read_req && resultCode == RESULT_OK && data != null) {
             imageUri = data.getData();
 
             if (imageUri != null) {
@@ -401,7 +430,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                 binding.setModel(model);
                 Picasso.get().load(imageUri).into(binding.image);
             }
-        } else if (requestCode == 200 && resultCode == RESULT_OK && data != null) {
+        } else if (requestCode == video_read_req && resultCode == RESULT_OK && data != null) {
             videoUri = data.getData();
 
             if (videoUri != null) {

@@ -102,7 +102,7 @@
     <string name="service_help">خدمات المساعدة</string>
     <string name="company_info">معلومات عن الشركة</string>
     <string name="complain">الشكاوي والاقتراحات</string>
-    <string name="videos">الفيديوهات</string>
+    <string name="videos">فيديوهات</string>
     <string name="notes">المذكرات</string>
     <string name="live_lesson">دروس مباشرة</string>
     <string name="quiz">أسئلة</string>
@@ -122,5 +122,22 @@
     <string name="to">إلى:</string>
     <string name="show_results">عرض الاجابات</string>
     <string name="no_exams">لا توجد إختبارات لعرضها</string>
+    <string name="no_teacher_to_show">لا يوجد مدرسين لعرضهم</string>
+    <string name="video2">فيديو تعريفى</string>
+    <string name="show_groups">عرض المجموعات</string>
+    <string name="no_groups_to_show">لا يوجد مجموعات لعرضها</string>
+    <string name="group_name">إسم المجموعة :</string>
+    <string name="max_users">اقصي عدد بالمجموعة</string>
+    <string name="group_time">مواعيد المجموعة</string>
+    <string name="reserve_group">حجز المجموعة</string>
+    <string name="reserve_done">تم الحجز في المجموعة</string>
+    <string name="student2">طالب</string>
+    <string name="name">الإسم</string>
+    <string name="subject">الموضوع</string>
+    <string name="message">الرسالة</string>
+    <string name="send">إرسال</string>
+    <string name="suc">تم بنجاح!</string>
+    <string name="update">تعديل البيانات</string>
+    <string name="update_photo">تعديل صورتك</string>
 
 </resources>

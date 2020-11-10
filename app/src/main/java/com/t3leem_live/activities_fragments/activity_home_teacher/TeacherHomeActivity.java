@@ -203,7 +203,12 @@ public class TeacherHomeActivity extends AppCompatActivity {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         dialog.dismiss();
                         if (response.isSuccessful()) {
-
+                            preferences.clear(TeacherHomeActivity.this);
+                            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                            if (notificationManager!=null){
+                                notificationManager.cancel(Tags.not_tag,Tags.not_id);
+                            }
+                            navigateToLoginActivity();
                         } else {
                             dialog.dismiss();
                             try {
@@ -239,12 +244,7 @@ public class TeacherHomeActivity extends AppCompatActivity {
                     }
                 });
 
-        preferences.clear(this);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (notificationManager!=null){
-            notificationManager.cancel(Tags.not_tag,Tags.not_id);
-        }
-        navigateToLoginActivity();
+
     }
     @Override
     public void onBackPressed() {

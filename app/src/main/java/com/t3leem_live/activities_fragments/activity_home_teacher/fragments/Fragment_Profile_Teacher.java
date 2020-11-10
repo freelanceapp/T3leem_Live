@@ -1,5 +1,6 @@
 package com.t3leem_live.activities_fragments.activity_home_teacher.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.t3leem_live.R;
+import com.t3leem_live.activities_fragments.activity_contact_us.ContactUsActivity;
 import com.t3leem_live.activities_fragments.activity_home_teacher.TeacherHomeActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
 import com.t3leem_live.databinding.FragmentProfileStudentBinding;
@@ -46,6 +48,10 @@ public class Fragment_Profile_Teacher extends Fragment {
         Paper.init(activity);
         lang = Paper.book().read("lang","ar");
         binding.logout.setOnClickListener(view -> activity.logout());
+        binding.llContactUs.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, ContactUsActivity.class);
+            startActivity(intent);
+        });
     }
 
 

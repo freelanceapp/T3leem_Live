@@ -134,10 +134,6 @@ public class VideosActivity extends AppCompatActivity {
                             if (response.body() != null && response.body().getData() != null) {
                                 videoLessonsModelList.clear();
                                 videoLessonsModelList.addAll(response.body().getData());
-                                videoLessonsModelList.addAll(response.body().getData());
-                                videoLessonsModelList.addAll(response.body().getData());
-                                videoLessonsModelList.addAll(response.body().getData());
-
                                 adapter.notifyDataSetChanged();
                                 if (videoLessonsModelList.size() > 0) {
                                     binding.recView.setVisibility(View.VISIBLE);

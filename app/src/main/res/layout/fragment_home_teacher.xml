@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
 
                 >
-                <com.t3leem_live.activities_fragments.activity_home_teacher.fragments.MyViewPager
+                <com.t3leem_live.adapters.MyViewPager
                     android:id="@+id/pager"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"

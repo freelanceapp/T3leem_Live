@@ -1,4 +1,4 @@
-package com.t3leem_live.activities_fragments.activity_home_teacher.fragments;
+package com.t3leem_live.adapters;
 
 import android.content.Context;
 import android.util.AttributeSet;

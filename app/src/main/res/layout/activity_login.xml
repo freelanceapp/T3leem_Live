@@ -208,7 +208,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/color1"
                 android:onClick="@{()->loginListener.forgetPassword()}"
-
+                android:visibility="gone"
                 />
 
             <TextView

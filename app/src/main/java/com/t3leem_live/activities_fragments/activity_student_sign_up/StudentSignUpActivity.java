@@ -68,6 +68,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     private List<StageClassModel> departmentList;
     private StageSpinnerAdapter adapter,classAdapter,departmentAdapter;
     private Preferences preferences;
+    private UserModel userModel;
 
 
     @Override
@@ -87,6 +88,8 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
     private void initView() {
         preferences = Preferences.getInstance();
+        userModel = preferences.getUserData(this);
+        binding.setUserModel(userModel);
         stageModelList = new ArrayList<>();
         StageClassModel stageClassModel = new StageClassModel();
         stageClassModel.setId(0);
@@ -113,9 +116,46 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         Paper.init(this);
         lang = Paper.book().read("lang", "ar");
         model = new StudentSignUpModel();
-        model.setPhone_code(phone_code);
-        model.setFather_phone_code(father_phone_code);
+
+        if (userModel==null){
+            model.setPhone_code(phone_code);
+            model.setFather_phone_code(father_phone_code);
+            binding.btnNext.setText(getString(R.string.save));
+
+        }else {
+            model.setName(userModel.getData().getName());
+            model.setEmail(userModel.getData().getEmail());
+            model.setPassword("123456");
+            model.setPhone_code(userModel.getData().getPhone_code());
+            model.setPhone(userModel.getData().getPhone());
+            model.setFather_phone_code("+20");
+            model.setFather_phone(userModel.getData().getParent_phone());
+            model.setAddress(userModel.getData().getAddress());
+            model.setSchool_name(userModel.getData().getName());
+            int class_id =0;
+            if (userModel.getData().getClass_fk()!=null){
+                class_id = userModel.getData().getClass_fk().getId();
+            }
+            model.setClass_id(class_id);
+            int stage_id =0;
+            if (userModel.getData().getStage_id()!=null){
+                stage_id = userModel.getData().getStage_fk().getId();
+            }
+            model.setStage_id(stage_id);
+            String department_id = "";
+            if (userModel.getData().getDepartment_fk()!=null){
+                department_id = String.valueOf(userModel.getData().getDepartment_fk().getId());
+            }
+            model.setDepartment_id(department_id);
+
+            if (userModel.getData().getLogo()!=null&&!userModel.getData().getLogo().isEmpty()&&!userModel.getData().getLogo().equals("0")){
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL+userModel.getData().getLogo())).into(binding.image);
+            }
+            binding.btnNext.setText(getString(R.string.update));
+        }
+
         binding.setModel(model);
+
         binding.setLang(lang);
         binding.setListener(this);
         sortCountries();
@@ -172,7 +212,6 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
             }
         });
 
-
         departmentAdapter = new StageSpinnerAdapter(departmentList,this);
         binding.spinnerDepartment.setAdapter(departmentAdapter);
         binding.spinnerDepartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -213,6 +252,12 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                         if (response.isSuccessful()) {
                             stageModelList.addAll(response.body().getData());
                             runOnUiThread(() -> adapter.notifyDataSetChanged());
+                            if (userModel!=null){
+                                int pos = getUserStagePos();
+                                if (pos!=-1){
+                                    binding.spinnerStage.setSelection(pos);
+                                }
+                            }
                         } else {
                             dialog.dismiss();
                             try {
@@ -276,6 +321,12 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                                 binding.spinnerClass.setSelection(0);
 
                             });
+                            if (userModel!=null){
+                                int pos = getUserClassPos();
+                                if (pos!=-1){
+                                    binding.spinnerClass.setSelection(pos);
+                                }
+                            }
 
                         } else {
                             dialog.dismiss();
@@ -331,7 +382,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
                             departmentList.addAll(response.body().getData());
 
-                            if (departmentList.size()>0){
+                            if (response.body().getData().size()>0){
                                 binding.llDepartment.setVisibility(View.VISIBLE);
                                 model.setHasDepartment(true);
                             }else {
@@ -339,11 +390,19 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                                 model.setHasDepartment(false);
 
                             }
+                            binding.setModel(model);
                             runOnUiThread(() -> {
                                 departmentAdapter.notifyDataSetChanged();
                                 binding.spinnerDepartment.setSelection(0);
 
                             });
+
+                            if (userModel!=null&&userModel.getData().getDepartment_fk()!=null){
+                                int pos = getUserDepartPos();
+                                if (pos!=-1){
+                                    binding.spinnerDepartment.setSelection(pos);
+                                }
+                            }
                         } else {
                             try {
                                 Log.e("error", response.code() + "__" + response.errorBody().string());
@@ -377,6 +436,40 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                     }
                 });
 
+    }
+
+    private int getUserStagePos(){
+        int pos = -1;
+        for (int index=0;index<stageModelList.size();index++){
+            StageClassModel model = stageModelList.get(index);
+            if (model.getId()==userModel.getData().getStage_fk().getId()){
+                pos = index;
+                return pos;
+            }
+        }
+        return pos;
+    }
+    private int getUserClassPos(){
+        int pos = -1;
+        for (int index=0;index<stageModelList.size();index++){
+            StageClassModel model = classModelList.get(index);
+            if (model.getId()==userModel.getData().getClass_fk().getId()){
+                pos = index;
+                return pos;
+            }
+        }
+        return pos;
+    }
+    private int getUserDepartPos(){
+        int pos = -1;
+        for (int index=0;index<stageModelList.size();index++){
+            StageClassModel model = departmentList.get(index);
+            if (model.getId()==userModel.getData().getDepartment_fk().getId()){
+                pos = index;
+                return pos;
+            }
+        }
+        return pos;
     }
 
     private void createCountriesDialog()
@@ -419,7 +512,22 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     @Override
     public void validate() {
         if (model.isDataValid(this)){
-            navigateToVerificationCodeActivity();
+           if (uri==null){
+               if (userModel==null){
+                   signUpWithoutImage();
+
+               }else {
+                   updateWithoutImage();
+               }
+           }else {
+               if (userModel==null){
+                   signUpWithImage();
+
+               }else {
+                   updateWithImage();
+               }
+           }
+            // navigateToVerificationCodeActivity();
         }
     }
 
@@ -438,7 +546,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .signUpStudentWithoutImage(model.getName(),model.getEmail(),model.getPhone_code(),model.getPhone(),model.getPassword(),model.getFather_phone_code()+model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),model.getDepartment_id(),"android","student")
+                .signUpStudentWithoutImage(model.getName(),model.getEmail(),model.getPhone_code().replace("+","00"),model.getPhone(),model.getPassword(),model.getFather_phone_code()+model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),model.getDepartment_id(),"android","student")
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -450,6 +558,8 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
                         }else
                         {
+                            Log.e("error",response.code()+"__");
+
                             if (response.code()==500)
                             {
                                 Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
@@ -467,11 +577,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                                 Toast.makeText(StudentSignUpActivity.this,getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
 
-                            try {
-                                Log.e("error",response.errorBody().string());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+
                         }
                     }
 
@@ -500,11 +606,11 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         dialog.setCancelable(false);
         dialog.show();
         RequestBody name_part = Common.getRequestBodyText(model.getName());
-        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code());
+        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+","00"));
         RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
         RequestBody email_part = Common.getRequestBodyText(model.getEmail());
         RequestBody password_part = Common.getRequestBodyText(model.getPassword());
-        RequestBody father_phone_part = Common.getRequestBodyText(model.getFather_phone_code()+model.getFather_phone());
+        RequestBody father_phone_part = Common.getRequestBodyText(model.getFather_phone_code().replace("+","00")+model.getFather_phone());
         RequestBody address_part = Common.getRequestBodyText(model.getAddress());
         RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
         RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
@@ -527,6 +633,141 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                         {
                             preferences.create_update_userdata(StudentSignUpActivity.this,response.body());
                             navigateToStudentHomeActivity();
+                        }else
+                        {
+                            if (response.code()==500)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==407)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==406)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, R.string.email_exist, Toast.LENGTH_SHORT).show();
+
+
+                            }else
+                            {
+                                Toast.makeText(StudentSignUpActivity.this,getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }catch (Exception e)
+                        {
+                            Log.e("Error",e.getMessage()+"__");
+                        }
+                    }
+                });
+    }
+
+
+    private void updateWithoutImage()
+    {
+        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        Api.getService(Tags.base_url)
+                .updateStudentProfileWithoutImage(model.getName(),model.getEmail(),model.getPhone_code().replace("+","00"),model.getPhone(),model.getPassword(),model.getFather_phone_code()+model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),model.getDepartment_id(),"android","student")
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()&&response.body()!=null)
+                        {
+                            preferences.create_update_userdata(StudentSignUpActivity.this,response.body());
+                            setResult(RESULT_OK);
+                            finish();
+                        }else
+                        {
+                            Log.e("error",response.code()+"__");
+
+                            if (response.code()==500)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==407)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==406)
+                            {
+                                Toast.makeText(StudentSignUpActivity.this, R.string.email_exist, Toast.LENGTH_SHORT).show();
+
+
+                            }
+                            else
+                            {
+                                Toast.makeText(StudentSignUpActivity.this,getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(StudentSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }catch (Exception e)
+                        {
+                            Log.e("Error",e.getMessage()+"__");
+                        }
+                    }
+                });
+    }
+
+    private void updateWithImage() {
+        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        RequestBody name_part = Common.getRequestBodyText(model.getName());
+        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+","00"));
+        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
+        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
+        RequestBody password_part = Common.getRequestBodyText(model.getPassword());
+        RequestBody father_phone_part = Common.getRequestBodyText(model.getFather_phone_code().replace("+","00")+model.getFather_phone());
+        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
+        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
+        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
+        RequestBody class_id_part = Common.getRequestBodyText(String.valueOf(model.getClass_id()));
+        RequestBody department_id_part = Common.getRequestBodyText(String.valueOf(model.getDepartment_id()));
+
+        RequestBody software_part = Common.getRequestBodyText("android");
+        RequestBody user_type_part = Common.getRequestBodyText("student");
+
+        MultipartBody.Part image = Common.getMultiPart(this,uri,"logo");
+
+
+        Api.getService(Tags.base_url)
+                .updateStudentProfileWithImage(name_part,email_part,phone_code_part,phone_part,password_part,father_phone_part,address_part,school_name_part,stage_id_part,class_id_part,department_id_part,software_part,user_type_part,image)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()&&response.body()!=null)
+                        {
+                            preferences.create_update_userdata(StudentSignUpActivity.this,response.body());
+                            setResult(RESULT_OK);
+                            finish();
                         }else
                         {
                             if (response.code()==500)
@@ -601,9 +842,19 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
             }
         }else if (requestCode==200&&resultCode==RESULT_OK){
             if (uri==null){
-                signUpWithImage();
+                if (userModel==null){
+                    signUpWithoutImage();
+
+                }else {
+                    updateWithoutImage();
+                }
             }else {
-                signUpWithoutImage();
+                if (userModel==null){
+                    signUpWithImage();
+
+                }else {
+                    updateWithImage();
+                }
             }
         }
     }
@@ -616,6 +867,11 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
     @Override
     public void onBackPressed() {
-        navigateToSignUpChooserActivity();
+        if (userModel==null){
+            navigateToSignUpChooserActivity();
+
+        }else {
+            finish();
+        }
     }
 }
