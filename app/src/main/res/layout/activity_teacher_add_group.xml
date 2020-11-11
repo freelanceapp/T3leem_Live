@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    >
+    <data>
+        <variable
+            name="lang"
+            type="String" />
+        <variable
+            name="model"
+            type="com.t3leem_live.models.TeacherAddGroupModel" />
+
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".activities_fragments.activity_student_teachers.StudentTeachersActivity"
+        android:background="@color/white"
+        >
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                >
+                <LinearLayout
+                    android:id="@+id/llBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    >
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_left_arrow"
+                        app:tint="@color/color1"
+                        android:padding="3dp"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        android:rotation='@{lang.equals("ar")?180:0}'
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="15sp"
+                        android:text="@string/add_group"
+                        android:textColor="@color/color1"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray4"
+            />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:fitsSystemWindows="true"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/class1"
+                    android:textSize="15sp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/rounded_gray"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:layout_marginTop="5dp"
+                    >
+                    <Spinner
+                        android:id="@+id/spinnerClass"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+
+
+
+                <LinearLayout
+                    android:id="@+id/llDepartment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/department"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+
+                        />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="@drawable/rounded_gray"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:layout_marginTop="5dp"
+                        >
+                        <Spinner
+                            android:id="@+id/spinnerDepartment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+                    </FrameLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subject2"
+                    android:textSize="15sp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/rounded_gray"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:layout_marginTop="5dp"
+                    >
+                    <Spinner
+                        android:id="@+id/spinnerSubject"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/group_name2"
+                    android:textSize="15sp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_gray"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:hint="@string/group_name2"
+                    android:singleLine="true"
+                    android:text="@={model.name}"
+                    error="@{model.error_name}"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/max_student"
+                    android:textSize="15sp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_gray"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:hint="@string/max_student"
+                    android:singleLine="true"
+                    android:text="@={model.max_number}"
+                    error="@{model.error_max_number}"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/group_date"
+                    android:textSize="15sp"
+                    android:layout_marginTop="10dp"
+
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_gray"
+                    android:padding="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:hint="@string/group_date"
+                    android:singleLine="true"
+                    android:gravity="top|start"
+                    android:text="@={model.time}"
+                    error="@{model.error_time}"
+                    android:inputType="textMultiLine"
+                    />
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_color1"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/save2"
+                    />
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+</layout>

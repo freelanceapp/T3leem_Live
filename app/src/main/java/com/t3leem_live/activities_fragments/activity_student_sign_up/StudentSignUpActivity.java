@@ -131,7 +131,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
             model.setFather_phone_code("+20");
             model.setFather_phone(userModel.getData().getParent_phone());
             model.setAddress(userModel.getData().getAddress());
-            model.setSchool_name(userModel.getData().getName());
+            model.setSchool_name(userModel.getData().getSchool_name());
             int class_id =0;
             if (userModel.getData().getClass_fk()!=null){
                 class_id = userModel.getData().getClass_fk().getId();
@@ -635,6 +635,12 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                             navigateToStudentHomeActivity();
                         }else
                         {
+                            try {
+                                Log.e("error_code",response.code()+"__"+response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                             if (response.code()==500)
                             {
                                 Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
@@ -676,11 +682,13 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
     private void updateWithoutImage()
     {
+        Log.e("1","updateWithoutImage");
+
         ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .updateStudentProfileWithoutImage(model.getName(),model.getEmail(),model.getPhone_code().replace("+","00"),model.getPhone(),model.getPassword(),model.getFather_phone_code()+model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),model.getDepartment_id(),"android","student")
+                .updateStudentProfileWithoutImage("Bearer "+userModel.getData().getToken(),userModel.getData().getId(),model.getName(),model.getEmail(),model.getPhone_code().replace("+","00"),model.getPhone(),model.getFather_phone_code()+model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),model.getDepartment_id(),"android","student")
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -692,8 +700,11 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                             finish();
                         }else
                         {
-                            Log.e("error",response.code()+"__");
-
+                            try {
+                                Log.e("error_code",response.code()+"__"+response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             if (response.code()==500)
                             {
                                 Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
@@ -736,14 +747,15 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     }
 
     private void updateWithImage() {
+        Log.e("1","updateWithImage");
         ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
+        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
         RequestBody name_part = Common.getRequestBodyText(model.getName());
         RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+","00"));
         RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
         RequestBody email_part = Common.getRequestBodyText(model.getEmail());
-        RequestBody password_part = Common.getRequestBodyText(model.getPassword());
         RequestBody father_phone_part = Common.getRequestBodyText(model.getFather_phone_code().replace("+","00")+model.getFather_phone());
         RequestBody address_part = Common.getRequestBodyText(model.getAddress());
         RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
@@ -758,7 +770,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
 
         Api.getService(Tags.base_url)
-                .updateStudentProfileWithImage(name_part,email_part,phone_code_part,phone_part,password_part,father_phone_part,address_part,school_name_part,stage_id_part,class_id_part,department_id_part,software_part,user_type_part,image)
+                .updateStudentProfileWithImage("Bearer "+userModel.getData().getToken(),id_part,name_part,email_part,phone_code_part,phone_part,father_phone_part,address_part,school_name_part,stage_id_part,class_id_part,department_id_part,software_part,user_type_part,image)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -770,6 +782,11 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                             finish();
                         }else
                         {
+                            try {
+                                Log.e("error_code",response.code()+"__"+response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             if (response.code()==500)
                             {
                                 Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();

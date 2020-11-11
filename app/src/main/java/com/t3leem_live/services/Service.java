@@ -9,11 +9,15 @@ import com.t3leem_live.models.StudentRateDataModel;
 import com.t3leem_live.models.SummaryDataModel;
 import com.t3leem_live.models.TeacherExamDataModel;
 import com.t3leem_live.models.TeacherGroupDataModel;
+import com.t3leem_live.models.TeacherGroupModel;
+import com.t3leem_live.models.TeacherStudentsDataModel;
 import com.t3leem_live.models.TeachersDataModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.models.VideoLessonsDataModel;
 
 import org.androidannotations.annotations.rest.Get;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -52,6 +56,12 @@ public interface Service {
 
     @GET("api/get-department-by-class-id")
     Call<StageDataModel> getDepartmentByClassId(@Query(value = "class_id") int class_id);
+
+    @GET("api/get-subjects-by-class-id")
+    Call<StageDataModel> getSubjectByClassId(@Query(value = "class_id") int class_id,
+                                             @Query(value = "stage_id") int stage_id
+    );
+
 
     @GET("api/get-libraries")
     Call<StageDataModel> getLibraries();
@@ -223,11 +233,12 @@ public interface Service {
 
     @FormUrlEncoded
     @POST("api/update-profile")
-    Call<UserModel> updateStudentProfileWithoutImage(@Field("name") String name,
+    Call<UserModel> updateStudentProfileWithoutImage(@Header("Authorization") String bearer_token,
+                                                     @Field("id") int id,
+                                                     @Field("name") String name,
                                                      @Field("email") String email,
                                                      @Field("phone_code") String phone_code,
                                                      @Field("phone") String phone,
-                                                     @Field("password") String password,
                                                      @Field("parent_phone") String parent_phone,
                                                      @Field("address") String address,
                                                      @Field("school_name") String school_name,
@@ -242,11 +253,12 @@ public interface Service {
 
     @Multipart
     @POST("api/update-profile")
-    Call<UserModel> updateStudentProfileWithImage(@Part("name") RequestBody name,
+    Call<UserModel> updateStudentProfileWithImage(@Header("Authorization") String bearer_token,
+                                                  @Part("id") RequestBody id,
+                                                  @Part("name") RequestBody name,
                                                   @Part("email") RequestBody email,
                                                   @Part("phone_code") RequestBody phone_code,
                                                   @Part("phone") RequestBody phone,
-                                                  @Part("password") RequestBody password,
                                                   @Part("parent_phone") RequestBody parent_phone,
                                                   @Part("address") RequestBody address,
                                                   @Part("school_name") RequestBody school_name,
@@ -258,4 +270,33 @@ public interface Service {
                                                   @Part MultipartBody.Part logo
     );
 
+
+    @FormUrlEncoded
+    @POST("api/add-new-groups")
+    Call<ResponseBody> teacherAddGroup(@Field("teacher_id") int teacher_id,
+                                       @Field("stage_id") int stage_id,
+                                       @Field("class_id") int class_id,
+                                       @Field("department_id") String department_id,
+                                       @Field("subject_id") int subject_id,
+                                       @Field("title") String title,
+                                       @Field("desc") String desc,
+                                       @Field("student_limit") String student_limit
+
+
+    );
+
+    @GET("api/get-my-groups-by-teacher-id")
+    Call<List<TeacherGroupModel>> getTeachersGroups(@Query(value = "teacher_id") int teacher_id);
+
+    @FormUrlEncoded
+    @POST("api/delete-group")
+    Call<ResponseBody> deleteGroups(@Field(value = "teacher_group_id") int teacher_group_id);
+
+
+    @GET("api/my-students")
+    Call<TeacherStudentsDataModel> getStudents(@Query(value = "pagination_status") String pagination_status,
+                                               @Query(value = "per_link_") int per_link,
+                                               @Query(value = "page") int page,
+                                               @Query(value = "teacher_id") int teacher_id
+    );
 }

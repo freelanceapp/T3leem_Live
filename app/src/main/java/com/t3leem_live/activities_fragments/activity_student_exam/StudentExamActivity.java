@@ -157,10 +157,11 @@ public class StudentExamActivity extends AppCompatActivity {
     }
 
     public void setItemData(TeacherExamModel model) {
-        /*String url = Tags.base_url+"student-answer-exam/"+model.getId()+"?teacher_id=12&view_type=webView";
+        String url = Tags.base_url+"student-exams/"+model.getId()+"?student_id="+userModel.getData().getId()+"&view_type=webView";
+        Log.e("url",url);
         Intent intent = new Intent(this, ViewActivity.class);
         intent.putExtra("url",url);
-        startActivity(intent);*/
+        startActivity(intent);
 
     }
 }

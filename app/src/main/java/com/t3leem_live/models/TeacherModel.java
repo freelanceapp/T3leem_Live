@@ -14,6 +14,7 @@ public class TeacherModel implements Serializable {
     private String class_id;
     private String department_id;
     private String subject_id;
+    private String parent_phone;
     private String teacher_degree;
     private String teacher_video;
     private String logo;
@@ -72,6 +73,10 @@ public class TeacherModel implements Serializable {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getParent_phone() {
+        return parent_phone;
     }
 
     public void setPhone(String phone) {

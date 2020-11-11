@@ -54,7 +54,7 @@ public class StudentExamsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         MyHolder myHolder = (MyHolder) holder;
         TeacherExamModel model = list.get(position);
         myHolder.binding.setModel(model);
-        myHolder.binding.llShowResults.setOnClickListener(view -> {
+        myHolder.binding.llShow.setOnClickListener(view -> {
             TeacherExamModel model2 = list.get(position);
             activity.setItemData(model2);
         });

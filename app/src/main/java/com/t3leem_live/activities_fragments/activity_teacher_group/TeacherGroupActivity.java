@@ -1,15 +1,14 @@
-package com.t3leem_live.activities_fragments.activity_student_teachers_group;
+package com.t3leem_live.activities_fragments.activity_teacher_group;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -17,17 +16,17 @@ import android.widget.Toast;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_home_teacher.TeacherHomeActivity;
-import com.t3leem_live.activities_fragments.activity_student_teachers.StudentTeachersActivity;
+import com.t3leem_live.activities_fragments.activity_student_teachers_group.StudentTeachersGroupActivity;
+import com.t3leem_live.activities_fragments.activity_teacher_add_group.TeacherAddGroupActivity;
 import com.t3leem_live.adapters.StudentTeacherGroupsAdapter;
-import com.t3leem_live.databinding.ActivityStudentTeachersBinding;
+import com.t3leem_live.adapters.TeacherGroupsAdapter;
 import com.t3leem_live.databinding.ActivityStudentTeachersGroupBinding;
+import com.t3leem_live.databinding.ActivityTeacherGroupBinding;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.TeacherGroupDataModel;
 import com.t3leem_live.models.TeacherGroupModel;
 import com.t3leem_live.models.TeacherModel;
-import com.t3leem_live.models.TeachersDataModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
@@ -44,13 +43,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StudentTeachersGroupActivity extends AppCompatActivity {
-    private ActivityStudentTeachersGroupBinding binding;
-    private TeacherModel teacherModel;
-    private StageClassModel stageClassModel;
+public class TeacherGroupActivity extends AppCompatActivity {
+    private ActivityTeacherGroupBinding binding;
     private String lang = "ar";
     private List<TeacherGroupModel> teacherGroupModelList;
-    private StudentTeacherGroupsAdapter adapter;
+    private TeacherGroupsAdapter adapter;
     private Preferences preference;
     private UserModel userModel;
     private SkeletonScreen skeletonScreen;
@@ -65,19 +62,11 @@ public class StudentTeachersGroupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_student_teachers_group);
-        getDataFromIntent();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_group);
         initView();
 
     }
 
-    private void getDataFromIntent() {
-        Intent intent = getIntent();
-        teacherModel = (TeacherModel) intent.getSerializableExtra("data");
-        stageClassModel = (StageClassModel) intent.getSerializableExtra("data2");
-
-
-    }
 
     private void initView() {
         preference = Preferences.getInstance();
@@ -85,9 +74,9 @@ public class StudentTeachersGroupActivity extends AppCompatActivity {
         teacherGroupModelList = new ArrayList<>();
         Paper.init(this);
         lang = Paper.book().read("lang", "ar");
-        binding.setModel(teacherModel);
+        binding.setLang(lang);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new StudentTeacherGroupsAdapter(teacherGroupModelList, this);
+        adapter = new TeacherGroupsAdapter(teacherGroupModelList, this);
         binding.recView.setAdapter(adapter);
 
         skeletonScreen = Skeleton.bind(binding.recView)
@@ -98,37 +87,35 @@ public class StudentTeachersGroupActivity extends AppCompatActivity {
                 .shimmer(true)
                 .show();
 
-
+        binding.fab.setOnClickListener(view -> {
+            Intent intent = new Intent(this, TeacherAddGroupActivity.class);
+            startActivityForResult(intent,100);
+        });
         getGroups();
 
     }
 
-    private void getGroups()
-    {
-        String department_id = "";
-        if (userModel.getData().getDepartment_fk()!=null){
-            department_id = userModel.getData().getDepartment_fk().getDepartment_id();
-        }
+    private void getGroups() {
 
 
-        Api.getService(Tags.base_url).getStudentTeachersGroups(Integer.parseInt(userModel.getData().getStage_id()), Integer.parseInt(userModel.getData().getClass_id()), department_id,stageClassModel.getId(), userModel.getData().getId())
-                .enqueue(new Callback<TeacherGroupDataModel>() {
+        Api.getService(Tags.base_url).getTeachersGroups(userModel.getData().getId())
+                .enqueue(new Callback<List<TeacherGroupModel>>() {
                     @Override
-                    public void onResponse(Call<TeacherGroupDataModel> call, Response<TeacherGroupDataModel> response) {
+                    public void onResponse(Call<List<TeacherGroupModel>> call, Response<List<TeacherGroupModel>> response) {
                         skeletonScreen.hide();
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
                                 teacherGroupModelList.clear();
-
-                                if (response.body().getData().size() > 0) {
+                                if (response.body().size() > 0) {
                                     binding.tvNoGroups.setVisibility(View.GONE);
-                                    teacherGroupModelList.addAll(response.body().getData());
+                                    teacherGroupModelList.addAll(response.body());
+                                    adapter.notifyDataSetChanged();
+
                                 } else {
                                     binding.tvNoGroups.setVisibility(View.VISIBLE);
 
                                 }
 
-                                adapter.notifyDataSetChanged();
 
 
                             }
@@ -145,17 +132,17 @@ public class StudentTeachersGroupActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<TeacherGroupDataModel> call, Throwable t) {
+                    public void onFailure(Call<List<TeacherGroupModel>> call, Throwable t) {
                         skeletonScreen.hide();
                         try {
                             if (t.getMessage() != null) {
                                 Log.e("error", t.getMessage() + "__");
 
                                 if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    Toast.makeText(StudentTeachersGroupActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TeacherGroupActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
                                 } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
                                 } else {
-                                    Toast.makeText(StudentTeachersGroupActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TeacherGroupActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -168,31 +155,26 @@ public class StudentTeachersGroupActivity extends AppCompatActivity {
     }
 
 
-    public void setItemData(TeacherGroupModel model, int adapterPosition)
-    {
-        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+    public void deleteGroup(TeacherGroupModel model, int adapterPosition) {
+        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .studentGroupReservation(userModel.getData().getId(),model.getId(),stageClassModel.getId())
+                .deleteGroups(model.getId())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         dialog.dismiss();
                         if (response.isSuccessful()) {
-                            int pos = getMyGroup();
-                            if (pos!=-1){
-                                TeacherGroupModel model2 = teacherGroupModelList.get(pos);
-                                model2.setStudent_book(null);
-                                teacherGroupModelList.set(pos,model2);
-                                adapter.notifyItemChanged(pos);
-
+                            teacherGroupModelList.remove(adapterPosition);
+                            adapter.notifyItemRemoved(adapterPosition);
+                            if (teacherGroupModelList.size() > 0) {
+                                binding.tvNoGroups.setVisibility(View.GONE);
+                            } else {
+                                binding.tvNoGroups.setVisibility(View.VISIBLE);
 
                             }
-                            model.setStudent_book(new TeacherGroupModel.StudentBook());
-                            teacherGroupModelList.set(adapterPosition,model);
-                            adapter.notifyItemChanged(adapterPosition);
 
                         } else {
                             dialog.dismiss();
@@ -203,9 +185,9 @@ public class StudentTeachersGroupActivity extends AppCompatActivity {
                             }
 
                             if (response.code() == 500) {
-                                Toast.makeText(StudentTeachersGroupActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(TeacherGroupActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(StudentTeachersGroupActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(TeacherGroupActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -218,9 +200,9 @@ public class StudentTeachersGroupActivity extends AppCompatActivity {
                                 Log.e("error", t.getMessage() + "__");
 
                                 if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    Toast.makeText(StudentTeachersGroupActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TeacherGroupActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(StudentTeachersGroupActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TeacherGroupActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         } catch (Exception e) {
@@ -230,15 +212,16 @@ public class StudentTeachersGroupActivity extends AppCompatActivity {
                 });
     }
 
-    private int getMyGroup(){
-        int pos = -1;
-        for (int index =0;index<teacherGroupModelList.size();index++){
-            TeacherGroupModel model = teacherGroupModelList.get(index);
-            if (model.getStudent_book()!=null){
-                pos = index;
-                return pos;
-            }
+
+    public void startLiveStream(TeacherGroupModel model2, int adapterPosition) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode ==100&&resultCode==RESULT_OK){
+            getGroups();
         }
-        return pos;
     }
 }

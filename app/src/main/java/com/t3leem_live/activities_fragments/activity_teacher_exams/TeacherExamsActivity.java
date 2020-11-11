@@ -88,7 +88,14 @@ public class TeacherExamsActivity extends AppCompatActivity {
                 .shimmer(true)
                 .show();
 
+        binding.fab.setOnClickListener(view -> {
+            String url = Tags.base_url+"create-teacher-exams?"+"teacher_id="+userModel.getData().getId()+"&view_type=webView";
+            Intent intent = new Intent(this, ViewActivity.class);
+            intent.putExtra("url",url);
+            startActivity(intent);
+        });
         getExams();
+
 
     }
 
@@ -154,7 +161,7 @@ public class TeacherExamsActivity extends AppCompatActivity {
     }
 
     public void setItemData(TeacherExamModel model) {
-        String url = Tags.base_url+"student-answer-exam/"+model.getId()+"?teacher_id=12&view_type=webView";
+        String url = Tags.base_url+"student-answer-exam/"+model.getId()+"?teacher_id="+userModel.getData().getId()+"&view_type=webView";
         Intent intent = new Intent(this, ViewActivity.class);
         intent.putExtra("url",url);
         startActivity(intent);

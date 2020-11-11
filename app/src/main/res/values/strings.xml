@@ -139,5 +139,18 @@
     <string name="suc">تم بنجاح!</string>
     <string name="update">تعديل البيانات</string>
     <string name="update_photo">تعديل صورتك</string>
+    <string name="add_group">إضافة مجموعة</string>
+    <string name="subject2">المادة</string>
+    <string name="group_name2">إسم المجموعة</string>
+    <string name="max_student">أقصى عدد للطلاب بالمجموعة</string>
+    <string name="group_date">موعد المجموعة</string>
+    <string name="save2">حفظ</string>
+    <string name="choose_subject">إختر المادة</string>
+    <string name="live2">لايف</string>
+    <string name="delete">حذف</string>
+    <string name="my_student">طلابي</string>
+    <string name="my_group">مجموعاتي</string>
+    <string name="my_tests">إختباراتي</string>
+    <string name="show">مشاهدة</string>
 
 </resources>

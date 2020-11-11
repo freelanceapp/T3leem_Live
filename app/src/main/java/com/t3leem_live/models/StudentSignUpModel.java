@@ -139,6 +139,14 @@ public class StudentSignUpModel extends BaseObservable {
                 error_school_name.set(null);
 
             }
+
+            if (isHasDepartment){
+                if (department_id.isEmpty()){
+                    Toast.makeText(context, R.string.choose_department, Toast.LENGTH_SHORT).show();
+                    return false;
+
+                }
+            }
             return false;
 
         }

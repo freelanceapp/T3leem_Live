@@ -1,4 +1,4 @@
-package com.t3leem_live.activities_fragments.activity_student_teachers;
+package com.t3leem_live.activities_fragments.activity_teacher_students;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,25 +11,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_on_boarding1.OnBoarding1Activity;
-import com.t3leem_live.activities_fragments.activity_splash.SplashActivity;
-import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
+import com.t3leem_live.activities_fragments.activity_student_teachers.StudentTeachersActivity;
 import com.t3leem_live.activities_fragments.activity_student_teachers_group.StudentTeachersGroupActivity;
 import com.t3leem_live.activities_fragments.activity_teacher_video.TeacherVideoActivity;
 import com.t3leem_live.adapters.StudentTeachersAdapter;
-import com.t3leem_live.databinding.ActivitySplashBinding;
+import com.t3leem_live.adapters.StudentsAdapter;
 import com.t3leem_live.databinding.ActivityStudentTeachersBinding;
-import com.t3leem_live.databinding.ActivityTeacherVideoBinding;
+import com.t3leem_live.databinding.ActivityTeacherStudentsBinding;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.TeacherModel;
+import com.t3leem_live.models.TeacherStudentsDataModel;
+import com.t3leem_live.models.TeacherStudentsModel;
 import com.t3leem_live.models.TeachersDataModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
@@ -45,17 +43,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StudentTeachersActivity extends AppCompatActivity {
-    private ActivityStudentTeachersBinding binding;
+public class TeacherStudentsActivity extends AppCompatActivity {
+    private ActivityTeacherStudentsBinding binding;
     private Preferences preferences;
     private UserModel userModel;
     private String lang = "ar";
-    private StudentTeachersAdapter adapter;
-    private List<TeacherModel> teacherModelList;
+    private StudentsAdapter adapter;
+    private List<TeacherStudentsModel> teacherModelList;
     private SkeletonScreen skeletonScreen;
     private int current_page = 1;
     private boolean isLoading = false;
-    private StageClassModel stageClassModel;
 
 
     @Override
@@ -67,15 +64,11 @@ public class StudentTeachersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_student_teachers);
-        getDataFromIntent();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_students);
         initView();
     }
 
-    private void getDataFromIntent() {
-        Intent intent = getIntent();
-        stageClassModel = (StageClassModel) intent.getSerializableExtra("data");
-    }
+
     private void initView() {
         teacherModelList = new ArrayList<>();
         Paper.init(this);
@@ -85,7 +78,7 @@ public class StudentTeachersActivity extends AppCompatActivity {
         binding.setLang(lang);
 
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new StudentTeachersAdapter(teacherModelList,this);
+        adapter = new StudentsAdapter(teacherModelList,this);
         binding.recView.setAdapter(adapter);
 
         skeletonScreen = Skeleton.bind(binding.recView)
@@ -114,16 +107,16 @@ public class StudentTeachersActivity extends AppCompatActivity {
                 }
             }
         });
-        getTeachers();
+        getStudents();
 
     }
 
-    private void getTeachers()
+    private void getStudents()
     {
-        Api.getService(Tags.base_url).getStudentTeachers("on", 20, 1, userModel.getData().getStage_fk().getId())
-                .enqueue(new Callback<TeachersDataModel>() {
+        Api.getService(Tags.base_url).getStudents("on", 20, 1, userModel.getData().getId())
+                .enqueue(new Callback<TeacherStudentsDataModel>() {
                     @Override
-                    public void onResponse(Call<TeachersDataModel> call, Response<TeachersDataModel> response) {
+                    public void onResponse(Call<TeacherStudentsDataModel> call, Response<TeacherStudentsDataModel> response) {
                         skeletonScreen.hide();
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
@@ -156,17 +149,17 @@ public class StudentTeachersActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<TeachersDataModel> call, Throwable t) {
+                    public void onFailure(Call<TeacherStudentsDataModel> call, Throwable t) {
                         skeletonScreen.hide();
                         try {
                             if (t.getMessage() != null) {
                                 Log.e("error", t.getMessage() + "__");
 
                                 if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    Toast.makeText(StudentTeachersActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TeacherStudentsActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
                                 } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
                                 } else {
-                                    Toast.makeText(StudentTeachersActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TeacherStudentsActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -182,79 +175,67 @@ public class StudentTeachersActivity extends AppCompatActivity {
         adapter.notifyItemInserted(teacherModelList.size() - 1);
         isLoading = true;
 
-        Api.getService(Tags.base_url).getStudentTeachers("on", 20, page,userModel.getData().getStage_fk().getId())
-                .enqueue(new Callback<TeachersDataModel>() {
-            @Override
-            public void onResponse(Call<TeachersDataModel> call, Response<TeachersDataModel> response) {
-                isLoading = false;
-                if (teacherModelList.get(teacherModelList.size() - 1) == null) {
-                    teacherModelList.remove(teacherModelList.size() - 1);
-                    adapter.notifyItemRemoved(teacherModelList.size() - 1);
-                }
-                if (response.isSuccessful()) {
-                    if (response.body() != null && response.body().getData().size() > 0) {
-                        current_page = response.body().getCurrent_page();
-                        int old_pos = teacherModelList.size() - 1;
-                        teacherModelList.addAll(response.body().getData());
-                        int new_pos = teacherModelList.size();
-                        adapter.notifyItemRangeInserted(old_pos, new_pos);
+        Api.getService(Tags.base_url).getStudents("on", 20, page,userModel.getData().getId())
+                .enqueue(new Callback<TeacherStudentsDataModel>() {
+                    @Override
+                    public void onResponse(Call<TeacherStudentsDataModel> call, Response<TeacherStudentsDataModel> response) {
+                        isLoading = false;
+                        if (teacherModelList.get(teacherModelList.size() - 1) == null) {
+                            teacherModelList.remove(teacherModelList.size() - 1);
+                            adapter.notifyItemRemoved(teacherModelList.size() - 1);
+                        }
+                        if (response.isSuccessful()) {
+                            if (response.body() != null && response.body().getData().size() > 0) {
+                                current_page = response.body().getCurrent_page();
+                                int old_pos = teacherModelList.size() - 1;
+                                teacherModelList.addAll(response.body().getData());
+                                int new_pos = teacherModelList.size();
+                                adapter.notifyItemRangeInserted(old_pos, new_pos);
 
-                    }
-                } else {
-                    isLoading = false;
-                    if (teacherModelList.get(teacherModelList.size() - 1) == null) {
-                        teacherModelList.remove(teacherModelList.size() - 1);
-                        adapter.notifyItemRemoved(teacherModelList.size() - 1);
-                    }
-                    try {
-                        Log.e("error_code", response.code() + response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<TeachersDataModel> call, Throwable t) {
-                isLoading = false;
-                if (teacherModelList.get(teacherModelList.size() - 1) == null) {
-                    teacherModelList.remove(teacherModelList.size() - 1);
-                    adapter.notifyItemRemoved(teacherModelList.size() - 1);
-                }
-                try {
-                    if (t.getMessage() != null) {
-                        Log.e("error", t.getMessage() + "__");
-
-                        if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                            Toast.makeText(StudentTeachersActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-                        } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
+                            }
                         } else {
-                            Toast.makeText(StudentTeachersActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            isLoading = false;
+                            if (teacherModelList.get(teacherModelList.size() - 1) == null) {
+                                teacherModelList.remove(teacherModelList.size() - 1);
+                                adapter.notifyItemRemoved(teacherModelList.size() - 1);
+                            }
+                            try {
+                                Log.e("error_code", response.code() + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<TeacherStudentsDataModel> call, Throwable t) {
+                        isLoading = false;
+                        if (teacherModelList.get(teacherModelList.size() - 1) == null) {
+                            teacherModelList.remove(teacherModelList.size() - 1);
+                            adapter.notifyItemRemoved(teacherModelList.size() - 1);
+                        }
+                        try {
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(TeacherStudentsActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
+                                } else {
+                                    Toast.makeText(TeacherStudentsActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+
+                        } catch (Exception e) {
+
                         }
                     }
-
-
-                } catch (Exception e) {
-
-                }
-            }
-        });
+                });
 
     }
 
-    public void setItemData(TeacherModel model, String type) {
-        Intent intent;
-        if (type.equals("video")){
-            intent = new Intent(this, TeacherVideoActivity.class);
 
-        }else {
-            intent = new Intent(this, StudentTeachersGroupActivity.class);
-
-        }
-        intent.putExtra("data",model);
-        intent.putExtra("data2",stageClassModel);
-        startActivity(intent);
-    }
 }

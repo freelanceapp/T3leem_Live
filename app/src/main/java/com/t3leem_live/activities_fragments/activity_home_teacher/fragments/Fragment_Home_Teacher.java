@@ -21,7 +21,8 @@ import com.t3leem_live.activities_fragments.activity_home_teacher.TeacherHomeAct
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
 import com.t3leem_live.activities_fragments.activity_subject_tutorial.SubjectTutorialActivity;
 import com.t3leem_live.activities_fragments.activity_teacher_exams.TeacherExamsActivity;
-import com.t3leem_live.activities_fragments.activity_view.ViewActivity;
+import com.t3leem_live.activities_fragments.activity_teacher_group.TeacherGroupActivity;
+import com.t3leem_live.activities_fragments.activity_teacher_students.TeacherStudentsActivity;
 import com.t3leem_live.adapters.SliderAdapter;
 import com.t3leem_live.adapters.StageAdapter;
 import com.t3leem_live.databinding.FragmentHomeStudentBinding;
@@ -75,19 +76,26 @@ public class Fragment_Home_Teacher extends Fragment {
         userModel = preferences.getUserData(activity);
         Paper.init(activity);
         lang = Paper.book().read("lang","ar");
-        getSlider();
-
-        binding.imageMyExam.setOnClickListener(view -> {
+        binding.setLang(lang);
+        binding.cardStudent.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, TeacherStudentsActivity.class);
+            startActivity(intent);
+        });
+        binding.cardTest.setOnClickListener(view -> {
             Intent intent = new Intent(activity, TeacherExamsActivity.class);
             startActivity(intent);
         });
 
-        binding.imageMyStudents.setOnClickListener(view -> {
-            String url = Tags.base_url+"create-teacher-exams?"+"teacher_id=12&view_type=webView";
-            Intent intent = new Intent(activity, ViewActivity.class);
-            intent.putExtra("url",url);
+        binding.cardGroup.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, TeacherGroupActivity.class);
             startActivity(intent);
         });
+
+
+        getSlider();
+
+
+
 
 
     }
