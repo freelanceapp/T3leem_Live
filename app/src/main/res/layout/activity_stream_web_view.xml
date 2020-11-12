@@ -3,18 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     >
     <data>
         <variable
             name="lang"
-            type="String" />
+            type="String"
+            />
     </data>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".activities_fragments.activity_student_teachers.StudentTeachersActivity">
+        >
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,10 +46,11 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:textSize="15sp"
-                        android:text="@string/my_student"
+                        android:text="@string/live_stream"
                         android:textColor="@color/color1"
                         android:clickable="false"
                         android:longClickable="false"
+
                         />
                 </LinearLayout>
             </androidx.appcompat.widget.Toolbar>
@@ -58,21 +59,46 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/black"
             >
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recView"
+            <WebView
+                android:id="@+id/webView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/tvNoTeacher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:text="@string/no_student"
-                android:visibility="gone"
+                android:layout_height="match_parent"
                 />
+            <FrameLayout
+                android:id="@+id/flLoading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    >
+                    <ProgressBar
+                        android:id="@+id/progBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:text="@string/wait2"
+                        android:layout_marginTop="10dp"
+
+                        />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
 
         </FrameLayout>
 

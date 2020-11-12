@@ -114,7 +114,7 @@
     <string name="view">مشاهدة</string>
     <string name="intro_vid">قم برفع الفيديو التعريفي الخاص بك</string>
     <string name="teacher_name">إسم المدرس</string>
-    <string name="no_rates">No Rates</string>
+    <string name="no_rates">لا توجد تقييمات</string>
     <string name="student_chat">مراسلة الطلاب</string>
     <string name="job_degree">الدرجة الوظيفية</string>
     <string name="degree">الدرجة</string>
@@ -152,5 +152,16 @@
     <string name="my_group">مجموعاتي</string>
     <string name="my_tests">إختباراتي</string>
     <string name="show">مشاهدة</string>
+    <string name="no_student">لا يوجد طلاب لعرضها</string>
+    <string name="create_room">إنشاء بث مباشر</string>
+    <string name="title">العنوان</string>
+    <string name="price">السعر</string>
+    <string name="subject3">الموضوع</string>
+    <string name="duration_minute">المدة (دقيقة)</string>
+    <string name="wait2">إنتظر قليلا.....</string>
+    <string name="live_stream">بث مباشر</string>
+    <string name="join">إنضم</string>
+    <string name="no_stream">لا يوجد بث مباشر الان</string>
+    <string name="live_now">مباشر الان</string>
 
 </resources>

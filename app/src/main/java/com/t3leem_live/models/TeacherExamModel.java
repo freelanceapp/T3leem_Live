@@ -24,6 +24,7 @@ public class TeacherExamModel implements Serializable {
     private String edit_view_exam_link;
     private String enter_exam;
     private String correct_article;
+    private TeacherModel teacher_fk;
 
 
     public int getId() {
@@ -108,5 +109,9 @@ public class TeacherExamModel implements Serializable {
 
     public String getCorrect_article() {
         return correct_article;
+    }
+
+    public TeacherModel getTeacher_fk() {
+        return teacher_fk;
     }
 }

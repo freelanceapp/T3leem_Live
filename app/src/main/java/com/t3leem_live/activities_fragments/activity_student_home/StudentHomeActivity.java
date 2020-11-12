@@ -24,6 +24,7 @@ import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_login.LoginActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Home_Student;
 import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Library_Student;
+import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Live_Student;
 import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Profile_Student;
 import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Rate_Student;
 import com.t3leem_live.databinding.ActivityStudentHomeBinding;
@@ -52,6 +53,8 @@ public class StudentHomeActivity extends AppCompatActivity {
     private Fragment_Rate_Student fragment_rate_student;
     private Fragment_Library_Student fragment_library_student;
     private Fragment_Profile_Student fragment_profile_student;
+    private Fragment_Live_Student fragment_live_student;
+
     private int current_pos = 0;
 
     @Override
@@ -109,7 +112,8 @@ public class StudentHomeActivity extends AppCompatActivity {
                     displayFragmentLibraryStudent();
                     break;
                 case 2:
-
+                    Log.e("fff","tt");
+                    displayFragmentLiveStudent();
                     break;
                 case 3:
                     displayFragmentRateStudent();
@@ -149,10 +153,15 @@ public class StudentHomeActivity extends AppCompatActivity {
         if (fragment_rate_student != null && fragment_rate_student.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_rate_student).commit();
         }
+
+        if (fragment_live_student != null && fragment_live_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_live_student).commit();
+        }
+
         if (fragment_home_student.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_home_student).commit();
         } else {
-            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_home_student, "fragment_home_student").addToBackStack("fragment_home_student").commit();
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_home_student, "fragment_home_student").commit();
 
         }
 
@@ -175,10 +184,14 @@ public class StudentHomeActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().hide(fragment_rate_student).commit();
         }
 
+        if (fragment_live_student != null && fragment_live_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_live_student).commit();
+        }
+
         if (fragment_library_student.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_library_student).commit();
         } else {
-            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_library_student, "fragment_library_student").addToBackStack("fragment_library_student").commit();
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_library_student, "fragment_library_student").commit();
 
         }
 
@@ -200,10 +213,14 @@ public class StudentHomeActivity extends AppCompatActivity {
         if (fragment_rate_student != null && fragment_rate_student.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_rate_student).commit();
         }
+        if (fragment_live_student != null && fragment_live_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_live_student).commit();
+        }
+
         if (fragment_profile_student.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_profile_student).commit();
         } else {
-            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_profile_student, "fragment_profile_student").addToBackStack("fragment_profile_student").commit();
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_profile_student, "fragment_profile_student").commit();
 
         }
 
@@ -226,14 +243,46 @@ public class StudentHomeActivity extends AppCompatActivity {
         if (fragment_home_student != null && fragment_home_student.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_home_student).commit();
         }
+        if (fragment_live_student != null && fragment_live_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_live_student).commit();
+        }
         if (fragment_rate_student.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_rate_student).commit();
         } else {
-            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_rate_student, "fragment_rate_student").addToBackStack("fragment_rate_student").commit();
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_rate_student, "fragment_rate_student").commit();
 
         }
 
         updateBottomNavigationPosition(3);
+    }
+
+    public void displayFragmentLiveStudent() {
+        Log.e("dd","fff");
+        if (fragment_live_student == null) {
+            fragment_live_student = Fragment_Live_Student.newInstance();
+        }
+
+        if (fragment_library_student != null && fragment_library_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_library_student).commit();
+        }
+        if (fragment_profile_student != null && fragment_profile_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_profile_student).commit();
+        }
+
+        if (fragment_home_student != null && fragment_home_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_home_student).commit();
+        }
+        if (fragment_rate_student != null && fragment_rate_student.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_rate_student).commit();
+        }
+        if (fragment_live_student.isAdded()) {
+            fragmentManager.beginTransaction().show(fragment_live_student).commit();
+        } else {
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_live_student, "fragment_live_student").commit();
+
+        }
+
+        updateBottomNavigationPosition(2);
     }
 
 

@@ -18,6 +18,7 @@ import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_student_teachers_group.StudentTeachersGroupActivity;
 import com.t3leem_live.activities_fragments.activity_teacher_add_group.TeacherAddGroupActivity;
+import com.t3leem_live.activities_fragments.activity_teacher_create_stream.TeacherCreateStreamActivity;
 import com.t3leem_live.adapters.StudentTeacherGroupsAdapter;
 import com.t3leem_live.adapters.TeacherGroupsAdapter;
 import com.t3leem_live.databinding.ActivityStudentTeachersGroupBinding;
@@ -214,6 +215,9 @@ public class TeacherGroupActivity extends AppCompatActivity {
 
 
     public void startLiveStream(TeacherGroupModel model2, int adapterPosition) {
+        Intent intent = new Intent(this, TeacherCreateStreamActivity.class);
+        intent.putExtra("data",model2);
+        startActivity(intent);
 
     }
 

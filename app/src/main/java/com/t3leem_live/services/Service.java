@@ -5,6 +5,8 @@ import com.t3leem_live.models.PlaceMapDetailsData;
 import com.t3leem_live.models.SettingDataModel;
 import com.t3leem_live.models.SliderDataModel;
 import com.t3leem_live.models.StageDataModel;
+import com.t3leem_live.models.StreamDataModel;
+import com.t3leem_live.models.StreamModel;
 import com.t3leem_live.models.StudentRateDataModel;
 import com.t3leem_live.models.SummaryDataModel;
 import com.t3leem_live.models.TeacherExamDataModel;
@@ -299,4 +301,24 @@ public interface Service {
                                                @Query(value = "page") int page,
                                                @Query(value = "teacher_id") int teacher_id
     );
+
+    @FormUrlEncoded
+    @POST("api/update_zoom")
+    Call<StreamDataModel> teacherCreateStream(@Field("teacher_id") int teacher_id,
+                                              @Field("stage_id") int stage_id,
+                                              @Field("class_id") int class_id,
+                                              @Field("department_id") String department_id,
+                                              @Field("subject_id") int subject_id,
+                                              @Field("teacher_group_id") int teacher_group_id,
+                                              @Field("topic") String title,
+                                              @Field("agenda") String subject,
+                                              @Field("teacher_live_price") String teacher_live_price,
+                                              @Field("duration") String duration,
+                                              @Field("device_type") String device_type
+
+
+    );
+
+    @GET("api/get-all-live-stream")
+    Call<List<StreamModel>> getStreams(@Query(value = "student_id") int student_id);
 }
