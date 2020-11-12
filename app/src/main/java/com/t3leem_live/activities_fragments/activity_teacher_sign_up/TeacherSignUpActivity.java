@@ -234,12 +234,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     @Override
     public void validate() {
         if (model.isDataValid(this)) {
-            if (imageUri == null) {
-                signUpWithoutImage();
-            } else {
-                signUpWithImage();
-            }
-            // navigateToVerificationActivity();
+             navigateToVerificationActivity();
         }
     }
 

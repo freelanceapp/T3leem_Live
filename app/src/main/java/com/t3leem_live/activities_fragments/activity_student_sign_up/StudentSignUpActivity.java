@@ -512,22 +512,8 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     @Override
     public void validate() {
         if (model.isDataValid(this)){
-           if (uri==null){
-               if (userModel==null){
-                   signUpWithoutImage();
 
-               }else {
-                   updateWithoutImage();
-               }
-           }else {
-               if (userModel==null){
-                   signUpWithImage();
-
-               }else {
-                   updateWithImage();
-               }
-           }
-            // navigateToVerificationCodeActivity();
+            navigateToVerificationCodeActivity();
         }
     }
 

@@ -148,8 +148,7 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
         if (loginModel.isDataValid(this))
         {
             Common.CloseKeyBoard(this,binding.edtPhone);
-            login();
-            //navigateToVerificationCodeActivity();
+            navigateToVerificationCodeActivity();
         }
     }
 
