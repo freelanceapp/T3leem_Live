@@ -146,6 +146,76 @@ public interface Service {
                                               @Part MultipartBody.Part video
     );
 
+
+    @Multipart
+    @POST("api/teacher-update-profile")
+    Call<UserModel> updateTeacherWithImageWithVideo(@Header("Authorization") String bearer_token,
+                                                    @Part("id") RequestBody id,
+                                                    @Part("name") RequestBody name,
+                                                    @Part("email") RequestBody email,
+                                                    @Part("phone_code") RequestBody phone_code,
+                                                    @Part("phone") RequestBody phone,
+                                                    @Part("address") RequestBody address,
+                                                    @Part("school_name") RequestBody school_name,
+                                                    @Part("stage_id") RequestBody stage_id,
+                                                    @Part("teacher_degree") RequestBody teacher_degree,
+                                                    @Part("software_type") RequestBody software_type,
+                                                    @Part("user_type") RequestBody user_type,
+                                                    @Part MultipartBody.Part logo,
+                                                    @Part MultipartBody.Part video
+    );
+
+    @Multipart
+    @POST("api/teacher-update-profile")
+    Call<UserModel> updateTeacherWithoutImageWithVideo(@Header("Authorization") String bearer_token,
+                                                       @Part("id") RequestBody id,
+                                                       @Part("name") RequestBody name,
+                                                       @Part("email") RequestBody email,
+                                                       @Part("phone_code") RequestBody phone_code,
+                                                       @Part("phone") RequestBody phone,
+                                                       @Part("address") RequestBody address,
+                                                       @Part("school_name") RequestBody school_name,
+                                                       @Part("stage_id") RequestBody stage_id,
+                                                       @Part("teacher_degree") RequestBody teacher_degree,
+                                                       @Part("software_type") RequestBody software_type,
+                                                       @Part("user_type") RequestBody user_type,
+                                                       @Part MultipartBody.Part video
+    );
+
+    @Multipart
+    @POST("api/teacher-update-profile")
+    Call<UserModel> updateTeacherWithImageWithoutVideo(@Header("Authorization") String bearer_token,
+                                                       @Part("id") RequestBody id,
+                                                       @Part("name") RequestBody name,
+                                                       @Part("email") RequestBody email,
+                                                       @Part("phone_code") RequestBody phone_code,
+                                                       @Part("phone") RequestBody phone,
+                                                       @Part("password") RequestBody password,
+                                                       @Part("school_name") RequestBody school_name,
+                                                       @Part("stage_id") RequestBody stage_id,
+                                                       @Part("teacher_degree") RequestBody teacher_degree,
+                                                       @Part("software_type") RequestBody software_type,
+                                                       @Part("user_type") RequestBody user_type,
+                                                       @Part MultipartBody.Part logo
+    );
+
+    @Multipart
+    @POST("api/teacher-update-profile")
+    Call<UserModel> updateTeacherWithoutImageWithoutVideo(@Header("Authorization") String bearer_token,
+                                                          @Part("id") RequestBody id,
+                                                          @Part("name") RequestBody name,
+                                                          @Part("email") RequestBody email,
+                                                          @Part("phone_code") RequestBody phone_code,
+                                                          @Part("phone") RequestBody phone,
+                                                          @Part("address") RequestBody address,
+                                                          @Part("school_name") RequestBody school_name,
+                                                          @Part("stage_id") RequestBody stage_id,
+                                                          @Part("teacher_degree") RequestBody teacher_degree,
+                                                          @Part("software_type") RequestBody software_type,
+                                                          @Part("user_type") RequestBody user_type
+    );
+
+
     @GET("api/get-subjects-by-class-id-or-department-id")
     Call<StageDataModel> getSubject(@Query(value = "stage_id") int stage_id,
                                     @Query(value = "class_id") int class_id,
@@ -315,6 +385,30 @@ public interface Service {
                                               @Field("teacher_live_price") String teacher_live_price,
                                               @Field("duration") String duration,
                                               @Field("device_type") String device_type
+
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/create-new-room-group")
+    Call<ResponseBody> teacherCreateChatGroups(@Header("Authorization") String bearer_token,
+                                               @Field("title") String title,
+                                               @Field("desc") String desc,
+                                               @Field("room_type") String room_type,
+                                               @Field("from_user_id") int from_user_id,
+                                               @Field("group_id") int group_id
+
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/create-new-room")
+    Call<ResponseBody> teacherCreateStudentChat(@Header("Authorization") String bearer_token,
+                                                @Field("title") String title,
+                                                @Field("desc") String desc,
+                                                @Field("room_type") String room_type,
+                                                @Field("from_user_id") int from_user_id,
+                                                @Field("to_user_id[]") List<Integer> usersId
 
 
     );

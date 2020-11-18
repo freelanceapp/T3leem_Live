@@ -8,6 +8,7 @@ public class TeacherStudentsModel implements Serializable {
     private String teacher_group_id;
     private String subject_id;
     private TeacherModel student_fk;
+    private boolean isSelected = false;
 
     public int getId() {
         return id;
@@ -27,5 +28,13 @@ public class TeacherStudentsModel implements Serializable {
 
     public TeacherModel getStudent_fk() {
         return student_fk;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

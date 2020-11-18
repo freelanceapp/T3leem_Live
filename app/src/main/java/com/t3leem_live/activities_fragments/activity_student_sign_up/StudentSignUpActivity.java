@@ -513,7 +513,22 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     public void validate() {
         if (model.isDataValid(this)){
 
-            navigateToVerificationCodeActivity();
+            if (uri==null){
+                if (userModel==null){
+                    signUpWithoutImage();
+
+                }else {
+                    updateWithoutImage();
+                }
+            }else {
+                if (userModel==null){
+                    signUpWithImage();
+
+                }else {
+                    updateWithImage();
+                }
+            }
+            //navigateToVerificationCodeActivity();
         }
     }
 
@@ -532,7 +547,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .signUpStudentWithoutImage(model.getName(),model.getEmail(),model.getPhone_code().replace("+","00"),model.getPhone(),model.getPassword(),model.getFather_phone_code()+model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),model.getDepartment_id(),"android","student")
+                .signUpStudentWithoutImage(model.getName(),model.getEmail(),model.getPhone_code().replace("+","00"),model.getPhone(),model.getPassword(),model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),model.getDepartment_id(),"android","student")
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -549,14 +564,8 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                             if (response.code()==500)
                             {
                                 Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==407)
-                            {
+                            }else if (response.code()==422) {
                                 Toast.makeText(StudentSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==406)
-                            {
-                                Toast.makeText(StudentSignUpActivity.this, R.string.email_exist, Toast.LENGTH_SHORT).show();
-
-
                             }
                             else
                             {
@@ -596,7 +605,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
         RequestBody email_part = Common.getRequestBodyText(model.getEmail());
         RequestBody password_part = Common.getRequestBodyText(model.getPassword());
-        RequestBody father_phone_part = Common.getRequestBodyText(model.getFather_phone_code().replace("+","00")+model.getFather_phone());
+        RequestBody father_phone_part = Common.getRequestBodyText(model.getFather_phone());
         RequestBody address_part = Common.getRequestBodyText(model.getAddress());
         RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
         RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
@@ -630,14 +639,8 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                             if (response.code()==500)
                             {
                                 Toast.makeText(StudentSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==407)
-                            {
+                            }else if (response.code()==422) {
                                 Toast.makeText(StudentSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==406)
-                            {
-                                Toast.makeText(StudentSignUpActivity.this, R.string.email_exist, Toast.LENGTH_SHORT).show();
-
-
                             }else
                             {
                                 Toast.makeText(StudentSignUpActivity.this,getString(R.string.failed), Toast.LENGTH_SHORT).show();
@@ -668,13 +671,14 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
 
     private void updateWithoutImage()
     {
-        Log.e("1","updateWithoutImage");
+
+        Log.e("parent_phone",model.getFather_phone());
 
         ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .updateStudentProfileWithoutImage("Bearer "+userModel.getData().getToken(),userModel.getData().getId(),model.getName(),model.getEmail(),model.getPhone_code().replace("+","00"),model.getPhone(),model.getFather_phone_code()+model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),model.getDepartment_id(),"android","student")
+                .updateStudentProfileWithoutImage("Bearer "+userModel.getData().getToken(),userModel.getData().getId(),model.getName(),model.getEmail(),model.getPhone_code().replace("+","00"),model.getPhone(),model.getFather_phone(),model.getAddress(),model.getSchool_name(),model.getStage_id(),model.getClass_id(),model.getDepartment_id(),"android","student")
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -733,7 +737,9 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     }
 
     private void updateWithImage() {
-        Log.e("1","updateWithImage");
+
+        Log.e("parent_phone",model.getFather_phone());
+
         ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
@@ -742,7 +748,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
         RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+","00"));
         RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
         RequestBody email_part = Common.getRequestBodyText(model.getEmail());
-        RequestBody father_phone_part = Common.getRequestBodyText(model.getFather_phone_code().replace("+","00")+model.getFather_phone());
+        RequestBody father_phone_part = Common.getRequestBodyText(model.getFather_phone());
         RequestBody address_part = Common.getRequestBodyText(model.getAddress());
         RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
         RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));

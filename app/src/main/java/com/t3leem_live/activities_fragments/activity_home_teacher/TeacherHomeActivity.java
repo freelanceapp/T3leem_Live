@@ -188,7 +188,7 @@ public class TeacherHomeActivity extends AppCompatActivity {
 
         }
 
-        updateBottomNavigationPosition(4);
+        updateBottomNavigationPosition(2);
     }
 
     public void logout(){

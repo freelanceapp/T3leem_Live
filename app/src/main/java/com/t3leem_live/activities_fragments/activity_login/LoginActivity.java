@@ -99,8 +99,6 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
                 }
             }
         });
-
-
         sortCountries();
         createCountriesDialog();
     }
@@ -148,7 +146,8 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
         if (loginModel.isDataValid(this))
         {
             Common.CloseKeyBoard(this,binding.edtPhone);
-            navigateToVerificationCodeActivity();
+            login();
+            //navigateToVerificationCodeActivity();
         }
     }
 

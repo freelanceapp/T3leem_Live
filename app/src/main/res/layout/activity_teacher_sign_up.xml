@@ -58,15 +58,30 @@
                     android:layout_gravity="center_horizontal"
                     />
 
-                <com.google.android.exoplayer2.ui.PlayerView
-                    android:id="@+id/player"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    app:use_controller="true"
-                    android:visibility="gone"
-                    app:auto_show="true"
-                    app:resize_mode="fit"
-                    />
+                    android:layout_height="wrap_content"
+                    >
+                    <com.google.android.exoplayer2.ui.PlayerView
+                        android:id="@+id/player"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        app:use_controller="true"
+                        android:visibility="gone"
+                        app:auto_show="true"
+                        app:resize_mode="fit"
+                        />
+                    <ProgressBar
+                        android:id="@+id/progBarBuffering"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:indeterminateTint="@color/gray8"
+                        android:alpha=".3"
+                        android:layout_gravity="center"
+
+                        />
+                </FrameLayout>
+
 
 
             </LinearLayout>
@@ -184,7 +199,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             android:text="+20"
-                            android:onClick="@{()->listener.showCountryDialog()}"
 
                             />
 
@@ -233,10 +247,10 @@
                             android:layout_marginBottom="5dp"
                             android:background="@color/gray4"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/imagePhoneCode"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <ImageView
+                        <!--<ImageView
                             android:id="@+id/imagePhoneCode"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
@@ -249,7 +263,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             android:onClick="@{()->listener.showCountryDialog()}"
 
-                            />
+                            />-->
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -306,6 +320,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"

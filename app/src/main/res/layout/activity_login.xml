@@ -100,7 +100,6 @@
                         app:layout_constraintStart_toEndOf="@id/callIcon"
                         app:layout_constraintTop_toTopOf="parent"
                         android:text="+20"
-                        android:onClick="@{()->loginListener.showCountryDialog()}"
 
                         />
 
@@ -131,7 +130,7 @@
                         android:textColorHint="@color/gray7"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/view2"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/view"
                         app:layout_constraintTop_toTopOf="parent"
                         android:paddingLeft="10dp"
@@ -141,7 +140,7 @@
                         error="@{loginModel.error_phone}"
                         />
 
-                    <View
+                   <!-- <View
                         android:id="@+id/view2"
                         android:layout_width="1px"
                         android:layout_height="match_parent"
@@ -150,9 +149,9 @@
                         android:background="@color/gray4"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/imagePhoneCode"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                    <ImageView
+                   <!-- <ImageView
                         android:id="@+id/imagePhoneCode"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
@@ -164,7 +163,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         android:onClick="@{()->loginListener.showCountryDialog()}"
-                        />
+                        />-->
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,5 +1,6 @@
 package com.t3leem_live.activities_fragments.activity_home_teacher.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +44,11 @@ public class Fragment_Library_Teacher extends Fragment {
     private TeacherHomeActivity activity;
     private SkeletonScreen skeletonScreen;
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (TeacherHomeActivity) context;
+    }
     public static Fragment_Library_Teacher newInstance(){
         return new Fragment_Library_Teacher();
     }
@@ -56,7 +62,6 @@ public class Fragment_Library_Teacher extends Fragment {
     }
 
     private void initView() {
-        activity = (TeacherHomeActivity) getActivity();
         stageClassModelList = new ArrayList<>();
         adapter = new LibraryAdapter(stageClassModelList,activity,this);
         binding.recView.setLayoutManager(new GridLayoutManager(activity,2));

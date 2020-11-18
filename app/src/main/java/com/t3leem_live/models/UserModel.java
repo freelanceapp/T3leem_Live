@@ -31,6 +31,8 @@ public class UserModel implements Serializable {
         private String class_id;
         private String address;
         private String user_type;
+        private String teacher_degree;
+        private String teacher_video;
         private String fireBaseToken;
         private StageClassModel stage_fk;
         private StageClassModel class_fk;
@@ -113,6 +115,14 @@ public class UserModel implements Serializable {
 
         public StageClassModel getDepartment_fk() {
             return department_fk;
+        }
+
+        public String getTeacher_degree() {
+            return teacher_degree;
+        }
+
+        public String getTeacher_video() {
+            return teacher_video;
         }
 
         public void setFireBaseToken(String fireBaseToken) {

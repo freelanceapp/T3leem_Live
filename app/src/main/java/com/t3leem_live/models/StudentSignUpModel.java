@@ -39,6 +39,20 @@ public class StudentSignUpModel extends BaseObservable {
 
     public boolean isDataValid(Context context) {
 
+        Log.e("name",name+"_");
+        Log.e("phone_code",phone_code+"_");
+        Log.e("phone",phone+"_");
+        Log.e("email",email+"_");
+        Log.e("password",password+"_");
+        Log.e("father_phone_code",father_phone_code+"_");
+        Log.e("father_phone",father_phone+"_");
+        Log.e("stage_id",stage_id+"_");
+        Log.e("class_id",class_id+"_");
+        Log.e("address",address+"_");
+        Log.e("school_name",school_name+"_");
+        Log.e("department_id",department_id+"_");
+
+
         if (!name.isEmpty() &&
                 !phone_code.isEmpty() &&
                 !phone.isEmpty() &&

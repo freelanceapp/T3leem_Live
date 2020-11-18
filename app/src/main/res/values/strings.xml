@@ -79,7 +79,7 @@
     <string name="choose_class">إختر الصف</string>
     <string name="password">كلمة المرور</string>
     <string name="password_short">كلمة المرور قصيرة جدا</string>
-    <string name="phone_exist">رقم الهاتف موجود من قبل</string>
+    <string name="phone_exist">رقم الهاتف او البريد الالكتروني موجود من قبل</string>
     <string name="email_exist">البريد الإلكتروني موجود من قبل</string>
     <string name="user_not_exist">المستخدم غير موجود</string>
     <string name="library">المكتبة</string>
@@ -115,7 +115,7 @@
     <string name="intro_vid">قم برفع الفيديو التعريفي الخاص بك</string>
     <string name="teacher_name">إسم المدرس</string>
     <string name="no_rates">لا توجد تقييمات</string>
-    <string name="student_chat">مراسلة الطلاب</string>
+    <string name="student_chat">المحادثات</string>
     <string name="job_degree">الدرجة الوظيفية</string>
     <string name="degree">الدرجة</string>
     <string name="from">من:</string>
@@ -163,5 +163,10 @@
     <string name="join">إنضم</string>
     <string name="no_stream">لا يوجد بث مباشر الان</string>
     <string name="live_now">مباشر الان</string>
+    <string name="create_group_chat_room">إنشاء محادثة للمجموعات</string>
+    <string name="create_student_chat">إنشاء محادثة للطلاب</string>
+    <string name="create_chat">إنشاء محادثة</string>
+    <string name="description">الوصف</string>
+    <string name="no_student_to_create_group">لا يوجد طلاب لإنشاء محادثة</string>
 
 </resources>

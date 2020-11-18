@@ -1,5 +1,6 @@
 package com.t3leem_live.activities_fragments.activity_home_teacher.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +59,13 @@ public class Fragment_Home_Teacher extends Fragment {
     private Timer timer;
     private Task task;
 
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (TeacherHomeActivity) context;
+    }
+
     public static Fragment_Home_Teacher newInstance(){
         return new Fragment_Home_Teacher();
     }
@@ -71,7 +79,6 @@ public class Fragment_Home_Teacher extends Fragment {
 
     private void initView() {
         sliderModelList = new ArrayList<>();
-        activity = (TeacherHomeActivity) getActivity();
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(activity);
         Paper.init(activity);
@@ -106,7 +113,10 @@ public class Fragment_Home_Teacher extends Fragment {
                 .enqueue(new Callback<SliderDataModel>() {
                     @Override
                     public void onResponse(Call<SliderDataModel> call, Response<SliderDataModel> response) {
-                        binding.progBar.setVisibility(View.GONE);
+                       try {
+                           binding.progBar.setVisibility(View.GONE);
+
+                       }catch (Exception e){}
 
                         if (response.isSuccessful() && response.body() != null) {
                             sliderModelList.clear();

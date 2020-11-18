@@ -180,7 +180,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             android:text="+20"
-                            android:onClick="@{()->listener.showCountryDialog(1)}"
 
                             />
 
@@ -205,13 +204,13 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:hint="@string/phone"
-                            android:inputType="phone"
+                            android:inputType="number"
                             android:singleLine="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/gray7"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/view2"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/view"
                             app:layout_constraintTop_toTopOf="parent"
                             android:paddingLeft="10dp"
@@ -221,7 +220,7 @@
                             error="@{model.error_phone}"
                             />
 
-                        <View
+                       <!-- <View
                             android:id="@+id/view2"
                             android:layout_width="1px"
                             android:layout_height="match_parent"
@@ -229,10 +228,10 @@
                             android:layout_marginBottom="5dp"
                             android:background="@color/gray4"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/imagePhoneCode"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
+-->
+                        <!--<ImageView
                             android:id="@+id/imagePhoneCode"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
@@ -245,7 +244,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             android:onClick="@{()->listener.showCountryDialog(1)}"
 
-                            />
+                            />-->
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -565,7 +564,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             android:text="+20"
-                            android:onClick="@{()->listener.showCountryDialog(2)}"
 
                             />
 
@@ -590,13 +588,13 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:hint="@string/phone"
-                            android:inputType="phone"
+                            android:inputType="number"
                             android:singleLine="true"
                             android:textColor="@color/black"
                             android:textColorHint="@color/gray7"
                             android:textSize="14sp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/view3"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/view1"
                             app:layout_constraintTop_toTopOf="parent"
                             android:paddingLeft="10dp"
@@ -606,7 +604,7 @@
                             error="@{model.error_father_phone}"
                             />
 
-                        <View
+                       <!-- <View
                             android:id="@+id/view3"
                             android:layout_width="1px"
                             android:layout_height="match_parent"
@@ -614,23 +612,10 @@
                             android:layout_marginBottom="5dp"
                             android:background="@color/gray4"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/imageFatherPhoneCode"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/imageFatherPhoneCode"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:padding="8dp"
-                            android:rotation='@{lang.equals("ar")?180:0}'
-                            android:src="@drawable/ic_right_arrow"
-                            app:tint="@color/black"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:onClick="@{()->listener.showCountryDialog(2)}"
+                            app:layout_constraintTop_toTopOf="parent" />
+-->
 
-                            />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

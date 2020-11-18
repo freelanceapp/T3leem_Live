@@ -26,13 +26,25 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:targetApi="m">
-        <activity android:name=".activities_fragments.activity_stream_web_view.StreamWebViewActivity"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
-            />
-        <activity android:name=".activities_fragments.activity_teacher_create_stream.TeacherCreateStreamActivity"
+        <activity android:name=".activities_fragments.activity_teacher_create_students_chat.TeacherCreateStudentsChatActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
             />
+        <activity
+            android:name=".activities_fragments.activity_teacher_create_chat_group.TeacherCreateGroupChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".activities_fragments.activity_teacher_groups_chat.TeacherGroupChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".activities_fragments.activity_stream_web_view.StreamWebViewActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".activities_fragments.activity_teacher_create_stream.TeacherCreateStreamActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activities_fragments.activity_teacher_students.TeacherStudentsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
