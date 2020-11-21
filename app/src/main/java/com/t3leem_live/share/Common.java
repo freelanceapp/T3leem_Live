@@ -241,6 +241,12 @@ public class Common {
 
     }
 
+    private static RequestBody getRequestBodyVideo(File file) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("video/*"), file);
+        return requestBody;
+    }
+
+
     private static RequestBody getRequestBodyImage(File file) {
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
         return requestBody;
@@ -256,10 +262,6 @@ public class Common {
         return requestBody;
     }
 
-    private static RequestBody getRequestBodyVideo(File file) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("video/*"), file);
-        return requestBody;
-    }
 
     public static ProgressDialog createProgressDialog(Context context, String msg) {
         ProgressDialog dialog = new ProgressDialog(context);

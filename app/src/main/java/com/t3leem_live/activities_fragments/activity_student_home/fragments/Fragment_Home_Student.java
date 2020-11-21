@@ -128,7 +128,9 @@ public class Fragment_Home_Student extends Fragment {
 
             }
         }
+
         binding.tvStageClassDepartment.setText(data);
+
         Api.getService(Tags.base_url)
                 .getSubject(stage_id,class_id,department_id)
                 .enqueue(new Callback<StageDataModel>() {

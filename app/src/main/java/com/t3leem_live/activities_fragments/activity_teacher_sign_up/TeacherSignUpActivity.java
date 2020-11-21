@@ -130,6 +130,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
             binding.btnNext.setText(getString(R.string.save));
             binding.player.setVisibility(View.GONE);
             binding.llPassword.setVisibility(View.VISIBLE);
+            binding.progBarBuffering.setVisibility(View.VISIBLE);
 
         }else {
             model.setName(userModel.getData().getName());
@@ -140,6 +141,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
             model.setVideoUri(userModel.getData().getTeacher_video());
             model.setAddress(userModel.getData().getAddress());
             model.setSchool_name(userModel.getData().getSchool_name());
+            binding.progBarBuffering.setVisibility(View.GONE);
 
             int stage_id =0;
             if (userModel.getData().getStage_id()!=null){
