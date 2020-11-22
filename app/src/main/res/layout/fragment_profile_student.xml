@@ -59,7 +59,7 @@
                             android:layout_width="80dp"
                             android:layout_height="80dp"
                             android:layout_gravity="top"
-                            app:civ_border_color="@color/colorPrimary"
+                            app:civ_border_color="@color/white"
                             app:civ_border_width="1dp"
                             user_image="@{model.data.logo}"
 
