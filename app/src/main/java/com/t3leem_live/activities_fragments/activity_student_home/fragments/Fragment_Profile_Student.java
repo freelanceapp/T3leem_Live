@@ -19,6 +19,7 @@ import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_about_app.AboutAppActivity;
+import com.t3leem_live.activities_fragments.activity_chat_rooms.ChatRoomsActivity;
 import com.t3leem_live.activities_fragments.activity_classes.ClassesActivity;
 import com.t3leem_live.activities_fragments.activity_contact_us.ContactUsActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
@@ -84,6 +85,12 @@ public class Fragment_Profile_Student extends Fragment {
             Intent intent = new Intent(activity, StudentSignUpActivity.class);
             startActivityForResult(intent,100);
         });
+
+        binding.llChat.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, ChatRoomsActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void updateUiUserData() {

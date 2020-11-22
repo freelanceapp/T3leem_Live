@@ -12,30 +12,29 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_student_teachers.StudentTeachersActivity;
-import com.t3leem_live.activities_fragments.activity_teacher_students.TeacherStudentsActivity;
+import com.t3leem_live.activities_fragments.activity_chat_rooms.ChatRoomsActivity;
 import com.t3leem_live.databinding.LoadMoreRowBinding;
+import com.t3leem_live.databinding.RoomRowBinding;
 import com.t3leem_live.databinding.StudentRowBinding;
-import com.t3leem_live.databinding.TeacherRowBinding;
-import com.t3leem_live.models.TeacherModel;
+import com.t3leem_live.models.RoomModel;
 import com.t3leem_live.models.TeacherStudentsModel;
 
 import java.util.List;
 
-public class StudentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ChatRoomsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int DATA = 1;
     private final int LOAD = 2;
-    private List<TeacherStudentsModel> list;
+    private List<RoomModel> list;
     private Context context;
     private LayoutInflater inflater;
-    private AppCompatActivity activity;
+    private ChatRoomsActivity activity;
 
 
-    public StudentsAdapter(List<TeacherStudentsModel> list, Context context) {
+    public ChatRoomsAdapter(List<RoomModel> list, Context context) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
-        activity = (AppCompatActivity) context;
+        activity = (ChatRoomsActivity) context;
     }
 
 
@@ -44,7 +43,7 @@ public class StudentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         if (viewType==DATA){
-            StudentRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.student_row, parent, false);
+            RoomRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.room_row, parent, false);
             return new MyHolder(binding);
         }else {
             LoadMoreRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.load_more_row, parent, false);
@@ -58,16 +57,13 @@ public class StudentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if (holder instanceof MyHolder){
             MyHolder myHolder = (MyHolder) holder;
-            TeacherStudentsModel model= list.get(position);
+            RoomModel model= list.get(position);
             myHolder.binding.setModel(model);
-            myHolder.itemView.setOnClickListener(view ->{
-                if (activity instanceof TeacherStudentsActivity){
-                    TeacherStudentsModel model2= list.get(holder.getAdapterPosition());
-
-                    TeacherStudentsActivity teacherStudentsActivity = (TeacherStudentsActivity) activity;
-                    teacherStudentsActivity.navigateToStudentProfileActivity(model2);
-                }
+            myHolder.itemView.setOnClickListener(view -> {
+                RoomModel model2= list.get(myHolder.getAdapterPosition());
+                activity.navigateToChatActivity(model2);
             });
+
 
 
         }else if (holder instanceof LoadMoreHolder){
@@ -84,9 +80,9 @@ public class StudentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public static class MyHolder extends RecyclerView.ViewHolder {
-        private StudentRowBinding binding;
+        private RoomRowBinding binding;
 
-        public MyHolder(StudentRowBinding binding) {
+        public MyHolder(RoomRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 

@@ -318,7 +318,6 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                             classModelList.addAll(response.body().getData());
                             runOnUiThread(() -> {
                                 classAdapter.notifyDataSetChanged();
-                                binding.spinnerClass.setSelection(0);
 
                             });
                             if (userModel!=null){
@@ -326,6 +325,9 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                                 if (pos!=-1){
                                     binding.spinnerClass.setSelection(pos);
                                 }
+                            }else {
+                                binding.spinnerClass.setSelection(0);
+
                             }
 
                         } else {
@@ -393,15 +395,21 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                             binding.setModel(model);
                             runOnUiThread(() -> {
                                 departmentAdapter.notifyDataSetChanged();
-                                binding.spinnerDepartment.setSelection(0);
 
                             });
 
-                            if (userModel!=null&&userModel.getData().getDepartment_fk()!=null){
-                                int pos = getUserDepartPos();
-                                if (pos!=-1){
-                                    binding.spinnerDepartment.setSelection(pos);
+                            if (userModel!=null){
+
+                                if (userModel.getData().getDepartment_fk()!=null){
+                                    int pos = getUserDepartPos();
+                                    if (pos!=-1){
+                                        binding.spinnerDepartment.setSelection(pos);
+                                    }
                                 }
+
+                            }else {
+                                binding.spinnerDepartment.setSelection(0);
+
                             }
                         } else {
                             try {
@@ -462,7 +470,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     }
     private int getUserDepartPos(){
         int pos = -1;
-        for (int index=0;index<stageModelList.size();index++){
+        for (int index=0;index<departmentList.size();index++){
             StageClassModel model = departmentList.get(index);
             if (model.getId()==userModel.getData().getDepartment_fk().getId()){
                 pos = index;

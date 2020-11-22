@@ -98,7 +98,6 @@ public class TeacherGroupActivity extends AppCompatActivity {
 
     private void getGroups() {
 
-
         Api.getService(Tags.base_url).getTeachersGroups(userModel.getData().getId())
                 .enqueue(new Callback<List<TeacherGroupModel>>() {
                     @Override

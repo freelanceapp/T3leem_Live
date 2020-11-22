@@ -168,5 +168,7 @@
     <string name="create_chat">إنشاء محادثة</string>
     <string name="description">الوصف</string>
     <string name="no_student_to_create_group">لا يوجد طلاب لإنشاء محادثة</string>
+    <string name="chats">المحادثات</string>
+    <string name="type_a_message">إكتب رسالتك....</string>
 
 </resources>

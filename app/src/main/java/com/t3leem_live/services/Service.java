@@ -2,6 +2,7 @@ package com.t3leem_live.services;
 
 import com.t3leem_live.models.PlaceGeocodeData;
 import com.t3leem_live.models.PlaceMapDetailsData;
+import com.t3leem_live.models.RoomDataModel;
 import com.t3leem_live.models.SettingDataModel;
 import com.t3leem_live.models.SliderDataModel;
 import com.t3leem_live.models.StageDataModel;
@@ -415,4 +416,15 @@ public interface Service {
 
     @GET("api/get-all-live-stream")
     Call<List<StreamModel>> getStreams(@Query(value = "student_id") int student_id);
+
+    @GET("api/get-rooms")
+    Call<RoomDataModel> getRooms(@Header("Authorization") String bearer_token,
+                                 @Query(value = "pagination_status") String pagination_status,
+                                 @Query(value = "per_link_") int per_link_,
+                                 @Query(value = "page") int page,
+                                 @Query(value = "user_id") int user_id,
+                                 @Query(value = "user_type") String user_type,
+                                 @Query(value = "room_status") String room_status
+
+    );
 }

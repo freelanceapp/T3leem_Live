@@ -76,6 +76,7 @@ public class StudentHomeActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
+
         displayFragmentHomeStudent();
         setUpBottomNavigation();
     }

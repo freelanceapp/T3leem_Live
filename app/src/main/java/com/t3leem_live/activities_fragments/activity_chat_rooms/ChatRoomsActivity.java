@@ -1,4 +1,4 @@
-package com.t3leem_live.activities_fragments.activity_teacher_students;
+package com.t3leem_live.activities_fragments.activity_chat_rooms;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,22 +14,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.ethanhua.skeleton.Skeleton;
-import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_student_profile.StudentProfileActivity;
-import com.t3leem_live.activities_fragments.activity_student_teachers.StudentTeachersActivity;
-import com.t3leem_live.activities_fragments.activity_student_teachers_group.StudentTeachersGroupActivity;
-import com.t3leem_live.activities_fragments.activity_teacher_video.TeacherVideoActivity;
-import com.t3leem_live.adapters.StudentTeachersAdapter;
-import com.t3leem_live.adapters.StudentsAdapter;
-import com.t3leem_live.databinding.ActivityStudentTeachersBinding;
-import com.t3leem_live.databinding.ActivityTeacherStudentsBinding;
+import com.t3leem_live.activities_fragments.activity_chat.ChatActivity;
+import com.t3leem_live.activities_fragments.activity_teacher_students.TeacherStudentsActivity;
+import com.t3leem_live.adapters.ChatRoomsAdapter;
+import com.t3leem_live.databinding.ActivityChatRoomsBinding;
 import com.t3leem_live.language.Language;
-import com.t3leem_live.models.StageClassModel;
-import com.t3leem_live.models.TeacherModel;
+import com.t3leem_live.models.RoomDataModel;
+import com.t3leem_live.models.RoomModel;
 import com.t3leem_live.models.TeacherStudentsDataModel;
-import com.t3leem_live.models.TeacherStudentsModel;
-import com.t3leem_live.models.TeachersDataModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
@@ -44,14 +37,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TeacherStudentsActivity extends AppCompatActivity {
-    private ActivityTeacherStudentsBinding binding;
+public class ChatRoomsActivity extends AppCompatActivity {
+    private ActivityChatRoomsBinding binding;
     private Preferences preferences;
     private UserModel userModel;
     private String lang = "ar";
-    private StudentsAdapter adapter;
-    private List<TeacherStudentsModel> teacherModelList;
-    private SkeletonScreen skeletonScreen;
+    private ChatRoomsAdapter adapter;
+    private List<RoomModel> roomModelList;
     private int current_page = 1;
     private boolean isLoading = false;
 
@@ -65,30 +57,22 @@ public class TeacherStudentsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_teacher_students);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_chat_rooms);
         initView();
     }
 
 
     private void initView() {
-        teacherModelList = new ArrayList<>();
+        roomModelList = new ArrayList<>();
         Paper.init(this);
         lang = Paper.book().read("lang","ar");
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         binding.setLang(lang);
-
+        binding.setModel(userModel);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new StudentsAdapter(teacherModelList,this);
+        adapter = new ChatRoomsAdapter(roomModelList,this);
         binding.recView.setAdapter(adapter);
-
-        skeletonScreen = Skeleton.bind(binding.recView)
-                .adapter(adapter)
-                .frozen(true)
-                .duration(1000)
-                .count(6)
-                .shimmer(true)
-                .show();
 
 
         binding.llBack.setOnClickListener(view -> {finish();});
@@ -114,21 +98,21 @@ public class TeacherStudentsActivity extends AppCompatActivity {
 
     private void getStudents()
     {
-        Api.getService(Tags.base_url).getStudents("on", 20, 1, userModel.getData().getId())
-                .enqueue(new Callback<TeacherStudentsDataModel>() {
+        Api.getService(Tags.base_url).getRooms("Bearer "+userModel.getData().getToken(),"on", 20, 1,userModel.getData().getId(),userModel.getData().getUser_type(),"all")
+                .enqueue(new Callback<RoomDataModel>() {
                     @Override
-                    public void onResponse(Call<TeacherStudentsDataModel> call, Response<TeacherStudentsDataModel> response) {
-                        skeletonScreen.hide();
+                    public void onResponse(Call<RoomDataModel> call, Response<RoomDataModel> response) {
+                        binding.progBar.setVisibility(View.GONE);
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
-                                teacherModelList.clear();
+                                roomModelList.clear();
 
                                 if (response.body().getData().size() > 0) {
-                                    binding.tvNoTeacher.setVisibility(View.GONE);
-                                    teacherModelList.addAll(response.body().getData());
+                                    binding.tvNoConversations.setVisibility(View.GONE);
+                                    roomModelList.addAll(response.body().getData());
                                     current_page = response.body().getCurrent_page();
                                 } else {
-                                    binding.tvNoTeacher.setVisibility(View.VISIBLE);
+                                    binding.tvNoConversations.setVisibility(View.VISIBLE);
 
                                 }
 
@@ -138,7 +122,7 @@ public class TeacherStudentsActivity extends AppCompatActivity {
 
                             }
                         } else {
-                            skeletonScreen.hide();
+                            binding.progBar.setVisibility(View.GONE);
                             try {
                                 Log.e("error_code", response.code() + response.errorBody().string());
                             } catch (IOException e) {
@@ -150,17 +134,17 @@ public class TeacherStudentsActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<TeacherStudentsDataModel> call, Throwable t) {
-                        skeletonScreen.hide();
+                    public void onFailure(Call<RoomDataModel> call, Throwable t) {
+                        binding.progBar.setVisibility(View.GONE);
                         try {
                             if (t.getMessage() != null) {
                                 Log.e("error", t.getMessage() + "__");
 
                                 if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    Toast.makeText(TeacherStudentsActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ChatRoomsActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
                                 } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
                                 } else {
-                                    Toast.makeText(TeacherStudentsActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ChatRoomsActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -173,32 +157,32 @@ public class TeacherStudentsActivity extends AppCompatActivity {
     }
     private void loadMore(int page)
     {
-        adapter.notifyItemInserted(teacherModelList.size() - 1);
+        adapter.notifyItemInserted(roomModelList.size() - 1);
         isLoading = true;
 
-        Api.getService(Tags.base_url).getStudents("on", 20, page,userModel.getData().getId())
-                .enqueue(new Callback<TeacherStudentsDataModel>() {
+        Api.getService(Tags.base_url).getRooms("Bearer "+userModel.getData().getToken(),"on", 20,page,userModel.getData().getId(),userModel.getData().getUser_type(),"all")
+                .enqueue(new Callback<RoomDataModel>() {
                     @Override
-                    public void onResponse(Call<TeacherStudentsDataModel> call, Response<TeacherStudentsDataModel> response) {
+                    public void onResponse(Call<RoomDataModel> call, Response<RoomDataModel> response) {
                         isLoading = false;
-                        if (teacherModelList.get(teacherModelList.size() - 1) == null) {
-                            teacherModelList.remove(teacherModelList.size() - 1);
-                            adapter.notifyItemRemoved(teacherModelList.size() - 1);
+                        if (roomModelList.get(roomModelList.size() - 1) == null) {
+                            roomModelList.remove(roomModelList.size() - 1);
+                            adapter.notifyItemRemoved(roomModelList.size() - 1);
                         }
                         if (response.isSuccessful()) {
                             if (response.body() != null && response.body().getData().size() > 0) {
                                 current_page = response.body().getCurrent_page();
-                                int old_pos = teacherModelList.size() - 1;
-                                teacherModelList.addAll(response.body().getData());
-                                int new_pos = teacherModelList.size();
+                                int old_pos = roomModelList.size() - 1;
+                                roomModelList.addAll(response.body().getData());
+                                int new_pos = roomModelList.size();
                                 adapter.notifyItemRangeInserted(old_pos, new_pos);
 
                             }
                         } else {
                             isLoading = false;
-                            if (teacherModelList.get(teacherModelList.size() - 1) == null) {
-                                teacherModelList.remove(teacherModelList.size() - 1);
-                                adapter.notifyItemRemoved(teacherModelList.size() - 1);
+                            if (roomModelList.get(roomModelList.size() - 1) == null) {
+                                roomModelList.remove(roomModelList.size() - 1);
+                                adapter.notifyItemRemoved(roomModelList.size() - 1);
                             }
                             try {
                                 Log.e("error_code", response.code() + response.errorBody().string());
@@ -211,21 +195,21 @@ public class TeacherStudentsActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<TeacherStudentsDataModel> call, Throwable t) {
+                    public void onFailure(Call<RoomDataModel> call, Throwable t) {
                         isLoading = false;
-                        if (teacherModelList.get(teacherModelList.size() - 1) == null) {
-                            teacherModelList.remove(teacherModelList.size() - 1);
-                            adapter.notifyItemRemoved(teacherModelList.size() - 1);
+                        if (roomModelList.get(roomModelList.size() - 1) == null) {
+                            roomModelList.remove(roomModelList.size() - 1);
+                            adapter.notifyItemRemoved(roomModelList.size() - 1);
                         }
                         try {
                             if (t.getMessage() != null) {
                                 Log.e("error", t.getMessage() + "__");
 
                                 if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    Toast.makeText(TeacherStudentsActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ChatRoomsActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
                                 } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
                                 } else {
-                                    Toast.makeText(TeacherStudentsActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ChatRoomsActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -239,9 +223,11 @@ public class TeacherStudentsActivity extends AppCompatActivity {
     }
 
 
-    public void navigateToStudentProfileActivity(TeacherStudentsModel model) {
-        Intent intent = new Intent(this, StudentProfileActivity.class);
-        intent.putExtra("data",model.getStudent_fk());
+    public void navigateToChatActivity(RoomModel model) {
+
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("data",model.getRoom_fk());
         startActivity(intent);
     }
+
 }

@@ -154,7 +154,7 @@
                         android:background="@color/gray3"
                         android:layout_marginTop="8dp"
                         />
-                    <LinearLayout
+                   <!-- <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -188,7 +188,7 @@
                         android:layout_height="1dp"
                         android:background="@color/gray3"
                         android:layout_marginTop="8dp"
-                        />
+                        />-->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -224,7 +224,7 @@
                         android:background="@color/gray3"
                         android:layout_marginTop="8dp"
                         />
-                    <LinearLayout
+                   <!-- <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -258,8 +258,9 @@
                         android:layout_height="1dp"
                         android:background="@color/gray3"
                         android:layout_marginTop="8dp"
-                        />
+                        />-->
                     <LinearLayout
+                        android:id="@+id/llChat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -278,7 +279,7 @@
                             android:layout_marginEnd="10dp"
                             android:textSize="18sp"
                             android:fontFamily="@font/font"
-                            android:text="@string/teacher_chat"
+                            android:text="@string/chats"
                             />
                         <ImageView
                             android:layout_width="20dp"
@@ -294,7 +295,7 @@
                         android:background="@color/gray3"
                         android:layout_marginTop="8dp"
                         />
-                    <LinearLayout
+                    <!--<LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -328,7 +329,7 @@
                         android:layout_height="1dp"
                         android:background="@color/gray3"
                         android:layout_marginTop="8dp"
-                        />
+                        />-->
                     <LinearLayout
                         android:id="@+id/llContactUs"
                         android:layout_width="match_parent"

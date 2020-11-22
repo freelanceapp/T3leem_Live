@@ -6,6 +6,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
@@ -102,11 +103,6 @@ public class GeneralMethod {
     }
 
 
-    @BindingAdapter("rate")
-    public static void rate(SimpleRatingBar ratingBar, double rate) {
-        ratingBar.setRating((float) rate);
-
-    }
 
     @BindingAdapter("video_frame")
     public static void chat_video_frame(View view, String endPoint) {
@@ -141,6 +137,15 @@ public class GeneralMethod {
 
     }
 
+    @BindingAdapter("date")
+    public static void date(View view,String date){
+        String[] dates = date.split("T");
+        String d = dates[0];
+        if (view instanceof TextView){
+            TextView textView = (TextView) view;
+            textView.setText(d);
+        }
+    }
 }
 
 

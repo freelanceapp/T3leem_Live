@@ -37,6 +37,7 @@ public class UserModel implements Serializable {
         private StageClassModel stage_fk;
         private StageClassModel class_fk;
         private StageClassModel department_fk;
+        private List<StudentRateModel> student_rates;
 
         public User() {
         }
@@ -127,6 +128,10 @@ public class UserModel implements Serializable {
 
         public void setFireBaseToken(String fireBaseToken) {
             this.fireBaseToken = fireBaseToken;
+        }
+
+        public List<StudentRateModel> getStudent_rates() {
+            return student_rates;
         }
     }
 }

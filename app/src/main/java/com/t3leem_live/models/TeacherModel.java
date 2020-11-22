@@ -1,6 +1,7 @@
 package com.t3leem_live.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class TeacherModel implements Serializable {
     private int id;
@@ -21,6 +22,7 @@ public class TeacherModel implements Serializable {
     private StageClassModel stage_fk;
     private StageClassModel class_fk;
     private StageClassModel department_fk;
+    private List<StudentRateModel> student_rates;
 
 
     public int getId() {
@@ -161,5 +163,9 @@ public class TeacherModel implements Serializable {
 
     public void setDepartment_fk(StageClassModel department_fk) {
         this.department_fk = department_fk;
+    }
+
+    public List<StudentRateModel> getStudent_rates() {
+        return student_rates;
     }
 }

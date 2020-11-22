@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.t3leem_live.R;
+import com.t3leem_live.activities_fragments.activity_chat_rooms.ChatRoomsActivity;
 import com.t3leem_live.activities_fragments.activity_contact_us.ContactUsActivity;
 import com.t3leem_live.activities_fragments.activity_home_teacher.TeacherHomeActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
@@ -81,6 +82,11 @@ public class Fragment_Profile_Teacher extends Fragment {
             Intent intent = new Intent(activity, TeacherCreateStudentsChatActivity.class);
             startActivity(intent);
 
+        });
+
+        binding.llChat.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, ChatRoomsActivity.class);
+            startActivity(intent);
         });
     }
 

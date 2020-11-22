@@ -107,9 +107,10 @@ public class StudentTeachersGroupActivity extends AppCompatActivity {
     {
         String department_id = "";
         if (userModel.getData().getDepartment_fk()!=null){
-            department_id = userModel.getData().getDepartment_fk().getDepartment_id();
+            department_id = String.valueOf(userModel.getData().getDepartment_fk().getId());
         }
 
+        Log.e("data",userModel.getData().getStage_fk().getId()+"__"+userModel.getData().getClass_id()+"___"+department_id+"__"+stageClassModel.getId()+"__"+userModel.getData().getId());
 
         Api.getService(Tags.base_url).getStudentTeachersGroups(Integer.parseInt(userModel.getData().getStage_id()), Integer.parseInt(userModel.getData().getClass_id()), department_id,stageClassModel.getId(), userModel.getData().getId())
                 .enqueue(new Callback<TeacherGroupDataModel>() {
