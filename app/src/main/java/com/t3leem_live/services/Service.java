@@ -1,9 +1,11 @@
 package com.t3leem_live.services;
 
+import com.t3leem_live.models.MessageDataModel;
 import com.t3leem_live.models.PlaceGeocodeData;
 import com.t3leem_live.models.PlaceMapDetailsData;
 import com.t3leem_live.models.RoomDataModel;
 import com.t3leem_live.models.SettingDataModel;
+import com.t3leem_live.models.SingleMessageDataModel;
 import com.t3leem_live.models.SliderDataModel;
 import com.t3leem_live.models.StageDataModel;
 import com.t3leem_live.models.StreamDataModel;
@@ -427,4 +429,35 @@ public interface Service {
                                  @Query(value = "room_status") String room_status
 
     );
+
+    @GET("api/get-message-by-room-id")
+    Call<MessageDataModel> getChatMessages(@Header("Authorization") String bearer_token,
+                                           @Query(value = "pagination_status") String pagination_status,
+                                           @Query(value = "per_link_") int per_link_,
+                                           @Query(value = "page") int page,
+                                           @Query(value = "room_id") int room_id
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/add-msg")
+    Call<SingleMessageDataModel> sendChatMessage(@Header("Authorization") String bearer_token,
+                                                 @Field("room_id") int room_id,
+                                                 @Field("from_user_id") int from_user_id,
+                                                 @Field("type") String type,
+                                                 @Field("message") String message
+
+
+    );
+
+    @Multipart
+    @POST("api/add-msg")
+    Call<SingleMessageDataModel> sendChatAttachment(@Header("Authorization") String user_token,
+                                                    @Part("room_id") RequestBody room_id,
+                                                    @Part("from_user_id") RequestBody from_user_id,
+                                                    @Part("type") RequestBody message_type,
+                                                    @Part MultipartBody.Part attachment
+    );
+
+
 }

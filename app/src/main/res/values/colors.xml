@@ -42,14 +42,15 @@
     <color name="gray8">#222222</color>
     <color name="gray9">#393939</color>
     <color name="gray10">#b0b0b0</color>
+    <color name="gray11">#707070</color>
 
     <color name="transparent">#00000000</color>
     <color name="color_red">#ef0607</color>
     <color name="rate_color">#FFD800</color>
     <color name="yellow">#FBC02D</color>
     <color name="black_trans">#88000000</color>
-    <color name="color_gray_trans">#55eeeeee</color>
-    <color name="color_primary_trans">#55FC6D67</color>
+    <color name="color_gray_trans">#55C3C2C2</color>
+    <color name="color_primary_trans">#55E1615C</color>
 
 
 </resources>

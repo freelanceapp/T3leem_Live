@@ -225,8 +225,10 @@ public class ChatRoomsActivity extends AppCompatActivity {
 
     public void navigateToChatActivity(RoomModel model) {
 
+        RoomModel.RoomFkModel roomFkModel = new RoomModel.RoomFkModel(model.getId(),model.getRoom_fk().getTitle(),model.getRoom_fk().getDesc(),model.getRoom_status(),model.getRoom_fk().getRoom_type());
+
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("data",model.getRoom_fk());
+        intent.putExtra("data",roomFkModel);
         startActivity(intent);
     }
 

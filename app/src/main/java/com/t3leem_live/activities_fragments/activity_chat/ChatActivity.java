@@ -34,11 +34,16 @@ import com.squareup.picasso.Picasso;
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_home_teacher.TeacherHomeActivity;
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
+import com.t3leem_live.adapters.ChatAdapter;
 import com.t3leem_live.databinding.ActivityChatBinding;
 import com.t3leem_live.language.Language;
+import com.t3leem_live.models.MessageDataModel;
+import com.t3leem_live.models.MessageModel;
 import com.t3leem_live.models.RoomModel;
+import com.t3leem_live.models.SingleMessageDataModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
+import com.t3leem_live.remote.Api;
 import com.t3leem_live.tags.Tags;
 
 import org.greenrobot.eventbus.EventBus;
@@ -75,12 +80,12 @@ public class ChatActivity extends AppCompatActivity {
     private RoomModel.RoomFkModel roomFkModel;
     private UserModel userModel;
     private Preferences preferences;
-   // private ChatAdapter adapter;
-    //private List<MessageDataModel.MessageModel> messageModelList;
+    private ChatAdapter adapter;
+    private List<MessageModel> messageModelList;
     private int current_page = 1;
     private boolean isLoading = false;
     private LinearLayoutManager manager;
-    //private Call<MessageDataModel> loadMoreCall;
+    private Call<MessageDataModel> loadMoreCall;
     private boolean isFromFireBase = false;
 
     @Override
@@ -117,7 +122,7 @@ public class ChatActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
-       // messageModelList = new ArrayList<>();
+        messageModelList = new ArrayList<>();
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         Paper.init(this);
@@ -126,10 +131,9 @@ public class ChatActivity extends AppCompatActivity {
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.color1), PorterDuff.Mode.SRC_IN);
         manager = new LinearLayoutManager(this);
         binding.setModel(roomFkModel);
-        /*adapter = new ChatAdapter(messageModelList, this, userModel.getData().getId(), chatUserModel.getChat_type());
+        adapter = new ChatAdapter(messageModelList, this, userModel.getData().getId(),roomFkModel.getRoom_status());
         binding.recView.setLayoutManager(manager);
         binding.recView.setAdapter(adapter);
-*/
 
         binding.llBack.setOnClickListener(v -> {
             back();
@@ -191,14 +195,14 @@ public class ChatActivity extends AppCompatActivity {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
                     int current_item_pos = manager.findLastCompletelyVisibleItemPosition();
-                    /*int total_items = adapter.getItemCount();
-                    if (total_items >= 39 && current_item_pos >= total_items - 2 && !isLoading) {
+                    int total_items = adapter.getItemCount();
+                    if (total_items >= 38 && (current_item_pos-total_items) == 2 && !isLoading) {
                         messageModelList.add(0, null);
                         adapter.notifyItemInserted(0);
                         isLoading = true;
                         int page = current_page + 1;
                         loadMore(page);
-                    }*/
+                    }
                 }
             }
         });
@@ -210,11 +214,12 @@ public class ChatActivity extends AppCompatActivity {
 
 
     public void getAllMessages() {
-        /*if (loadMoreCall != null) {
+        if (loadMoreCall != null) {
             loadMoreCall.cancel();
         }
+        Log.e("room_id",roomFkModel.getId()+"__");
         Api.getService(Tags.base_url)
-                .getChatMessages("Bearer " + userModel.getData().getToken(), chatUserModel.getRoom_id(), "on", 40, 1)
+                .getChatMessages("Bearer " + userModel.getData().getToken(), "on", 40, 1,roomFkModel.getId())
                 .enqueue(new Callback<MessageDataModel>() {
                     @Override
                     public void onResponse(Call<MessageDataModel> call, Response<MessageDataModel> response) {
@@ -223,13 +228,6 @@ public class ChatActivity extends AppCompatActivity {
 
                             if (response.body() != null && response.body().getData() != null) {
 
-                                if (response.body().getRoom()!=null){
-                                    updateUIContent(response.body().getRoom().getStatus());
-                                }
-                                if (response.body().getRoom().getRoom_type().equals("group")) {
-                                    updateUi(response.body().getRoom());
-
-                                }
                                 if (response.body().getData().size() > 0) {
                                     messageModelList.clear();
                                     messageModelList.addAll(response.body().getData());
@@ -274,13 +272,13 @@ public class ChatActivity extends AppCompatActivity {
                         } catch (Exception e) {
                         }
                     }
-                });*/
+                });
     }
 
 
     private void loadMore(int page) {
 
-     /*   loadMoreCall = Api.getService(Tags.base_url).getChatMessages("Bearer " + userModel.getData().getToken(), chatUserModel.getRoom_id(), "on", 40, page);
+        loadMoreCall = Api.getService(Tags.base_url).getChatMessages("Bearer " + userModel.getData().getToken(), "on", 40, page,roomFkModel.getId());
 
         loadMoreCall.enqueue(new Callback<MessageDataModel>() {
             @Override
@@ -349,7 +347,7 @@ public class ChatActivity extends AppCompatActivity {
                 } catch (Exception e) {
                 }
             }
-        });*/
+        });
     }
 
 
@@ -367,8 +365,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private void sendChatText(String message) {
 
-      /*  Api.getService(Tags.base_url)
-                .sendChatMessage("Bearer " + userModel.getData().getToken(), chatUserModel.getRoom_id(), userModel.getData().getId(), "text", message)
+        Api.getService(Tags.base_url)
+                .sendChatMessage("Bearer " + userModel.getData().getToken(), roomFkModel.getId(), userModel.getData().getId(), "message", message)
                 .enqueue(new Callback<SingleMessageDataModel>() {
                     @Override
                     public void onResponse(Call<SingleMessageDataModel> call, Response<SingleMessageDataModel> response) {
@@ -376,9 +374,7 @@ public class ChatActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
 
                             if (response.body() != null && response.body().getData() != null) {
-                                isNewMessage = true;
-                                MessageDataModel.MessageModel model = response.body().getData();
-                                model.setUser_data(userModel.getData());
+                                MessageModel model = response.body().getData();
                                 messageModelList.add(model);
                                 adapter.notifyItemInserted(messageModelList.size());
                                 binding.recView.postDelayed(() -> binding.recView.smoothScrollToPosition(messageModelList.size() - 1), 200);
@@ -407,7 +403,7 @@ public class ChatActivity extends AppCompatActivity {
                         } catch (Exception e) {
                         }
                     }
-                });*/
+                });
     }
 
 
@@ -610,15 +606,14 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAttachmentSuccess(Object messageModel) {
-        /*messageModelList.add(messageModel);
+    public void onAttachmentSuccess(MessageModel messageModel) {
+        messageModelList.add(messageModel);
         adapter.notifyItemChanged(messageModelList.size());
         binding.recView.postDelayed(() -> binding.recView.smoothScrollToPosition(messageModelList.size() - 1), 200);
-        isNewMessage = true;
-        if (messageModel.getFrom_id() == userModel.getData().getId()) {
+        if (messageModel.getFrom_user_fk().getId() == userModel.getData().getId()) {
             deleteFile();
 
-        }*/
+        }
 
     }
 

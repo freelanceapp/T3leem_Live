@@ -10,9 +10,14 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 
+import com.t3leem_live.R;
+import com.t3leem_live.models.MessageModel;
+import com.t3leem_live.models.SingleMessageDataModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
+import com.t3leem_live.remote.Api;
 import com.t3leem_live.share.Common;
+import com.t3leem_live.tags.Tags;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -28,15 +33,11 @@ public class ServiceUploadAttachment extends Service {
     private String user_token;
     private int room_id;
     private String attachment_type;
-    private Preferences preferences;
-    private UserModel userModel;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-        preferences = Preferences.getInstance();
-        userModel  = preferences.getUserData(this);
     }
 
     @Override
@@ -61,30 +62,29 @@ public class ServiceUploadAttachment extends Service {
 
         MultipartBody.Part file_part;
         if (attachment_type.equals("image")){
-            file_part = Common.getMultiPartImage(this, Uri.parse(file_uri), "attachment");
+            file_part = Common.getMultiPartImage(this, Uri.parse(file_uri), "image");
 
-        }else if (attachment_type.equals("voice")){
-            file_part = Common.getMultiPartAudio(this, file_uri, "attachment");
+        }else{
+            file_part = Common.getMultiPartAudio(this, file_uri, "voice");
 
         }
-       /* Api.getService(Tags.base_url).sendChatAttachment("Bearer "+user_token, room_id_part, user_id_part,type_part,file_part)
+        Api.getService(Tags.base_url).sendChatAttachment("Bearer "+user_token, room_id_part, user_id_part,type_part,file_part)
                 .enqueue(new Callback<SingleMessageDataModel>() {
                     @Override
                     public void onResponse(Call<SingleMessageDataModel> call, Response<SingleMessageDataModel> response) {
                         stopSelf();
                         if (response.isSuccessful() && response.body() != null) {
 
-                            MessageDataModel.MessageModel model = response.body().getData();
-                            model.setUser_data(userModel.getData());
-                            EventBus.getDefault().post(response.body().getData());
+                            MessageModel model = response.body().getData();
+                            EventBus.getDefault().post(model);
                         } else {
 
                             if (response.code() == 500) {
 
-                                Toast.makeText(com.endpoint.nadres.activities_fragments.activity_chat.ServiceUploadAttachment.this, "Server Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ServiceUploadAttachment.this, "Server Error", Toast.LENGTH_SHORT).show();
 
                             } else {
-                                Toast.makeText(com.endpoint.nadres.activities_fragments.activity_chat.ServiceUploadAttachment.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ServiceUploadAttachment.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
 
 
                             }
@@ -103,9 +103,9 @@ public class ServiceUploadAttachment extends Service {
 
                                 if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
 
-                                    Toast.makeText(com.endpoint.nadres.activities_fragments.activity_chat.ServiceUploadAttachment.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ServiceUploadAttachment.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(com.endpoint.nadres.activities_fragments.activity_chat.ServiceUploadAttachment.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ServiceUploadAttachment.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
 
 
                                 }
@@ -114,7 +114,7 @@ public class ServiceUploadAttachment extends Service {
 
                         }
                     }
-                });*/
+                });
 
         stopSelf();
     }
