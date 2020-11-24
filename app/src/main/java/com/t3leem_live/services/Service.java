@@ -1,6 +1,7 @@
 package com.t3leem_live.services;
 
 import com.t3leem_live.models.MessageDataModel;
+import com.t3leem_live.models.MySonsDataModel;
 import com.t3leem_live.models.PlaceGeocodeData;
 import com.t3leem_live.models.PlaceMapDetailsData;
 import com.t3leem_live.models.RoomDataModel;
@@ -115,6 +116,34 @@ public interface Service {
                                            @Part("user_type") RequestBody user_type,
                                            @Part MultipartBody.Part logo
     );
+
+    @FormUrlEncoded
+    @POST("api/register-parent")
+    Call<UserModel> signUpParentWithoutImage(@Field("name") String name,
+                                             @Field("email") String email,
+                                             @Field("phone_code") String phone_code,
+                                             @Field("phone") String phone,
+                                             @Field("password") String password,
+                                             @Field("address") String address,
+                                             @Field("software_type") String software_type,
+                                             @Field("user_type") String user_type
+
+
+    );
+
+    @Multipart
+    @POST("api/register-parent")
+    Call<UserModel> signUpParentWithImage(@Part("name") RequestBody name,
+                                          @Part("email") RequestBody email,
+                                          @Part("phone_code") RequestBody phone_code,
+                                          @Part("phone") RequestBody phone,
+                                          @Part("password") RequestBody password,
+                                          @Part("address") RequestBody address,
+                                          @Part("software_type") RequestBody software_type,
+                                          @Part("user_type") RequestBody user_type,
+                                          @Part MultipartBody.Part logo
+    );
+
 
     @Multipart
     @POST("api/register-teacher")
@@ -347,6 +376,36 @@ public interface Service {
 
 
     @FormUrlEncoded
+    @POST("api/update-parent-profile")
+    Call<UserModel> updateParentProfileWithoutImage(@Header("Authorization") String bearer_token,
+                                                    @Field("id") int id,
+                                                    @Field("name") String name,
+                                                    @Field("email") String email,
+                                                    @Field("phone_code") String phone_code,
+                                                    @Field("phone") String phone,
+                                                    @Field("address") String address,
+                                                    @Field("software_type") String software_type,
+                                                    @Field("user_type") String user_type
+
+
+    );
+
+    @Multipart
+    @POST("api/update-parent-profile")
+    Call<UserModel> updateParentProfileWithImage(@Header("Authorization") String bearer_token,
+                                                 @Part("id") RequestBody id,
+                                                 @Part("name") RequestBody name,
+                                                 @Part("email") RequestBody email,
+                                                 @Part("phone_code") RequestBody phone_code,
+                                                 @Part("phone") RequestBody phone,
+                                                 @Part("address") RequestBody address,
+                                                 @Part("software_type") RequestBody software_type,
+                                                 @Part("user_type") RequestBody user_type,
+                                                 @Part MultipartBody.Part logo
+    );
+
+
+    @FormUrlEncoded
     @POST("api/add-new-groups")
     Call<ResponseBody> teacherAddGroup(@Field("teacher_id") int teacher_id,
                                        @Field("stage_id") int stage_id,
@@ -459,5 +518,10 @@ public interface Service {
                                                     @Part MultipartBody.Part attachment
     );
 
+
+    @GET("api/my-sons")
+    Call<MySonsDataModel> getMySons(@Header("Authorization") String user_token,
+                                    @Query(value = "parent_id") int parent_id
+    );
 
 }

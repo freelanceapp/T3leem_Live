@@ -170,5 +170,8 @@
     <string name="no_student_to_create_group">لا يوجد طلاب لإنشاء محادثة</string>
     <string name="chats">المحادثات</string>
     <string name="type_a_message">إكتب رسالتك....</string>
+    <string name="parent">انا ولي امر</string>
+    <string name="my_sons">أبنائي</string>
+    <string name="no_sons_to_show">لا يوجد ابناء لعرضها</string>
 
 </resources>

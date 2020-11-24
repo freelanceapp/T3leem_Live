@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils;
 
 import com.t3leem_live.R;
 import com.t3leem_live.activities_fragments.activity_login.LoginActivity;
+import com.t3leem_live.activities_fragments.activity_parent_sign_up.ParentSignUpActivity;
 import com.t3leem_live.activities_fragments.activity_student_sign_up.StudentSignUpActivity;
 import com.t3leem_live.activities_fragments.activity_teacher_sign_up.TeacherSignUpActivity;
 import com.t3leem_live.databinding.ActivitySignUpChooserBinding;
@@ -36,8 +37,12 @@ public class SignUpChooserActivity extends AppCompatActivity {
         binding.imageLogo.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but1));
         binding.btnTeacher.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but2));
         binding.btnStudent.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but3));
+        binding.btnParent.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but4));
+
         binding.btnStudent.setOnClickListener(view -> navigateToStudentSignUpActivity());
         binding.btnTeacher.setOnClickListener(view -> navigateToTeacherSignUpActivity());
+        binding.btnParent.setOnClickListener(view -> navigateToParentSignUpActivity());
+
     }
 
 
@@ -56,6 +61,12 @@ public class SignUpChooserActivity extends AppCompatActivity {
 
     private void navigateToTeacherSignUpActivity(){
         Intent intent = new Intent(this, TeacherSignUpActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void navigateToParentSignUpActivity(){
+        Intent intent = new Intent(this, ParentSignUpActivity.class);
         startActivity(intent);
         finish();
     }

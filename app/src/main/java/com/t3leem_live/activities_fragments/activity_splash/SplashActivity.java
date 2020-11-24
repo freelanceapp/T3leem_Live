@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.t3leem_live.R;
+import com.t3leem_live.activities_fragments.activity_home_parent.ParentHomeActivity;
 import com.t3leem_live.activities_fragments.activity_home_teacher.TeacherHomeActivity;
 import com.t3leem_live.activities_fragments.activity_on_boarding1.OnBoarding1Activity;
 import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
@@ -52,20 +53,22 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                Intent intent;
                 if (userModel==null){
-                    Intent intent = new Intent(SplashActivity.this, OnBoarding1Activity.class);
-                    startActivity(intent);
-                    finish();
+                    intent = new Intent(SplashActivity.this, OnBoarding1Activity.class);
                 }else {
-                    Intent intent;
                     if (userModel.getData().getUser_type().equals("student")){
                         intent = new Intent(SplashActivity.this, StudentHomeActivity.class);
-                    }else {
+                    }else if (userModel.getData().getUser_type().equals("teacher")){
                         intent = new Intent(SplashActivity.this, TeacherHomeActivity.class);
+
+                    }else {
+                        intent = new Intent(SplashActivity.this, ParentHomeActivity.class);
+
                     }
-                    startActivity(intent);
-                    finish();
                 }
+                startActivity(intent);
+                finish();
             }
 
             @Override

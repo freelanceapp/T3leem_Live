@@ -27,10 +27,15 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:targetApi="m">
-        <activity android:name=".activities_fragments.activity_student_profile.StudentProfileActivity"
+        <activity android:name=".activities_fragments.activity_home_parent.ParentHomeActivity"></activity>
+        <activity
+            android:name=".activities_fragments.activity_parent_sign_up.ParentSignUpActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
-            />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".activities_fragments.activity_student_profile.StudentProfileActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activities_fragments.activity_chat.ChatActivity"
             android:screenOrientation="portrait"

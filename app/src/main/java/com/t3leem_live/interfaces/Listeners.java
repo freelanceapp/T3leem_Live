@@ -18,6 +18,14 @@ public interface Listeners {
 
     }
 
+    interface ParentSignUpListener{
+        void validate();
+        void showCountryDialog(int type);
+        void navigateToParentHomeActivity();
+        void showImageChooserDialog();
+
+    }
+
     interface TeacherSignUpListener{
         void validate();
         void showCountryDialog();
