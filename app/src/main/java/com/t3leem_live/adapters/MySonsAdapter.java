@@ -22,17 +22,22 @@ import com.t3leem_live.models.UserModel;
 
 import java.util.List;
 
+import io.paperdb.Paper;
+
 public class MySonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<UserModel.User> list;
     private Context context;
     private LayoutInflater inflater;
     private Fragment_Home_Parent fragment;
+    private String lang;
 
     public MySonsAdapter(List<UserModel.User> list, Context context, Fragment_Home_Parent fragment) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.fragment = fragment;
+        Paper.init(context);
+        lang = Paper.book().read("lang","ar");
     }
 
 
@@ -52,6 +57,7 @@ public class MySonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             MyHolder myHolder = (MyHolder) holder;
             UserModel.User model= list.get(position);
             myHolder.binding.setModel(model);
+            myHolder.binding.tvStageClassDepartment.setText(getStageData(model));
 
 
 
@@ -59,6 +65,40 @@ public class MySonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     }
 
+    private String getStageData(UserModel.User user){
+        String data="";
+        if (user.getStage_fk()!=null){
+            if (lang.equals("ar")){
+                data += user.getStage_fk().getTitle();
+
+            }else {
+                data += user.getStage_fk().getTitle_en();
+
+            }
+        }
+        if (user.getClass_fk()!=null){
+            data +=",";
+            if (lang.equals("ar")){
+                data += user.getClass_fk().getTitle();
+
+            }else {
+                data += user.getClass_fk().getTitle_en();
+
+            }
+        }
+        if (user.getDepartment_fk()!=null){
+
+            data +=",";
+            if (lang.equals("ar")){
+                data += user.getDepartment_fk().getTitle();
+
+            }else {
+                data += user.getDepartment_fk().getTitle_en();
+
+            }
+        }
+        return data;
+    }
     @Override
     public int getItemCount() {
         return list.size();
