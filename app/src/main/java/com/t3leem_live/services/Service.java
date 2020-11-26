@@ -2,6 +2,8 @@ package com.t3leem_live.services;
 
 import com.t3leem_live.models.MessageDataModel;
 import com.t3leem_live.models.MySonsDataModel;
+import com.t3leem_live.models.NotificationCountModel;
+import com.t3leem_live.models.NotificationDataModel;
 import com.t3leem_live.models.PlaceGeocodeData;
 import com.t3leem_live.models.PlaceMapDetailsData;
 import com.t3leem_live.models.RoomDataModel;
@@ -522,6 +524,47 @@ public interface Service {
     @GET("api/my-sons")
     Call<MySonsDataModel> getMySons(@Header("Authorization") String user_token,
                                     @Query(value = "parent_id") int parent_id
+    );
+
+    @GET("api/search-for-my-sons")
+    Call<MySonsDataModel> search(@Header("Authorization") String user_token,
+                                 @Query(value = "search_val") String query
+    );
+
+
+    @FormUrlEncoded
+    @POST("api/add-to-my-sons")
+    Call<ResponseBody> addSon(@Header("Authorization") String bearer_token,
+                              @Field("parent_id") int parent_id,
+                              @Field("student_id") int student_id
+
+    );
+
+    @GET("api/get_my_notifications")
+    Call<NotificationDataModel> getNotification(@Header("Authorization") String user_token,
+                                                @Query(value = "user_id") int user_id
+    );
+
+    @FormUrlEncoded
+    @POST("api/accept_or_refuse_parent_request")
+    Call<ResponseBody> acceptRefuseRequest(@Header("Authorization") String bearer_token,
+                                           @Field("status") String status,
+                                           @Field("parent_with_son_id") int parent_with_son_id
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/get_notification_count")
+    Call<NotificationCountModel> getNotificationCount(@Header("Authorization") String bearer_token,
+                                                      @Field(value = "user_id") int user_id
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/update-is-read")
+    Call<ResponseBody> readNotificationCount(@Header("Authorization") String bearer_token,
+                                                      @Field(value = "user_id") int user_id
+
     );
 
 }

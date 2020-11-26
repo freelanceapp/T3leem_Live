@@ -25,6 +25,31 @@ public class TeacherModel implements Serializable {
     private List<StudentRateModel> student_rates;
 
 
+    public TeacherModel() {
+    }
+
+    public TeacherModel(int id, String email, String name, String code, String user_type, String phone_code, String phone, String stage_id, String class_id, String department_id, String subject_id, String parent_phone, String teacher_degree, String teacher_video, String logo, StageClassModel stage_fk, StageClassModel class_fk, StageClassModel department_fk, List<StudentRateModel> student_rates) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.code = code;
+        this.user_type = user_type;
+        this.phone_code = phone_code;
+        this.phone = phone;
+        this.stage_id = stage_id;
+        this.class_id = class_id;
+        this.department_id = department_id;
+        this.subject_id = subject_id;
+        this.parent_phone = parent_phone;
+        this.teacher_degree = teacher_degree;
+        this.teacher_video = teacher_video;
+        this.logo = logo;
+        this.stage_fk = stage_fk;
+        this.class_fk = class_fk;
+        this.department_fk = department_fk;
+        this.student_rates = student_rates;
+    }
+
     public int getId() {
         return id;
     }

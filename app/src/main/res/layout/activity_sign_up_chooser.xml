@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/login1"
-        tools:context=".activities_fragments.activity_sign_up_chooser.SignUpChooserActivity">
+        tools:context=".uis.module_general.activity_sign_up_chooser.SignUpChooserActivity">
 
         <ImageView
             android:id="@+id/imageLogo"

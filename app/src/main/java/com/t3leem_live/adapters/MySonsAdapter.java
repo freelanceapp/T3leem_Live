@@ -1,23 +1,16 @@
 package com.t3leem_live.adapters;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_home_parent.fragments.Fragment_Home_Parent;
-import com.t3leem_live.activities_fragments.activity_teacher_students.TeacherStudentsActivity;
-import com.t3leem_live.databinding.LoadMoreRowBinding;
+import com.t3leem_live.uis.module_parent.activity_home_parent.fragments.Fragment_Home_Parent;
 import com.t3leem_live.databinding.SonRowBinding;
-import com.t3leem_live.databinding.StudentRowBinding;
-import com.t3leem_live.models.TeacherStudentsModel;
 import com.t3leem_live.models.UserModel;
 
 import java.util.List;
@@ -58,7 +51,10 @@ public class MySonsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             UserModel.User model= list.get(position);
             myHolder.binding.setModel(model);
             myHolder.binding.tvStageClassDepartment.setText(getStageData(model));
-
+            myHolder.itemView.setOnClickListener(view -> {
+                UserModel.User userModel = list.get(myHolder.getAdapterPosition());
+                fragment.navigateToSonDetailsActivity(userModel);
+            });
 
 
         }

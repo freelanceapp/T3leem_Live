@@ -5,15 +5,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Library_Student;
-import com.t3leem_live.databinding.LibraryRowBinding;
 import com.t3leem_live.databinding.SummaryRowBinding;
-import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.SummaryModel;
 
 import java.util.List;

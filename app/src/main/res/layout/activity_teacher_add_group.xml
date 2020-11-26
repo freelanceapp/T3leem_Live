@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".activities_fragments.activity_student_teachers.StudentTeachersActivity"
+        tools:context=".uis.module_student.activity_student_teachers.StudentTeachersActivity"
         android:background="@color/white"
         >
         <com.google.android.material.appbar.AppBarLayout

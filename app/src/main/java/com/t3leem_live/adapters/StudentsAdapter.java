@@ -12,12 +12,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_student_teachers.StudentTeachersActivity;
-import com.t3leem_live.activities_fragments.activity_teacher_students.TeacherStudentsActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_students.TeacherStudentsActivity;
 import com.t3leem_live.databinding.LoadMoreRowBinding;
 import com.t3leem_live.databinding.StudentRowBinding;
-import com.t3leem_live.databinding.TeacherRowBinding;
-import com.t3leem_live.models.TeacherModel;
 import com.t3leem_live.models.TeacherStudentsModel;
 
 import java.util.List;

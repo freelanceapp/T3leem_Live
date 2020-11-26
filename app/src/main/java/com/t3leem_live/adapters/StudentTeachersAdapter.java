@@ -2,9 +2,7 @@ package com.t3leem_live.adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -13,7 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_student_teachers.StudentTeachersActivity;
+import com.t3leem_live.uis.module_student.activity_student_teachers.StudentTeachersActivity;
 import com.t3leem_live.databinding.LoadMoreRowBinding;
 import com.t3leem_live.databinding.TeacherRowBinding;
 import com.t3leem_live.models.TeacherModel;

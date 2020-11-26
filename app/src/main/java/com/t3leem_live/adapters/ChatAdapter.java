@@ -17,11 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import com.squareup.picasso.Picasso;
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_chat.ChatActivity;
+import com.t3leem_live.uis.module_general.activity_chat.ChatActivity;
 import com.t3leem_live.databinding.ChatImageLeftRowBinding;
 import com.t3leem_live.databinding.ChatImageRightRowBinding;
 import com.t3leem_live.databinding.ChatMessageAudioLeftRowBinding;

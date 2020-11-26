@@ -5,14 +5,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_student_teachers_group.StudentTeachersGroupActivity;
-import com.t3leem_live.activities_fragments.activity_teacher_group.TeacherGroupActivity;
-import com.t3leem_live.databinding.GroupRowBinding;
+import com.t3leem_live.uis.module_teacher.activity_teacher_group.TeacherGroupActivity;
 import com.t3leem_live.databinding.TeacherGroupRowBinding;
 import com.t3leem_live.models.TeacherGroupModel;
 

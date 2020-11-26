@@ -9,12 +9,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_notes_pdf.NotesPdfActivity;
-import com.t3leem_live.activities_fragments.activity_student_teachers_group.StudentTeachersGroupActivity;
+import com.t3leem_live.uis.module_student.activity_student_teachers_group.StudentTeachersGroupActivity;
 import com.t3leem_live.databinding.GroupRowBinding;
-import com.t3leem_live.databinding.NotesPdfRowBinding;
 import com.t3leem_live.models.TeacherGroupModel;
-import com.t3leem_live.models.VideoLessonsModel;
 
 import java.util.List;
 

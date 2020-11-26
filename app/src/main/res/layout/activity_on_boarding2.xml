@@ -15,7 +15,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".activities_fragments.activity_on_boarding1.OnBoarding1Activity">
+            tools:context=".uis.module_general.activity_on_boarding1.OnBoarding1Activity">
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"

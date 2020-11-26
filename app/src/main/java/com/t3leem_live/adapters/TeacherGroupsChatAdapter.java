@@ -9,10 +9,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_teacher_group.TeacherGroupActivity;
-import com.t3leem_live.activities_fragments.activity_teacher_groups_chat.TeacherGroupChatActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_groups_chat.TeacherGroupChatActivity;
 import com.t3leem_live.databinding.TeacherGroupChatRowBinding;
-import com.t3leem_live.databinding.TeacherGroupRowBinding;
 import com.t3leem_live.models.TeacherGroupModel;
 
 import java.util.List;

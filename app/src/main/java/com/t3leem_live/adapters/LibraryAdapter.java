@@ -11,11 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_classes.ClassesActivity;
-import com.t3leem_live.activities_fragments.activity_home_teacher.fragments.Fragment_Library_Teacher;
-import com.t3leem_live.activities_fragments.activity_student_home.StudentHomeActivity;
-import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Library_Student;
-import com.t3leem_live.databinding.ClassRowBinding;
+import com.t3leem_live.uis.module_teacher.activity_home_teacher.fragments.Fragment_Library_Teacher;
+import com.t3leem_live.uis.module_student.activity_student_home.fragments.Fragment_Library_Student;
 import com.t3leem_live.databinding.LibraryRowBinding;
 import com.t3leem_live.models.StageClassModel;
 

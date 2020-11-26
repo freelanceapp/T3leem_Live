@@ -27,170 +27,193 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:targetApi="m">
-        <activity android:name=".activities_fragments.activity_home_parent.ParentHomeActivity"></activity>
+        <activity android:name=".uis.module_parent.activity_son_profile.SonProfileActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            />
+        <activity android:name=".uis.module_student.activity_son_subjects.SonSubjectActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            />
         <activity
-            android:name=".activities_fragments.activity_parent_sign_up.ParentSignUpActivity"
+            android:name=".uis.module_parent.activity_son_details.SonDetailsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_student_profile.StudentProfileActivity"
+            android:name=".uis.module_student.activity_notification.NotificationActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_chat.ChatActivity"
+            android:name=".uis.module_parent.activity_parent_add_son.ParentAddSonActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_chat_rooms.ChatRoomsActivity"
+            android:name=".uis.module_parent.activity_home_parent.ParentHomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_teacher_create_students_chat.TeacherCreateStudentsChatActivity"
+            android:name=".uis.module_parent.activity_parent_sign_up.ParentSignUpActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_teacher_create_chat_group.TeacherCreateGroupChatActivity"
+            android:name=".uis.module_student.activity_student_profile.StudentProfileActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_teacher_groups_chat.TeacherGroupChatActivity"
+            android:name=".uis.module_general.activity_chat.ChatActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_stream_web_view.StreamWebViewActivity"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-        <activity
-            android:name=".activities_fragments.activity_teacher_create_stream.TeacherCreateStreamActivity"
+            android:name=".uis.module_general.activity_chat_rooms.ChatRoomsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_teacher_students.TeacherStudentsActivity"
+            android:name=".uis.module_teacher.activity_teacher_create_students_chat.TeacherCreateStudentsChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_teacher.activity_teacher_create_chat_group.TeacherCreateGroupChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_teacher.activity_teacher_groups_chat.TeacherGroupChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_general.activity_stream_web_view.StreamWebViewActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_teacher.activity_teacher_create_stream.TeacherCreateStreamActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_teacher.activity_teacher_students.TeacherStudentsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_teacher_group.TeacherGroupActivity"
+            android:name=".uis.module_teacher.activity_teacher_group.TeacherGroupActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_teacher_add_group.TeacherAddGroupActivity"
+            android:name=".uis.module_teacher.activity_teacher_add_group.TeacherAddGroupActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_about_app.AboutAppActivity"
+            android:name=".uis.module_general.activity_about_app.AboutAppActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_contact_us.ContactUsActivity"
+            android:name=".uis.module_general.activity_contact_us.ContactUsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_student_exam.StudentExamActivity"
+            android:name=".uis.module_student.activity_student_exam.StudentExamActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_student_teachers_group.StudentTeachersGroupActivity"
+            android:name=".uis.module_student.activity_student_teachers_group.StudentTeachersGroupActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_teacher_video.TeacherVideoActivity"
+            android:name=".uis.module_teacher.activity_teacher_video.TeacherVideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_student_teachers.StudentTeachersActivity"
+            android:name=".uis.module_student.activity_student_teachers.StudentTeachersActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_teacher_exams.TeacherExamsActivity"
+            android:name=".uis.module_teacher.activity_teacher_exams.TeacherExamsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_home_teacher.TeacherHomeActivity"
+            android:name=".uis.module_teacher.activity_home_teacher.TeacherHomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_view.ViewActivity"
+            android:name=".uis.module_general.activity_view.ViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_library_details.LibraryDetailsActivity"
+            android:name=".uis.module_general.activity_library_details.LibraryDetailsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_notes_pdf.NotesPdfActivity"
+            android:name=".uis.module_student.activity_notes_pdf.NotesPdfActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_videos.VideosActivity"
+            android:name=".uis.module_student.activity_videos.VideosActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_subject_tutorial.SubjectTutorialActivity"
+            android:name=".uis.module_student.activity_subject_tutorial.SubjectTutorialActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_classes.ClassesActivity"
+            android:name=".uis.module_student.activity_classes.ClassesActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_student_home.StudentHomeActivity"
+            android:name=".uis.module_student.activity_student_home.StudentHomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_teacher_sign_up.TeacherSignUpActivity"
+            android:name=".uis.module_teacher.activity_teacher_sign_up.TeacherSignUpActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:turnScreenOn="true"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_student_sign_up.StudentSignUpActivity"
+            android:name=".uis.module_student.activity_student_sign_up.StudentSignUpActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_sign_up_chooser.SignUpChooserActivity"
+            android:name=".uis.module_general.activity_sign_up_chooser.SignUpChooserActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_verification_code.VerificationCodeActivity"
+            android:name=".uis.module_general.activity_verification_code.VerificationCodeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_login.LoginActivity"
+            android:name=".uis.module_general.activity_login.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_on_boarding2.OnBoarding2Activity"
+            android:name=".uis.module_general.activity_on_boarding2.OnBoarding2Activity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_on_boarding1.OnBoarding1Activity"
+            android:name=".uis.module_general.activity_on_boarding1.OnBoarding1Activity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
-            android:name=".activities_fragments.activity_splash.SplashActivity"
+            android:name=".uis.module_general.activity_splash.SplashActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
@@ -202,7 +225,7 @@
         </activity>
 
         <service
-            android:name=".activities_fragments.activity_chat.ServiceUploadAttachment"
+            android:name=".uis.module_general.activity_chat.ServiceUploadAttachment"
             android:enabled="true"
             android:stopWithTask="false" />
     </application>

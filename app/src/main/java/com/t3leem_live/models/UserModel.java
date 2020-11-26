@@ -38,6 +38,7 @@ public class UserModel implements Serializable {
         private StageClassModel class_fk;
         private StageClassModel department_fk;
         private List<StudentRateModel> student_rates;
+        private User exist_son;
 
         public User() {
         }
@@ -132,6 +133,10 @@ public class UserModel implements Serializable {
 
         public List<StudentRateModel> getStudent_rates() {
             return student_rates;
+        }
+
+        public User getExist_son() {
+            return exist_son;
         }
     }
 }

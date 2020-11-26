@@ -6,16 +6,14 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_teacher_create_students_chat.TeacherCreateStudentsChatActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_create_students_chat.TeacherCreateStudentsChatActivity;
 import com.t3leem_live.databinding.LoadMoreRowBinding;
 import com.t3leem_live.databinding.StudentRow2Binding;
-import com.t3leem_live.databinding.StudentRowBinding;
 import com.t3leem_live.models.TeacherStudentsModel;
 
 import java.util.List;

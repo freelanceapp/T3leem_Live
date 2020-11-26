@@ -9,10 +9,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_classes.ClassesActivity;
-import com.t3leem_live.activities_fragments.activity_student_home.fragments.Fragment_Home_Student;
+import com.t3leem_live.uis.module_student.activity_classes.ClassesActivity;
 import com.t3leem_live.databinding.ClassRowBinding;
-import com.t3leem_live.databinding.StageRowBinding;
 import com.t3leem_live.models.StageClassModel;
 
 import java.util.List;

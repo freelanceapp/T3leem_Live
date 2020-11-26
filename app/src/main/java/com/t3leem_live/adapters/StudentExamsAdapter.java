@@ -9,10 +9,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_student_exam.StudentExamActivity;
-import com.t3leem_live.activities_fragments.activity_teacher_exams.TeacherExamsActivity;
+import com.t3leem_live.uis.module_student.activity_student_exam.StudentExamActivity;
 import com.t3leem_live.databinding.StudentExamRowBinding;
-import com.t3leem_live.databinding.TeacherExamRowBinding;
 import com.t3leem_live.models.TeacherExamModel;
 
 import java.util.List;

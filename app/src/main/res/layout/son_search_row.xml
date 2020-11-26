@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="model"
+            type="com.t3leem_live.models.UserModel.User" />
+
+        <import type="android.view.View"/>
+    </data>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:contentPadding="8dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="3dp"
+        android:layout_margin="8dp"
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_avatar"
+                    user_image="@{model.logo}"
+                    />
+                <FrameLayout
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:visibility="@{model.exist_son==null?View.GONE:View.VISIBLE,default=gone}"
+
+
+                    >
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@color/color1"
+                        />
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_boy"
+                        app:tint="@color/white"
+                        android:padding="5dp"
+                        />
+                </FrameLayout>
+            </FrameLayout>
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="0dp"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:singleLine="true"
+                    android:text="@{model.name}"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/tvStageClassDepartment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:singleLine="true"
+                    android:layout_marginTop="5dp"
+
+                    />
+
+
+                <FrameLayout
+                    android:id="@+id/flAddSon"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/rounded_color1"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="@{model.exist_son==null?View.VISIBLE:View.GONE,default=gone}"
+
+                    >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:clickable="false"
+                        android:longClickable="false"
+
+                        >
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:padding="5dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_plus"
+                            app:tint="@color/white"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:textSize="16sp"
+                            android:textColor="@color/white"
+                            android:text="@string/add"
+                            />
+                    </LinearLayout>
+
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

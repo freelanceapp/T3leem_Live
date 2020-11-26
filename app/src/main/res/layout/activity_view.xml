@@ -7,7 +7,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activities_fragments.activity_view.ViewActivity">
+        tools:context=".uis.module_general.activity_view.ViewActivity">
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"

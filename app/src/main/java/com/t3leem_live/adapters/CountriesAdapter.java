@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.t3leem_live.R;
-import com.t3leem_live.activities_fragments.activity_login.LoginActivity;
-import com.t3leem_live.activities_fragments.activity_student_sign_up.StudentSignUpActivity;
-import com.t3leem_live.activities_fragments.activity_teacher_sign_up.TeacherSignUpActivity;
+import com.t3leem_live.uis.module_general.activity_login.LoginActivity;
+import com.t3leem_live.uis.module_student.activity_student_sign_up.StudentSignUpActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_sign_up.TeacherSignUpActivity;
 import com.t3leem_live.databinding.CountriesRowBinding;
 import com.t3leem_live.models.CountryModel;
 
