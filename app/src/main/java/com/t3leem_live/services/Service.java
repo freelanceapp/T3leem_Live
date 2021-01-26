@@ -249,7 +249,33 @@ public interface Service {
                                                           @Part("user_type") RequestBody user_type
     );
 
-
+    @Multipart
+    @POST("api/create-center")
+    Call<UserModel> signupCenterWithoutImage(
+                                                          @Part("id") RequestBody id,
+                                                          @Part("name") RequestBody name,
+                                                          @Part("email") RequestBody email,
+                                                          @Part("phone_code") RequestBody phone_code,
+                                                          @Part("phone") RequestBody phone,
+                                                          @Part("address") RequestBody address,
+                                                          @Part("stage_id") RequestBody stage_id,
+                                                          @Part("teacher_degree") RequestBody teacher_degree,
+                                                          @Part("software_type") RequestBody software_type
+    );
+    @Multipart
+    @POST("api/create-center")
+    Call<UserModel> signupCenterWithImage(
+                                                       @Part("id") RequestBody id,
+                                                       @Part("name") RequestBody name,
+                                                       @Part("email") RequestBody email,
+                                                       @Part("phone_code") RequestBody phone_code,
+                                                       @Part("phone") RequestBody phone,
+                                                       @Part("password") RequestBody password,
+                                                       @Part("stage_id") RequestBody stage_id,
+                                                       @Part("teacher_degree") RequestBody teacher_degree,
+                                                       @Part("software_type") RequestBody software_type,
+                                                       @Part MultipartBody.Part logo
+    );
     @GET("api/get-subjects-by-class-id-or-department-id")
     Call<StageDataModel> getSubject(@Query(value = "stage_id") int stage_id,
                                     @Query(value = "class_id") int class_id,

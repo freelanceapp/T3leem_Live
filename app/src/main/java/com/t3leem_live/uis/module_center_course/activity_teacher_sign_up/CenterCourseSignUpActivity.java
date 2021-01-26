@@ -61,6 +61,8 @@ import com.t3leem_live.uis.module_general.activity_sign_up_chooser.SignUpChooser
 import com.t3leem_live.uis.module_general.activity_verification_code.VerificationCodeActivity;
 import com.t3leem_live.uis.module_teacher.activity_home_teacher.TeacherHomeActivity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,7 +128,7 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
 
         model = new CenterSignUpModel();
 
-        if (userModel==null){
+        if (userModel == null) {
             model.setPhone_code(phone_code);
             binding.setModel(model);
             binding.btnNext.setText(getString(R.string.save));
@@ -134,7 +136,7 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
             binding.llPassword.setVisibility(View.VISIBLE);
             binding.progBarBuffering.setVisibility(View.GONE);
 
-        }else {
+        } else {
             model.setName(userModel.getData().getName());
             model.setEmail(userModel.getData().getEmail());
             model.setPassword("123456");
@@ -144,15 +146,15 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
             model.setAddress(userModel.getData().getAddress());
             binding.progBarBuffering.setVisibility(View.VISIBLE);
 
-            int stage_id =0;
-            if (userModel.getData().getStage_id()!=null){
+            int stage_id = 0;
+            if (userModel.getData().getStage_id() != null) {
                 stage_id = userModel.getData().getStage_fk().getId();
             }
             model.setStage_id(stage_id);
             model.setDegree(userModel.getData().getTeacher_degree());
 
-            if (userModel.getData().getLogo()!=null&&!userModel.getData().getLogo().isEmpty()&&!userModel.getData().getLogo().equals("0")){
-                Picasso.get().load(Uri.parse(Tags.IMAGE_URL+userModel.getData().getLogo())).into(binding.image);
+            if (userModel.getData().getLogo() != null && !userModel.getData().getLogo().isEmpty() && !userModel.getData().getLogo().equals("0")) {
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL + userModel.getData().getLogo())).into(binding.image);
             }
             binding.btnNext.setText(getString(R.string.update));
             binding.player.setVisibility(View.VISIBLE);
@@ -202,7 +204,7 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
             @Override
             public void afterTextChanged(Editable editable) {
                 String phone = editable.toString();
-                if (phone.startsWith("0")){
+                if (phone.startsWith("0")) {
                     binding.edtPhone.setText(null);
                 }
             }
@@ -240,9 +242,9 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
                         if (response.isSuccessful()) {
                             stageModelList.addAll(response.body().getData());
                             runOnUiThread(() -> adapter.notifyDataSetChanged());
-                            if (userModel!=null){
+                            if (userModel != null) {
                                 int pos = getUserStagePos();
-                                if (pos!=-1){
+                                if (pos != -1) {
                                     binding.spinnerStage.setSelection(pos);
                                 }
                             }
@@ -283,11 +285,11 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
 
     }
 
-    private int getUserStagePos(){
+    private int getUserStagePos() {
         int pos = -1;
-        for (int index=0;index<stageModelList.size();index++){
+        for (int index = 0; index < stageModelList.size(); index++) {
             StageClassModel model = stageModelList.get(index);
-            if (model.getId()==userModel.getData().getStage_fk().getId()){
+            if (model.getId() == userModel.getData().getStage_fk().getId()) {
                 pos = index;
                 return pos;
             }
@@ -327,26 +329,27 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
     public void validate() {
         if (model.isDataValid(this)) {
 
-            if (userModel==null){
-                 if (imageUri == null) {
-                signUpWithoutImage();
-            } else {
-                signUpWithImage();
-            }
-            }else {
-                if (videoUri!=null&&imageUri!=null){
-                    updateWithImageWithVideo();
-                }else if (videoUri!=null&&imageUri==null){
-                    updateWithoutImageWithVideo();
-                }else if (videoUri==null&&imageUri!=null){
-                    updateWithImageWithoutVideo();
-                }else if (videoUri==null&&imageUri==null){
-                    updateWithoutImageWithoutVideo();
+            if (userModel == null) {
+                if (imageUri == null) {
+                    signUpWithoutImage();
+                } else {
+                    signUpWithImage();
                 }
             }
+//            }else {
+//                if (videoUri!=null&&imageUri!=null){
+//                    updateWithImageWithVideo();
+//                }else if (videoUri!=null&&imageUri==null){
+//                    updateWithoutImageWithVideo();
+//                }else if (videoUri==null&&imageUri!=null){
+//                    updateWithImageWithoutVideo();
+//                }else if (videoUri==null&&imageUri==null){
+//                    updateWithoutImageWithoutVideo();
+//                }
+//            }
 
 
-             //navigateToVerificationActivity();
+            //navigateToVerificationActivity();
         }
     }
 
@@ -368,51 +371,50 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
         RequestBody email_part = Common.getRequestBodyText(model.getEmail());
         RequestBody password_part = Common.getRequestBodyText(model.getPassword());
         RequestBody address_part = Common.getRequestBodyText(model.getAddress());
-       // RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
+        // RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
         RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
         RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
         RequestBody software_part = Common.getRequestBodyText("android");
-        RequestBody user_type_part = Common.getRequestBodyText("teacher");
-        MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
+//        RequestBody user_type_part = Common.getRequestBodyText("center");
 
 
-//        Api.getService(Tags.base_url)
-//                .signUpTeacherWithoutImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part, video)
-//                .enqueue(new Callback<UserModel>() {
-//                    @Override
-//                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-//                        dialog.dismiss();
-//                        if (response.isSuccessful() && response.body() != null) {
-//                            preferences.create_update_userdata(CenterCourseSignUpActivity.this, response.body());
-//                            navigateToTeacherHomeActivity();
-//                        } else {
-//                            if (response.code() == 500) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-//                            }else if (response.code()==422) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-//                            }else {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<UserModel> call, Throwable t) {
-//                        try {
-//                            dialog.dismiss();
-//                            if (t.getMessage() != null) {
-//
-//                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            Log.e("Error", e.getMessage() + "__");
-//                        }
-//                    }
-//                });
+        Api.getService(Tags.base_url)
+                .signupCenterWithoutImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, stage_id_part, degree_part, software_part)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful() && response.body() != null) {
+                            preferences.create_update_userdata(CenterCourseSignUpActivity.this, response.body());
+                            navigateToTeacherHomeActivity();
+                        } else {
+                            if (response.code() == 500) {
+                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            } else if (response.code() == 422) {
+                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
     }
 
     private void signUpWithImage() {
@@ -429,287 +431,287 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
         RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
         RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
         RequestBody software_part = Common.getRequestBodyText("android");
-        RequestBody user_type_part = Common.getRequestBodyText("teacher");
-        MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
+        // RequestBody user_type_part = Common.getRequestBodyText("teacher");
+//        MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
         MultipartBody.Part image = Common.getMultiPart(this, imageUri, "logo");
 
 
-//        Api.getService(Tags.base_url)
-//                .signUpTeacherWithImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part, image, video)
-//                .enqueue(new Callback<UserModel>() {
-//                    @Override
-//                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-//                        dialog.dismiss();
-//                        if (response.isSuccessful() && response.body() != null) {
-//                            preferences.create_update_userdata(CenterCourseSignUpActivity.this, response.body());
-//                            navigateToTeacherHomeActivity();
-//                        } else {
-//                            if (response.code() == 500) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-//                            } else if (response.code()==422) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-//                            } else {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<UserModel> call, Throwable t) {
-//                        try {
-//                            dialog.dismiss();
-//                            if (t.getMessage() != null) {
-//
-//                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            Log.e("Error", e.getMessage() + "__");
-//                        }
-//                    }
-//                });
+        Api.getService(Tags.base_url)
+                .signupCenterWithImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, stage_id_part, degree_part, software_part, image)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, @NotNull Response<UserModel> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful() && response.body() != null) {
+                            preferences.create_update_userdata(CenterCourseSignUpActivity.this, response.body());
+                            navigateToTeacherHomeActivity();
+                        } else {
+                            if (response.code() == 500) {
+                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            } else if (response.code() == 422) {
+                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
     }
 
 
-    private void updateWithoutImageWithoutVideo()
-    {
-        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
-        dialog.setCancelable(false);
-        dialog.show();
-        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
-        RequestBody name_part = Common.getRequestBodyText(model.getName());
-        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
-        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
-        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
-        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
-//        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
-        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
-        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
-        RequestBody software_part = Common.getRequestBodyText("android");
-        RequestBody user_type_part = Common.getRequestBodyText("teacher");
-
-
-//        Api.getService(Tags.base_url)
-//                .updateTeacherWithoutImageWithoutVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part)
-//                .enqueue(new Callback<UserModel>() {
-//                    @Override
-//                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-//                        dialog.dismiss();
-//                        if (response.isSuccessful() && response.body() != null) {
+//    private void updateWithoutImageWithoutVideo()
+//    {
+//        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+//        dialog.setCancelable(false);
+//        dialog.show();
+//        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
+//        RequestBody name_part = Common.getRequestBodyText(model.getName());
+//        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
+//        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
+//        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
+//        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
+////        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
+//        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
+//        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
+//        RequestBody software_part = Common.getRequestBodyText("android");
+//        RequestBody user_type_part = Common.getRequestBodyText("teacher");
 //
-//                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
-//                            setResult(RESULT_OK);
-//                            finish();
-//                        } else {
-//                            if (response.code() == 500) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-//                            }else if (response.code()==422) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-//                            }else {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
 //
-//                    @Override
-//                    public void onFailure(Call<UserModel> call, Throwable t) {
-//                        try {
-//                            dialog.dismiss();
-//                            if (t.getMessage() != null) {
+////        Api.getService(Tags.base_url)
+////                .updateTeacherWithoutImageWithoutVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part)
+////                .enqueue(new Callback<UserModel>() {
+////                    @Override
+////                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+////                        dialog.dismiss();
+////                        if (response.isSuccessful() && response.body() != null) {
+////
+////                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
+////                            setResult(RESULT_OK);
+////                            finish();
+////                        } else {
+////                            if (response.code() == 500) {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+////                            }else if (response.code()==422) {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+////                            }else {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+////                            }
+////                        }
+////                    }
+////
+////                    @Override
+////                    public void onFailure(Call<UserModel> call, Throwable t) {
+////                        try {
+////                            dialog.dismiss();
+////                            if (t.getMessage() != null) {
+////
+////                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+////                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+////                                } else {
+////                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+////                                }
+////                            }
+////                        } catch (Exception e) {
+////                            Log.e("Error", e.getMessage() + "__");
+////                        }
+////                    }
+////                });
+//    }
+//    private void updateWithImageWithoutVideo()
+//    {
+//        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+//        dialog.setCancelable(false);
+//        dialog.show();
+//        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
+//        RequestBody name_part = Common.getRequestBodyText(model.getName());
+//        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
+//        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
+//        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
+//        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
+////        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
+//        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
+//        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
+//        RequestBody software_part = Common.getRequestBodyText("android");
+//        RequestBody user_type_part = Common.getRequestBodyText("teacher");
+//        MultipartBody.Part image = Common.getMultiPart(this, imageUri, "logo");
 //
-//                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            Log.e("Error", e.getMessage() + "__");
-//                        }
-//                    }
-//                });
-    }
-    private void updateWithImageWithoutVideo()
-    {
-        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
-        dialog.setCancelable(false);
-        dialog.show();
-        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
-        RequestBody name_part = Common.getRequestBodyText(model.getName());
-        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
-        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
-        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
-        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
-//        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
-        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
-        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
-        RequestBody software_part = Common.getRequestBodyText("android");
-        RequestBody user_type_part = Common.getRequestBodyText("teacher");
-        MultipartBody.Part image = Common.getMultiPart(this, imageUri, "logo");
-
-
-//        Api.getService(Tags.base_url)
-//                .updateTeacherWithImageWithoutVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,image)
-//                .enqueue(new Callback<UserModel>() {
-//                    @Override
-//                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-//                        dialog.dismiss();
-//                        if (response.isSuccessful() && response.body() != null) {
-//                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
 //
-//                            setResult(RESULT_OK);
-//                            finish();
-//                        } else {
-//                            if (response.code() == 500) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-//                            }else if (response.code()==422) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-//                            }else {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
+////        Api.getService(Tags.base_url)
+////                .updateTeacherWithImageWithoutVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,image)
+////                .enqueue(new Callback<UserModel>() {
+////                    @Override
+////                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+////                        dialog.dismiss();
+////                        if (response.isSuccessful() && response.body() != null) {
+////                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
+////
+////                            setResult(RESULT_OK);
+////                            finish();
+////                        } else {
+////                            if (response.code() == 500) {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+////                            }else if (response.code()==422) {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+////                            }else {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+////                            }
+////                        }
+////                    }
+////
+////                    @Override
+////                    public void onFailure(Call<UserModel> call, Throwable t) {
+////                        try {
+////                            dialog.dismiss();
+////                            if (t.getMessage() != null) {
+////
+////                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+////                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+////                                } else {
+////                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+////                                }
+////                            }
+////                        } catch (Exception e) {
+////                            Log.e("Error", e.getMessage() + "__");
+////                        }
+////                    }
+////                });
+//    }
 //
-//                    @Override
-//                    public void onFailure(Call<UserModel> call, Throwable t) {
-//                        try {
-//                            dialog.dismiss();
-//                            if (t.getMessage() != null) {
+//    private void updateWithoutImageWithVideo()
+//    {
+//        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+//        dialog.setCancelable(false);
+//        dialog.show();
+//        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
+//        RequestBody name_part = Common.getRequestBodyText(model.getName());
+//        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
+//        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
+//        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
+//        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
+////        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
+//        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
+//        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
+//        RequestBody software_part = Common.getRequestBodyText("android");
+//        RequestBody user_type_part = Common.getRequestBodyText("teacher");
+//        MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
 //
-//                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            Log.e("Error", e.getMessage() + "__");
-//                        }
-//                    }
-//                });
-    }
-
-    private void updateWithoutImageWithVideo()
-    {
-        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
-        dialog.setCancelable(false);
-        dialog.show();
-        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
-        RequestBody name_part = Common.getRequestBodyText(model.getName());
-        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
-        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
-        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
-        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
-//        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
-        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
-        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
-        RequestBody software_part = Common.getRequestBodyText("android");
-        RequestBody user_type_part = Common.getRequestBodyText("teacher");
-        MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
-
-
-//        Api.getService(Tags.base_url)
-//                .updateTeacherWithoutImageWithVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,video)
-//                .enqueue(new Callback<UserModel>() {
-//                    @Override
-//                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-//                        dialog.dismiss();
-//                        if (response.isSuccessful() && response.body() != null) {
-//                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
 //
-//                            setResult(RESULT_OK);
-//                            finish();
-//                        } else {
-//                            if (response.code() == 500) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-//                            }else if (response.code()==422) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-//                            }else {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
+////        Api.getService(Tags.base_url)
+////                .updateTeacherWithoutImageWithVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,video)
+////                .enqueue(new Callback<UserModel>() {
+////                    @Override
+////                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+////                        dialog.dismiss();
+////                        if (response.isSuccessful() && response.body() != null) {
+////                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
+////
+////                            setResult(RESULT_OK);
+////                            finish();
+////                        } else {
+////                            if (response.code() == 500) {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+////                            }else if (response.code()==422) {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+////                            }else {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+////                            }
+////                        }
+////                    }
+////
+////                    @Override
+////                    public void onFailure(Call<UserModel> call, Throwable t) {
+////                        try {
+////                            dialog.dismiss();
+////                            if (t.getMessage() != null) {
+////
+////                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+////                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+////                                } else {
+////                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+////                                }
+////                            }
+////                        } catch (Exception e) {
+////                            Log.e("Error", e.getMessage() + "__");
+////                        }
+////                    }
+////                });
+//    }
+//    private void updateWithImageWithVideo()
+//    {
+//        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+//        dialog.setCancelable(false);
+//        dialog.show();
+//        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
+//        RequestBody name_part = Common.getRequestBodyText(model.getName());
+//        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
+//        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
+//        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
+//        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
+////        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
+//        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
+//        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
+//        RequestBody software_part = Common.getRequestBodyText("android");
+//        RequestBody user_type_part = Common.getRequestBodyText("teacher");
+//        MultipartBody.Part image = Common.getMultiPart(this, imageUri, "logo");
+//        MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
 //
-//                    @Override
-//                    public void onFailure(Call<UserModel> call, Throwable t) {
-//                        try {
-//                            dialog.dismiss();
-//                            if (t.getMessage() != null) {
-//
-//                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            Log.e("Error", e.getMessage() + "__");
-//                        }
-//                    }
-//                });
-    }
-    private void updateWithImageWithVideo()
-    {
-        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
-        dialog.setCancelable(false);
-        dialog.show();
-        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
-        RequestBody name_part = Common.getRequestBodyText(model.getName());
-        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
-        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
-        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
-        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
-//        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
-        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
-        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
-        RequestBody software_part = Common.getRequestBodyText("android");
-        RequestBody user_type_part = Common.getRequestBodyText("teacher");
-        MultipartBody.Part image = Common.getMultiPart(this, imageUri, "logo");
-        MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
-
-//
-//        Api.getService(Tags.base_url)
-//                .updateTeacherWithImageWithVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,image,video)
-//                .enqueue(new Callback<UserModel>() {
-//                    @Override
-//                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-//                        dialog.dismiss();
-//                        if (response.isSuccessful() && response.body() != null) {
-//                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
-//                            setResult(RESULT_OK);
-//                            finish();
-//                        } else {
-//                            if (response.code() == 500) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-//                            }else if (response.code()==422) {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-//                            }else {
-//                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<UserModel> call, Throwable t) {
-//                        try {
-//                            dialog.dismiss();
-//                            if (t.getMessage() != null) {
-//
-//                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        } catch (Exception e) {
-//                            Log.e("Error", e.getMessage() + "__");
-//                        }
-//                    }
-//                });
-    }
+////
+////        Api.getService(Tags.base_url)
+////                .updateTeacherWithImageWithVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,image,video)
+////                .enqueue(new Callback<UserModel>() {
+////                    @Override
+////                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+////                        dialog.dismiss();
+////                        if (response.isSuccessful() && response.body() != null) {
+////                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
+////                            setResult(RESULT_OK);
+////                            finish();
+////                        } else {
+////                            if (response.code() == 500) {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+////                            }else if (response.code()==422) {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+////                            }else {
+////                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+////                            }
+////                        }
+////                    }
+////
+////                    @Override
+////                    public void onFailure(Call<UserModel> call, Throwable t) {
+////                        try {
+////                            dialog.dismiss();
+////                            if (t.getMessage() != null) {
+////
+////                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+////                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+////                                } else {
+////                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+////                                }
+////                            }
+////                        } catch (Exception e) {
+////                            Log.e("Error", e.getMessage() + "__");
+////                        }
+////                    }
+////                });
+//    }
 
     @Override
     public void showCountryDialog() {
@@ -777,22 +779,22 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
             }
         } else if (requestCode == 300 && resultCode == RESULT_OK) {
 
-            if (userModel==null){
+            if (userModel == null) {
                 if (imageUri == null) {
                     signUpWithoutImage();
                 } else {
                     signUpWithImage();
                 }
-            }else {
-                if (videoUri!=null&&imageUri!=null){
-                    updateWithImageWithVideo();
-                }else if (videoUri!=null&&imageUri==null){
-                    updateWithoutImageWithVideo();
-                }else if (videoUri==null&&imageUri!=null){
-                    updateWithImageWithoutVideo();
-                }else if (videoUri==null&&imageUri==null){
-                    updateWithoutImageWithoutVideo();
-                }
+            } else {
+//                if (videoUri!=null&&imageUri!=null){
+//                    updateWithImageWithVideo();
+//                }else if (videoUri!=null&&imageUri==null){
+//                    updateWithoutImageWithVideo();
+//                }else if (videoUri==null&&imageUri!=null){
+//                    updateWithImageWithoutVideo();
+//                }else if (videoUri==null&&imageUri==null){
+//                    updateWithoutImageWithoutVideo();
+//                }
             }
         }
     }
@@ -804,7 +806,6 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(uri);
         player.prepare(mediaSource);
     }
-
 
 
     private void initPlayer(Uri uri) {
@@ -834,18 +835,18 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
                 if (playWhenReady) {
                     if (playbackState == Player.STATE_BUFFERING) {
                         binding.progBarBuffering.setVisibility(View.VISIBLE);
-                    }else if (playbackState==Player.STATE_READY){
+                    } else if (playbackState == Player.STATE_READY) {
                         binding.progBarBuffering.setVisibility(View.GONE);
 
-                    }else if (playbackState == Player.STATE_ENDED) {
+                    } else if (playbackState == Player.STATE_ENDED) {
                         binding.progBarBuffering.setVisibility(View.GONE);
                         currentWindow = 0;
                         currentPosition = 0;
                         initPlayer(uri);
-                    } else if (playbackState == Player.TIMELINE_CHANGE_REASON_RESET){
+                    } else if (playbackState == Player.TIMELINE_CHANGE_REASON_RESET) {
                         binding.progBarBuffering.setVisibility(View.VISIBLE);
 
-                    }else {
+                    } else {
                         binding.progBarBuffering.setVisibility(View.GONE);
 
                     }
@@ -889,10 +890,10 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
     @Override
     public void onBackPressed() {
 
-        if (userModel==null){
+        if (userModel == null) {
             navigateToSignUpChooserActivity();
 
-        }else {
+        } else {
             finish();
         }
     }
@@ -914,13 +915,13 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
     protected void onStart() {
         super.onStart();
         if (Util.SDK_INT >= 24) {
-            if (userModel!=null&&videoUri==null){
-                Uri uri = Uri.parse(Tags.IMAGE_URL+userModel.getData().getTeacher_video());
+            if (userModel != null && videoUri == null) {
+                Uri uri = Uri.parse(Tags.IMAGE_URL + userModel.getData().getTeacher_video());
                 if (uri != null) {
                     initPlayer(uri);
 
                 }
-            }else {
+            } else {
                 if (videoUri != null) {
                     playVideo(videoUri);
 
@@ -934,13 +935,13 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
     protected void onResume() {
         super.onResume();
         if (Util.SDK_INT < 24 || player == null) {
-            if (userModel!=null&&videoUri==null){
-                Uri uri = Uri.parse(Tags.IMAGE_URL+userModel.getData().getTeacher_video());
+            if (userModel != null && videoUri == null) {
+                Uri uri = Uri.parse(Tags.IMAGE_URL + userModel.getData().getTeacher_video());
                 if (uri != null) {
                     initPlayer(uri);
 
                 }
-            }else {
+            } else {
                 if (videoUri != null) {
                     playVideo(videoUri);
 

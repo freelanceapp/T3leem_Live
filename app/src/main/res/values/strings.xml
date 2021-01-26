@@ -185,5 +185,7 @@
     <string name="Test2">الإختبارات</string>
     <string name="course_center">انا مركز كورسات </string>
     <string name="center_name">اسم المركز</string>
+    <string name="centers_group">مراكز الكورسات</string>
+    <string name="detials">Detials</string>
 
 </resources>
