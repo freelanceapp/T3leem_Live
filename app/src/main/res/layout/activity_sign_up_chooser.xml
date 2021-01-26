@@ -9,16 +9,17 @@
         android:background="@drawable/login1"
         tools:context=".uis.module_general.activity_sign_up_chooser.SignUpChooserActivity">
 
-        <ImageView
-            android:id="@+id/imageLogo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/logo_circle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias=".68" />
+<!--        <ImageView-->
+<!--            android:id="@+id/imageLogo"-->
+<!--            android:layout_width="80dp"-->
+<!--            android:layout_height="80dp"-->
+<!--            android:src="@drawable/logo_circle"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:visibility="gone"-->
+<!--           />-->
 
         <Button
             android:id="@+id/btnTeacher"
@@ -34,9 +35,10 @@
             android:text="@string/teacher"
             android:textColor="@color/white"
             android:textSize="28sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageLogo"
+            app:layout_constraintTop_toTopOf="parent"
 
             />
 
@@ -77,6 +79,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnStudent"
+
+            />
+        <Button
+            android:id="@+id/btncenter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/rounded_color22"
+            android:fontFamily="@font/font"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:shadowDx="@android:integer/config_shortAnimTime"
+            android:text="@string/course_center"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnParent"
+
 
             />
     </androidx.constraintlayout.widget.ConstraintLayout>

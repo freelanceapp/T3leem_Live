@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.animation.AnimationUtils;
 
 import com.t3leem_live.R;
+import com.t3leem_live.uis.module_center_course.activity_teacher_sign_up.CenterCourseSignUpActivity;
 import com.t3leem_live.uis.module_general.activity_login.LoginActivity;
 import com.t3leem_live.uis.module_parent.activity_parent_sign_up.ParentSignUpActivity;
 import com.t3leem_live.uis.module_student.activity_student_sign_up.StudentSignUpActivity;
@@ -34,15 +35,24 @@ public class SignUpChooserActivity extends AppCompatActivity {
 
     private void initView() {
 
-        binding.imageLogo.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but1));
-        binding.btnTeacher.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but2));
-        binding.btnStudent.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but3));
-        binding.btnParent.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but4));
+        //binding.imageLogo.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but1));
+        binding.btnTeacher.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but1));
+        binding.btnStudent.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but2));
+        binding.btnParent.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but3));
+        binding.btncenter.startAnimation(AnimationUtils.loadAnimation(this,R.anim.anim_but4));
 
         binding.btnStudent.setOnClickListener(view -> navigateToStudentSignUpActivity());
         binding.btnTeacher.setOnClickListener(view -> navigateToTeacherSignUpActivity());
         binding.btnParent.setOnClickListener(view -> navigateToParentSignUpActivity());
+        binding.btncenter.setOnClickListener(view -> navigateToCenterSignUpActivity());
 
+
+    }
+
+    private void navigateToCenterSignUpActivity() {
+        Intent intent = new Intent(this, CenterCourseSignUpActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 

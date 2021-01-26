@@ -183,5 +183,7 @@
     <string name="no_notification">لا توجد إشعارات لعرضها</string>
     <string name="rate">التقييم</string>
     <string name="Test2">الإختبارات</string>
+    <string name="course_center">انا مركز كورسات </string>
+    <string name="center_name">اسم المركز</string>
 
 </resources>
