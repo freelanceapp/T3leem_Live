@@ -1,6 +1,7 @@
 package com.t3leem_live.services;
 
 import com.t3leem_live.models.CenterGroupDataModel;
+import com.t3leem_live.models.CenterGroupTeacherDataModel;
 import com.t3leem_live.models.MessageDataModel;
 import com.t3leem_live.models.MySonsDataModel;
 import com.t3leem_live.models.NotificationCountModel;
@@ -601,20 +602,35 @@ public interface Service {
     );
 
     @GET("api/center-groups")
-    Call<CenterGroupDataModel> getCenterGroups(@Query(value = "center_id") int center_id,
-                                               @Query(value = "pagination_status") String pagination_status
+    Call<CenterGroupDataModel> getCenterGroups(
+            @Header("Authorization") String bearer_token,
+            @Query(value = "center_id") int center_id,
+            @Query(value = "pagination_status") String pagination_status
     );
 
 
     @GET("api/centers")
     Call<List<StudentCenterModel>> getStudentCenter(@Query(value = "stage_id") int stage_id);
 
+
     @FormUrlEncoded
     @POST("api/store-center-group")
-    Call<ResponseBody> centerCreateChatGroups(@Field("center_id") String center_id,
-                                              @Field("title") String title
+    Call<ResponseBody> centerCreateGroups(
+            @Header("Authorization") String bearer_token,
+
+            @Field("center_id") String center_id,
+            @Field("title") String title
 
     );
+
+    @GET("api/center-group-teachers")
+    Call<CenterGroupTeacherDataModel> getCenterGroupTeacher(
+            @Header("Authorization") String bearer_token,
+            @Query(value = "center_id") int center_id,
+            @Query(value = "center_group_id") int center_group_id,
+            @Query(value = "pagination_status") String pagination_status
+    );
+
 
     @FormUrlEncoded
     @POST("api/share")

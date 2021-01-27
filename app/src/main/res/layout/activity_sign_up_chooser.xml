@@ -88,7 +88,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="30dp"
-            android:background="@drawable/rounded_color22"
+            android:background="@drawable/rounded_color23"
             android:fontFamily="@font/font"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:shadowDx="@android:integer/config_shortAnimTime"

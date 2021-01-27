@@ -3,6 +3,7 @@ package com.t3leem_live.uis.module_center_course.activity_home_center.fragments;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
+import com.t3leem_live.uis.module_center_course.activity_center_group_details.CenterGroupDetailsActivity;
 import com.t3leem_live.uis.module_center_course.activity_home_center.CenterHomeActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_create_chat_group.TeacherCreateGroupChatActivity;
 
@@ -77,9 +79,10 @@ public class Fragment_Home_Center extends Fragment {
         centerGroupModelList = new ArrayList<>();
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(activity);
+        binding.setModel(userModel);
         Paper.init(activity);
         lang = Paper.book().read("lang", "ar");
-        centerGroupsAdapter = new CenterGroupsAdapter(centerGroupModelList, activity);
+        centerGroupsAdapter = new CenterGroupsAdapter(centerGroupModelList, activity,this);
         binding.recView.setLayoutManager(new LinearLayoutManager(activity));
 
         binding.recView.setAdapter(centerGroupsAdapter);
@@ -88,16 +91,17 @@ public class Fragment_Home_Center extends Fragment {
                 .frozen(true)
                 .duration(1000)
                 .count(6)
-                .shimmer(true)
-                .show();
+                .shimmer(true).show();
 
         getCenterGroups();
     }
 
     private void getCenterGroups()
     {
+
+        skeletonScreen.show();
         Api.getService(Tags.base_url)
-                .getCenterGroups(userModel.getData().getId(),"off")
+                .getCenterGroups("Bearer "+userModel.getData().getToken(),userModel.getData().getId(),"off")
                 .enqueue(new Callback<CenterGroupDataModel>() {
                     @Override
                     public void onResponse(Call<CenterGroupDataModel> call, Response<CenterGroupDataModel> response) {
@@ -180,7 +184,7 @@ public class Fragment_Home_Center extends Fragment {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .centerCreateChatGroups(userModel.getData().getId()+"",title)
+                .centerCreateGroups("Bearer "+userModel.getData().getToken(),userModel.getData().getId()+"",title)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -225,4 +229,9 @@ public class Fragment_Home_Center extends Fragment {
                 });
     }
 
+    public void showDetials(int layoutPosition) {
+        Intent intent=new Intent(activity, CenterGroupDetailsActivity.class);
+        intent.putExtra("data",centerGroupModelList.get(layoutPosition));
+        startActivity(intent);
+    }
 }

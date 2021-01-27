@@ -186,6 +186,11 @@
     <string name="course_center">انا مركز كورسات </string>
     <string name="center_name">اسم المركز</string>
     <string name="centers_group">مراكز الكورسات</string>
+    <string name="teacher_price">سعر المدرس</string>
+    <string name="discount_value">قيمة الخصم</string>
+    <string name="teacher_price_after_disount">سعر المدرس بعد الخصم</string>
+    <string name="admin_precent">نسبة الادمن</string>
+    <string name="remove">حذف</string>
     <string name="detials">تفاصيل</string>
     <string name="number_of_teacher_in_group">عدد المدرسين فى المجموعة</string>
     <string name="group_price">سعر المجموعة</string>

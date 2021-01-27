@@ -13,29 +13,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
 import com.t3leem_live.databinding.CenterGroupRowBinding;
-import com.t3leem_live.databinding.GroupRowBinding;
+import com.t3leem_live.databinding.CenterTeacherGroupRowBinding;
 import com.t3leem_live.models.CenterGroupModel;
-import com.t3leem_live.models.TeacherGroupModel;
+import com.t3leem_live.models.CenterGroupTeacherModel;
 import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Home_Center;
-import com.t3leem_live.uis.module_student.activity_student_teachers_group.StudentTeachersGroupActivity;
 
 import java.util.List;
 
 import io.paperdb.Paper;
 
-public class CenterGroupsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CenterGroupsTeacherAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<CenterGroupModel> list;
+    private List<CenterGroupTeacherModel> list;
     private Context context;
     private LayoutInflater inflater;
     private Fragment fragment;
 
-    public CenterGroupsAdapter(List<CenterGroupModel> list, Context context, Fragment fragment) {
+    public CenterGroupsTeacherAdapter(List<CenterGroupTeacherModel> list, Context context) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
         Paper.init(context);
-        this.fragment = fragment;
+
     }
 
     @NonNull
@@ -43,7 +42,7 @@ public class CenterGroupsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-        CenterGroupRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.center_group_row, parent, false);
+        CenterTeacherGroupRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.center_teacher_group_row, parent, false);
         return new MyHolder(binding);
 
 
@@ -53,18 +52,9 @@ public class CenterGroupsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         MyHolder myHolder = (MyHolder) holder;
-        CenterGroupModel model = list.get(position);
+        CenterGroupTeacherModel model = list.get(position);
         myHolder.binding.setModel(model);
-        myHolder.binding.tvdetials.setPaintFlags(myHolder.binding.tvdetials.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-myHolder.binding.tvdetials.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        if(fragment instanceof Fragment_Home_Center){
-            Fragment_Home_Center fragment_home_center=(Fragment_Home_Center)fragment;
-            fragment_home_center.showDetials(myHolder.getLayoutPosition());
-        }
-    }
-});
+
 
     }
 
@@ -74,9 +64,9 @@ myHolder.binding.tvdetials.setOnClickListener(new View.OnClickListener() {
     }
 
     public static class MyHolder extends RecyclerView.ViewHolder {
-        public CenterGroupRowBinding binding;
+        public CenterTeacherGroupRowBinding binding;
 
-        public MyHolder(@NonNull CenterGroupRowBinding binding) {
+        public MyHolder(@NonNull CenterTeacherGroupRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 

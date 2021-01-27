@@ -1,4 +1,4 @@
-package com.t3leem_live.uis.module_center_course.activity_teacher_sign_up;
+package com.t3leem_live.uis.module_center_course.activity_center_sign_up;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -51,7 +51,6 @@ import com.t3leem_live.models.CenterSignUpModel;
 import com.t3leem_live.models.CountryModel;
 import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.StageDataModel;
-import com.t3leem_live.models.TeacherSignUpModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
@@ -60,7 +59,6 @@ import com.t3leem_live.tags.Tags;
 import com.t3leem_live.uis.module_center_course.activity_home_center.CenterHomeActivity;
 import com.t3leem_live.uis.module_general.activity_sign_up_chooser.SignUpChooserActivity;
 import com.t3leem_live.uis.module_general.activity_verification_code.VerificationCodeActivity;
-import com.t3leem_live.uis.module_teacher.activity_home_teacher.TeacherHomeActivity;
 
 import org.jetbrains.annotations.NotNull;
 
