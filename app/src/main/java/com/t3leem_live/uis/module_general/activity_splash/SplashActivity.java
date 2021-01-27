@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.t3leem_live.R;
+import com.t3leem_live.uis.module_center_course.activity_home_center.CenterHomeActivity;
 import com.t3leem_live.uis.module_parent.activity_home_parent.ParentHomeActivity;
 import com.t3leem_live.uis.module_teacher.activity_home_teacher.TeacherHomeActivity;
 import com.t3leem_live.uis.module_general.activity_on_boarding1.OnBoarding1Activity;
@@ -62,8 +63,12 @@ public class SplashActivity extends AppCompatActivity {
                     }else if (userModel.getData().getUser_type().equals("teacher")){
                         intent = new Intent(SplashActivity.this, TeacherHomeActivity.class);
 
-                    }else {
+                    }else if(userModel.getData().getUser_type().equals("parent")){
                         intent = new Intent(SplashActivity.this, ParentHomeActivity.class);
+
+                    }
+                    else {
+                        intent = new Intent(SplashActivity.this, CenterHomeActivity.class);
 
                     }
                 }

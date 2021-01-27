@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.t3leem_live.R;
+import com.t3leem_live.uis.module_center_course.activity_home_center.CenterHomeActivity;
 import com.t3leem_live.uis.module_general.activity_splash.SplashActivity;
 import com.t3leem_live.uis.module_parent.activity_home_parent.ParentHomeActivity;
 import com.t3leem_live.uis.module_teacher.activity_home_teacher.TeacherHomeActivity;
@@ -201,9 +202,12 @@ public class LoginActivity extends AppCompatActivity implements Listeners.LoginL
 
                             }else if (response.body().getData().getUser_type().equals("teacher")){
                                 intent = new Intent(LoginActivity.this, TeacherHomeActivity.class);
-                            }else {
+                            }else if(response.body().getData().getUser_type().equals("parent")){
                                 intent = new Intent(LoginActivity.this, ParentHomeActivity.class);
 
+                            }
+                            else {
+                                intent = new Intent(LoginActivity.this, CenterHomeActivity.class);
                             }
                             startActivity(intent);
                             finish();
