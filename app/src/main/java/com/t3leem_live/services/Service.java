@@ -24,6 +24,7 @@ import com.t3leem_live.models.TeacherGroupModel;
 import com.t3leem_live.models.TeacherStudentsDataModel;
 import com.t3leem_live.models.TeachersDataModel;
 import com.t3leem_live.models.UserModel;
+import com.t3leem_live.models.UsersDataModel;
 import com.t3leem_live.models.VideoLessonsDataModel;
 
 import org.androidannotations.annotations.rest.Get;
@@ -615,11 +616,9 @@ public interface Service {
 
     @FormUrlEncoded
     @POST("api/store-center-group")
-    Call<ResponseBody> centerCreateGroups(
-            @Header("Authorization") String bearer_token,
-
-            @Field("center_id") String center_id,
-            @Field("title") String title
+    Call<ResponseBody> centerCreateGroups(@Header("Authorization") String bearer_token,
+                                          @Field("center_id") String center_id,
+                                          @Field("title") String title
 
     );
 
@@ -640,5 +639,10 @@ public interface Service {
                              @Field("to_user_id[]") List<Integer> to_user_id
 
     );
+
+    @GET("api/StudentsInMyStage")
+    Call<UsersDataModel> getStudentInMyStages(@Query(value = "student_id") int student_id
+    );
+
 
 }

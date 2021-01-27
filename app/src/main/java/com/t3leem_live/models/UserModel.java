@@ -20,6 +20,13 @@ public class UserModel implements Serializable {
         private String code;
         private String name;
         private String email;
+        private String is_parent;
+        private double student_money;
+        private int number_of_groups;
+        private String live_status;
+        private double teacher_live_price;
+        private int teacher_ratio;
+        private int rates;
         private String phone_code;
         private String phone;
         private String parent_phone;
@@ -133,6 +140,34 @@ public class UserModel implements Serializable {
 
         public List<StudentRateModel> getStudent_rates() {
             return student_rates;
+        }
+
+        public String getIs_parent() {
+            return is_parent;
+        }
+
+        public double getStudent_money() {
+            return student_money;
+        }
+
+        public int getNumber_of_groups() {
+            return number_of_groups;
+        }
+
+        public String getLive_status() {
+            return live_status;
+        }
+
+        public double getTeacher_live_price() {
+            return teacher_live_price;
+        }
+
+        public int getTeacher_ratio() {
+            return teacher_ratio;
+        }
+
+        public int getRates() {
+            return rates;
         }
 
         public User getExist_son() {
