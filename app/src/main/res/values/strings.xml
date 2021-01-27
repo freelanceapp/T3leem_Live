@@ -186,9 +186,18 @@
     <string name="course_center">انا مركز كورسات </string>
     <string name="center_name">اسم المركز</string>
     <string name="centers_group">مراكز الكورسات</string>
-    <string name="detials">Detials</string>
-    <string name="number_of_teacher_in_group">Number Of Teacher In Group</string>
-    <string name="group_price">Group Price</string>
-    <string name="g">جنيه</string>
+    <string name="detials">تفاصيل</string>
+    <string name="number_of_teacher_in_group">عدد المدرسين فى المجموعة</string>
+    <string name="group_price">سعر المجموعة</string>
+    <string name="g">ج.م</string>
+    <string name="questions_bank">بنك الاسئلة</string>
+    <string name="my_reservation">حجوزاتي</string>
+    <string name="centers">المراكز</string>
+    <string name="joined_centers">المراكز المشترك فيها</string>
+    <string name="av_teacher">المدرسين المتاحين</string>
+    <string name="follow_teacher">المدرسين المتابعين</string>
+    <string name="center_group">مجموعات المركز</string>
+    <string name="share">مشاركة</string>
+    <string name="no_centers">لا توجد مراكز لعرضها</string>
 
 </resources>

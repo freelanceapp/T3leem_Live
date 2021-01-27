@@ -331,7 +331,7 @@
                         android:layout_marginTop="8dp"
                         />-->
                     <LinearLayout
-                        android:id="@+id/llContactUs"
+                        android:id="@+id/llQuestions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -350,7 +350,7 @@
                             android:layout_marginEnd="10dp"
                             android:textSize="18sp"
                             android:fontFamily="@font/font"
-                            android:text="@string/service_help"
+                            android:text="@string/questions_bank"
                             />
                         <ImageView
                             android:layout_width="20dp"
@@ -386,7 +386,7 @@
                             android:layout_marginEnd="10dp"
                             android:textSize="18sp"
                             android:fontFamily="@font/font"
-                            android:text="@string/company_info"
+                            android:text="@string/my_reservation"
                             />
                         <ImageView
                             android:layout_width="20dp"
@@ -402,6 +402,43 @@
                         android:background="@color/gray3"
                         android:layout_marginTop="8dp"
                         />
+                    <LinearLayout
+                        android:id="@+id/llCenter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="10dp"
+                        >
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@color/color1"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:textSize="18sp"
+                            android:fontFamily="@font/font"
+                            android:text="@string/centers"
+                            />
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_left_arrow"
+                            app:tint="@color/gray6"
+                            android:padding="2dp"
+                            />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray3"
+                        android:layout_marginTop="8dp"
+                        />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -421,7 +458,79 @@
                             android:layout_marginEnd="10dp"
                             android:textSize="18sp"
                             android:fontFamily="@font/font"
-                            android:text="@string/complain"
+                            android:text="@string/joined_centers"
+                            />
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_left_arrow"
+                            app:tint="@color/gray6"
+                            android:padding="2dp"
+                            />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray3"
+                        android:layout_marginTop="8dp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="10dp"
+                        >
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@color/color1"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:textSize="18sp"
+                            android:fontFamily="@font/font"
+                            android:text="@string/av_teacher"
+                            />
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_left_arrow"
+                            app:tint="@color/gray6"
+                            android:padding="2dp"
+                            />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray3"
+                        android:layout_marginTop="8dp"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="10dp"
+                        >
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@color/color1"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:textSize="18sp"
+                            android:fontFamily="@font/font"
+                            android:text="@string/follow_teacher"
                             />
                         <ImageView
                             android:layout_width="20dp"

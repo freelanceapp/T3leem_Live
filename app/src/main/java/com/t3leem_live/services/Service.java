@@ -14,6 +14,7 @@ import com.t3leem_live.models.SliderDataModel;
 import com.t3leem_live.models.StageDataModel;
 import com.t3leem_live.models.StreamDataModel;
 import com.t3leem_live.models.StreamModel;
+import com.t3leem_live.models.StudentCenterModel;
 import com.t3leem_live.models.StudentRateDataModel;
 import com.t3leem_live.models.SummaryDataModel;
 import com.t3leem_live.models.TeacherExamDataModel;
@@ -253,30 +254,32 @@ public interface Service {
     @Multipart
     @POST("api/create-center")
     Call<UserModel> signupCenterWithoutImage(
-                                                          @Part("name") RequestBody name,
-                                                          @Part("email") RequestBody email,
-                                                          @Part("phone_code") RequestBody phone_code,
-                                                          @Part("phone") RequestBody phone,
-                                                          @Part("password") RequestBody password,
-                                                          @Part("address") RequestBody address,
-                                                          @Part("stage_id") RequestBody stage_id,
-                                                          @Part("teacher_degree") RequestBody teacher_degree,
-                                                          @Part("software_type") RequestBody software_type
+            @Part("name") RequestBody name,
+            @Part("email") RequestBody email,
+            @Part("phone_code") RequestBody phone_code,
+            @Part("phone") RequestBody phone,
+            @Part("password") RequestBody password,
+            @Part("address") RequestBody address,
+            @Part("stage_id") RequestBody stage_id,
+            @Part("teacher_degree") RequestBody teacher_degree,
+            @Part("software_type") RequestBody software_type
     );
+
     @Multipart
     @POST("api/create-center")
     Call<UserModel> signupCenterWithImage(
-                                                       @Part("name") RequestBody name,
-                                                       @Part("email") RequestBody email,
-                                                       @Part("phone_code") RequestBody phone_code,
-                                                       @Part("phone") RequestBody phone,
-                                                       @Part("password") RequestBody password,
-                                                       @Part("address") RequestBody address,
-                                                       @Part("stage_id") RequestBody stage_id,
-                                                       @Part("teacher_degree") RequestBody teacher_degree,
-                                                       @Part("software_type") RequestBody software_type,
-                                                       @Part MultipartBody.Part logo
+            @Part("name") RequestBody name,
+            @Part("email") RequestBody email,
+            @Part("phone_code") RequestBody phone_code,
+            @Part("phone") RequestBody phone,
+            @Part("password") RequestBody password,
+            @Part("address") RequestBody address,
+            @Part("stage_id") RequestBody stage_id,
+            @Part("teacher_degree") RequestBody teacher_degree,
+            @Part("software_type") RequestBody software_type,
+            @Part MultipartBody.Part logo
     );
+
     @GET("api/get-subjects-by-class-id-or-department-id")
     Call<StageDataModel> getSubject(@Query(value = "stage_id") int stage_id,
                                     @Query(value = "class_id") int class_id,
@@ -311,6 +314,9 @@ public interface Service {
 
     @GET("api/sliders")
     Call<SliderDataModel> getSlider();
+
+    @GET("api/advertisements")
+    Call<SliderDataModel> getStudentSlider();
 
     @GET("api/Get-teacher-Exams")
     Call<TeacherExamDataModel> getTeacherExams(@Header("Authorization") String bearer_token,
@@ -590,18 +596,32 @@ public interface Service {
     @FormUrlEncoded
     @POST("api/update-is-read")
     Call<ResponseBody> readNotificationCount(@Header("Authorization") String bearer_token,
-                                                      @Field(value = "user_id") int user_id
+                                             @Field(value = "user_id") int user_id
 
     );
+
     @GET("api/center-groups")
     Call<CenterGroupDataModel> getCenterGroups(@Query(value = "center_id") int center_id,
                                                @Query(value = "pagination_status") String pagination_status
     );
+
+
+    @GET("api/centers")
+    Call<List<StudentCenterModel>> getStudentCenter(@Query(value = "stage_id") int stage_id);
+
     @FormUrlEncoded
     @POST("api/store-center-group")
-    Call<ResponseBody> centerCreateChatGroups(
-                                               @Field("center_id") String center_id,
-                                               @Field("title") String title
+    Call<ResponseBody> centerCreateChatGroups(@Field("center_id") String center_id,
+                                              @Field("title") String title
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/share")
+    Call<ResponseBody> share(@Field("student_id") int student_id,
+                             @Field("share_type") String share_type,
+                             @Field("share_id") int share_id,
+                             @Field("to_user_id[]") List<Integer> to_user_id
 
     );
 

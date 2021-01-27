@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.t3leem_live">
+    package="com.t3leem_live" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -26,19 +26,21 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
-        tools:targetApi="m">
-        <activity android:name=".uis.module_parent.activity_son_profile.SonProfileActivity"
+        tools:targetApi="m" >
+        <activity android:name=".uis.module_student.activity_student_center.StudentCenterActivity" >
+        </activity>
+        <activity
+            android:name=".uis.module_parent.activity_son_profile.SonProfileActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
-            />
-        <activity android:name=".uis.module_student.activity_son_subjects.SonSubjectActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_student.activity_son_subjects.SonSubjectActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
-            />
-        <activity android:name=".uis.module_center_course.activity_home_center.CenterHomeActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_center_course.activity_home_center.CenterHomeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
-            />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".uis.module_parent.activity_son_details.SonDetailsActivity"
             android:screenOrientation="portrait"
@@ -224,7 +226,7 @@
             android:name=".uis.module_general.activity_splash.SplashActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

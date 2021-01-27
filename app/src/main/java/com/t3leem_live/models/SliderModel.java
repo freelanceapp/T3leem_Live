@@ -6,6 +6,7 @@ public class SliderModel implements Serializable {
     private int id;
     private String title;
     private String desc;
+    private String text;
     private String image;
     private String icon;
 
@@ -27,5 +28,9 @@ public class SliderModel implements Serializable {
 
     public String getIcon() {
         return icon;
+    }
+
+    public String getText() {
+        return text;
     }
 }
