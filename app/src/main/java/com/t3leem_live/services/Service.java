@@ -1,5 +1,6 @@
 package com.t3leem_live.services;
 
+import com.t3leem_live.models.CenterGroupDataModel;
 import com.t3leem_live.models.MessageDataModel;
 import com.t3leem_live.models.MySonsDataModel;
 import com.t3leem_live.models.NotificationCountModel;
@@ -252,11 +253,11 @@ public interface Service {
     @Multipart
     @POST("api/create-center")
     Call<UserModel> signupCenterWithoutImage(
-                                                          @Part("id") RequestBody id,
                                                           @Part("name") RequestBody name,
                                                           @Part("email") RequestBody email,
                                                           @Part("phone_code") RequestBody phone_code,
                                                           @Part("phone") RequestBody phone,
+                                                          @Part("password") RequestBody password,
                                                           @Part("address") RequestBody address,
                                                           @Part("stage_id") RequestBody stage_id,
                                                           @Part("teacher_degree") RequestBody teacher_degree,
@@ -265,12 +266,12 @@ public interface Service {
     @Multipart
     @POST("api/create-center")
     Call<UserModel> signupCenterWithImage(
-                                                       @Part("id") RequestBody id,
                                                        @Part("name") RequestBody name,
                                                        @Part("email") RequestBody email,
                                                        @Part("phone_code") RequestBody phone_code,
                                                        @Part("phone") RequestBody phone,
                                                        @Part("password") RequestBody password,
+                                                       @Part("address") RequestBody address,
                                                        @Part("stage_id") RequestBody stage_id,
                                                        @Part("teacher_degree") RequestBody teacher_degree,
                                                        @Part("software_type") RequestBody software_type,
@@ -590,6 +591,17 @@ public interface Service {
     @POST("api/update-is-read")
     Call<ResponseBody> readNotificationCount(@Header("Authorization") String bearer_token,
                                                       @Field(value = "user_id") int user_id
+
+    );
+    @GET("api/center-groups")
+    Call<CenterGroupDataModel> getCenterGroups(@Query(value = "center_id") int center_id,
+                                               @Query(value = "pagination_status") String pagination_status
+    );
+    @FormUrlEncoded
+    @POST("api/store-center-group")
+    Call<ResponseBody> centerCreateChatGroups(
+                                               @Field("center_id") String center_id,
+                                               @Field("title") String title
 
     );
 

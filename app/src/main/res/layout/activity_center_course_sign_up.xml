@@ -9,7 +9,7 @@
             type="String" />
         <variable
             name="listener"
-            type="com.t3leem_live.interfaces.Listeners.TeacherSignUpListener" />
+            type="com.t3leem_live.interfaces.Listeners.CenterSignUpListener" />
         <variable
             name="model"
             type="com.t3leem_live.models.CenterSignUpModel" />

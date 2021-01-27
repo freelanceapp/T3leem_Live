@@ -187,5 +187,8 @@
     <string name="center_name">اسم المركز</string>
     <string name="centers_group">مراكز الكورسات</string>
     <string name="detials">Detials</string>
+    <string name="number_of_teacher_in_group">Number Of Teacher In Group</string>
+    <string name="group_price">Group Price</string>
+    <string name="g">جنيه</string>
 
 </resources>

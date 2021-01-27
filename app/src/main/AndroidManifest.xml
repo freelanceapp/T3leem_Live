@@ -35,6 +35,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
             />
+        <activity android:name=".uis.module_center_course.activity_home_center.CenterHomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            />
         <activity
             android:name=".uis.module_parent.activity_son_details.SonDetailsActivity"
             android:screenOrientation="portrait"

@@ -50,6 +50,7 @@ android:layout_marginStart="20dp"
                         android:textColor="@color/white" />
 
                     <TextView
+                        android:id="@+id/tvdetials"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -75,13 +76,22 @@ android:layout_marginStart="20dp"
                         android:padding="3dp"
                         android:src="@drawable/ic_group"
                         app:tint="@color/colorAccent" />
-
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_weight="1"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+
+                        android:text="@string/number_of_teacher_in_group"
+                        android:textColor="@color/gray9" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:singleLine="true"
                         android:textSize="14sp"
 
@@ -94,19 +104,38 @@ android:layout_marginStart="20dp"
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center_vertical"
+                        android:padding="3dp"
+                        android:src="@drawable/ic_dollar"
+                        app:tint="@color/colorAccent" />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_weight="1"
+                        android:singleLine="true"
                         android:textSize="14sp"
 
-                        android:text="@{model.group_price}"
+                        android:text="@string/group_price"
                         android:textColor="@color/gray9" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:singleLine="true"
+                        android:textSize="14sp"
+
+                        android:text='@{model.group_price+@string/g}'
+                        android:textColor="@color/gray9" />
+
+
                 </LinearLayout>
             </LinearLayout>
 

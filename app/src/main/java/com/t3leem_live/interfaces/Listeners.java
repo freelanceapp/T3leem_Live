@@ -34,6 +34,13 @@ public interface Listeners {
         void showVideoChooserDialog();
 
     }
+    interface CenterSignUpListener{
+        void validate();
+        void showCountryDialog();
+        void navigateToCenterHomeActivity();
+        void showImageChooserDialog();
+        void showVideoChooserDialog();
 
+    }
 
 }

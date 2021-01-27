@@ -14,7 +14,7 @@ import com.t3leem_live.R;
 
 public class CenterSignUpModel extends BaseObservable {
     private String imageUri;
-    private String videoUri;
+//    private String videoUri;
     private String name;
     private String phone_code;
     private String phone;
@@ -45,8 +45,8 @@ public class CenterSignUpModel extends BaseObservable {
                 Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
                 stage_id!=0&&
                 !degree.isEmpty() &&
-                !address.isEmpty() &&
-                !videoUri.isEmpty()
+                !address.isEmpty()
+//                !videoUri.isEmpty()
 
         ) {
             error_phone.set(null);
@@ -114,9 +114,9 @@ public class CenterSignUpModel extends BaseObservable {
             }
 
 
-            if (videoUri.isEmpty()){
-                Toast.makeText(context, R.string.intro_vid, Toast.LENGTH_SHORT).show();
-            }
+//            if (videoUri.isEmpty()){
+//                Toast.makeText(context, R.string.intro_vid, Toast.LENGTH_SHORT).show();
+//            }
 
             return false;
 
@@ -126,7 +126,7 @@ public class CenterSignUpModel extends BaseObservable {
 
     public CenterSignUpModel() {
         imageUri = "";
-        videoUri = "";
+//        videoUri = "";
         name="";
         phone_code = "";
         phone = "";
@@ -146,13 +146,13 @@ public class CenterSignUpModel extends BaseObservable {
         this.imageUri = imageUri;
     }
 
-    public String getVideoUri() {
-        return videoUri;
-    }
-
-    public void setVideoUri(String videoUri) {
-        this.videoUri = videoUri;
-    }
+//    public String getVideoUri() {
+//        return videoUri;
+//    }
+//
+//    public void setVideoUri(String videoUri) {
+//        this.videoUri = videoUri;
+//    }
 
     @Bindable
     public String getName() {
