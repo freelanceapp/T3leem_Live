@@ -431,6 +431,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
                             }else {
                                 binding.llDepartment.setVisibility(View.GONE);
                                 model.setHasDepartment(false);
+                                model.setDepartment_id("");
 
                             }
                             binding.setModel(model);
@@ -500,7 +501,7 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     }
     private int getUserClassPos(){
         int pos = -1;
-        for (int index=0;index<stageModelList.size();index++){
+        for (int index=0;index<classModelList.size();index++){
             StageClassModel model = classModelList.get(index);
             if (model.getId()==userModel.getData().getClass_fk().getId()){
                 pos = index;
