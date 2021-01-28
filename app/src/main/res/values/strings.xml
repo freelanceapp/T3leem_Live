@@ -216,5 +216,7 @@
     <string name="followed">تم المتابعة</string>
     <string name="honor_board">لوحة الشرف</string>
     <string name="summary">الملخصات</string>
+    <string name="final_teacher_price">السعر النهائي للمدرس</string>
+    <string name="add_teacher">اضافة مدرس</string>
 
 </resources>
