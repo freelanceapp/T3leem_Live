@@ -155,6 +155,7 @@ public class SummaryActivity extends AppCompatActivity {
                             skeletonScreen.hide();
                             binding.swipeRefresh.setRefreshing(false);
 
+
                             if (t.getMessage() != null) {
                                 Log.e("error", t.getMessage() + "__");
 
