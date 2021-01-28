@@ -9,155 +9,171 @@
             name="model"
             type="com.t3leem_live.models.CenterGroupTeacherModel" />
     </data>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginEnd="8dp"
-    android:layout_marginStart="8dp"
-    >
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical">
 
-        android:orientation="horizontal">
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray7"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="@{model.stage_fk.title}"
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:gravity="center"
 
-            />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray7"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="@{model.teacher_fk.name}"
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:gravity="center"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-            />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray7"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="@{model.teacher_price}"
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:gravity="center"
+            android:orientation="horizontal">
 
-            />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray7"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="@{model.center_discount_value}"
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:gravity="center"
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray7" />
 
-            />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray7"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="@{model.teacher_price_after_center_discountce}"
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:gravity="center"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{model.stage_fk.title}"
+                android:textColor="@color/black"
+                android:textSize="15sp"
 
-            />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray7"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="@{model.admin_price}"
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:gravity="center"
-
-            />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray7"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:text="@{model.teacher_price_after_all_discounts}"
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:gravity="center"
-
-            />
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray7"
-            />
-        <FrameLayout
-            android:id="@+id/fldelete"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-android:layout_weight="1"
-
-            >
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_delete"
-                android:layout_gravity="center"
                 />
 
-        </FrameLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray7" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{model.teacher_fk.name}"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray7" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{model.teacher_price}"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray7" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{model.center_discount_value}"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray7" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{model.teacher_price_after_center_discountce}"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray7" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{model.admin_price}"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray7" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@{model.teacher_price_after_all_discounts}"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+
+                />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray7" />
+
+            <FrameLayout
+                android:id="@+id/fldelete"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+
+                >
+
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_red">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_delete"
+                        android:tint="@color/white" />
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray7" />
+        </LinearLayout>
+
         <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray7"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gray7" />
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/gray7"
-        />
-</LinearLayout>
 </layout>
