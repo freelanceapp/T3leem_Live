@@ -24,7 +24,9 @@ import com.t3leem_live.models.TeacherGroupDataModel;
 import com.t3leem_live.models.TeacherGroupModel;
 import com.t3leem_live.models.TeacherStudentsDataModel;
 import com.t3leem_live.models.TeachersDataModel;
+import com.t3leem_live.models.TeachersInsideCenterModel;
 import com.t3leem_live.models.UserModel;
+import com.t3leem_live.models.UsersDataModel;
 import com.t3leem_live.models.VideoLessonsDataModel;
 
 import org.androidannotations.annotations.rest.Get;
@@ -666,6 +668,34 @@ public interface Service {
 
     );
 
+    @GET("api/StudentsInMyStage")
+    Call<UsersDataModel> getStudentInMyStages(@Query(value = "student_id") int student_id
+    );
+
+    @GET("api/GetGroupsInsideCenter")
+    Call<List<CenterGroupModel>> getStudentCenterGroups(@Query(value = "center_id") int center_id);
+
+
+    @GET("api/teachersInsideGroup")
+    Call<List<TeachersInsideCenterModel>> getTeachersInsideCenterGroup(@Query(value = "center_group_id") int center_group_id,
+                                                                       @Query(value = "student_id") int student_id
+    );
+
+
+    @FormUrlEncoded
+    @POST("api/book-group")
+    Call<ResponseBody> studentBookGroup(@Field("student_id") int student_id,
+                                        @Field("center_group_id") int center_group_id,
+                                        @Field("teachers_group_id[]") List<Integer> to_user_id
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/student-follow")
+    Call<ResponseBody> studentFollow_UnFollow(@Field("student_id") int student_id,
+                                              @Field("teacher_id") int teacher_id
+    );
+
     @FormUrlEncoded
     @POST("api/delete-center-group-teacher")
     Call<ResponseBody> deleteTeacher(
@@ -700,7 +730,7 @@ public interface Service {
             @Field("center_discount_value") String title,
             @Field("teacher_price_after_center_discountce") String teacher_price_after_center_discountce,
             @Field("admin_price") String admin_price,
-            @Field("teacher_price_after_all_discounts") String teacher_price_after_all_discounts
+            @Field("teacher_price_after_all_discounts") String teacher_price_after_all_discounts);
 
 
 }

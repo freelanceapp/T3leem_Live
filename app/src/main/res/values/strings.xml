@@ -220,5 +220,8 @@
     <string name="add_teacher">اضافة مدرس</string>
     <string name="edit">تعديل</string>
     <string name="teachers">المدرسين</string>
+    <string name="must_big">يجب ان يكون اكبر من صفر</string>
+    <string name="select_teacher">اختر المدرس</string>
+    <string name="select_stage">اختر المرحله</string>
 
 </resources>

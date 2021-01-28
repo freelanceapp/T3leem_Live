@@ -207,4 +207,8 @@ public class TeacherModel implements Serializable {
     public static class FollowFk implements Serializable {
 
     }
+
+    public void setFollow_fk(FollowFk follow_fk) {
+        this.follow_fk = follow_fk;
+    }
 }
