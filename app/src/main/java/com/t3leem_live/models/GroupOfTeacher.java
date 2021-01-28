@@ -6,6 +6,7 @@ public class GroupOfTeacher implements Serializable {
     private int id;
     private int teacher_id;
     private int stage_id;
+
     private int class_id;
     private String department_id;
     private int subject_id;
