@@ -23,6 +23,8 @@ public class TeacherModel implements Serializable {
     private StageClassModel class_fk;
     private StageClassModel department_fk;
     private List<StudentRateModel> student_rates;
+    private List<GroupOfTeacher> teacher_groups_fk;
+    private FollowFk follow_fk;
 
 
     public TeacherModel() {
@@ -166,6 +168,10 @@ public class TeacherModel implements Serializable {
         this.logo = logo;
     }
 
+    public FollowFk getFollow_fk() {
+        return follow_fk;
+    }
+
     public StageClassModel getStage_fk() {
         return stage_fk;
     }
@@ -192,5 +198,13 @@ public class TeacherModel implements Serializable {
 
     public List<StudentRateModel> getStudent_rates() {
         return student_rates;
+    }
+
+    public List<GroupOfTeacher> getTeacher_groups_fk() {
+        return teacher_groups_fk;
+    }
+
+    public static class FollowFk implements Serializable {
+
     }
 }

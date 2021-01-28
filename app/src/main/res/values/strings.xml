@@ -218,5 +218,7 @@
     <string name="summary">الملخصات</string>
     <string name="final_teacher_price">السعر النهائي للمدرس</string>
     <string name="add_teacher">اضافة مدرس</string>
+    <string name="edit">تعديل</string>
+    <string name="teachers">المدرسين</string>
 
 </resources>

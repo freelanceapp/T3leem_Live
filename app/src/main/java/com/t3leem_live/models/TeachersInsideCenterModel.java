@@ -69,6 +69,7 @@ public class TeachersInsideCenterModel implements Serializable {
         return teacher_fk;
     }
 
+
     public void setTeacher_fk(TeacherModel teacher_fk) {
         this.teacher_fk = teacher_fk;
     }
