@@ -223,5 +223,6 @@
     <string name="must_big">يجب ان يكون اكبر من صفر</string>
     <string name="select_teacher">اختر المدرس</string>
     <string name="select_stage">اختر المرحله</string>
+    <string name="no_group">لا يوجد جروبات</string>
 
 </resources>
