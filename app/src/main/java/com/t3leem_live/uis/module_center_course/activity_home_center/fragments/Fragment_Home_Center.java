@@ -1,5 +1,6 @@
 package com.t3leem_live.uis.module_center_course.activity_home_center.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -94,11 +95,17 @@ public class Fragment_Home_Center extends Fragment {
                 .shimmer(true).show();
 
         getCenterGroups();
+        binding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateDialogAlertGroup(activity);
+            }
+        });
     }
 
     private void getCenterGroups()
     {
-
+binding.tvNoGroups.setVisibility(View.GONE);
         skeletonScreen.show();
         Api.getService(Tags.base_url)
                 .getCenterGroups("Bearer "+userModel.getData().getToken(),userModel.getData().getId(),"off")
@@ -110,6 +117,9 @@ public class Fragment_Home_Center extends Fragment {
                             centerGroupModelList.clear();
                             centerGroupModelList.addAll(response.body().getData());
                             centerGroupsAdapter.notifyDataSetChanged();
+                            if(centerGroupModelList.size()==0){
+                                binding.tvNoGroups.setVisibility(View.VISIBLE);
+                            }
                         } else {
                             skeletonScreen.hide();
 
@@ -146,12 +156,7 @@ public class Fragment_Home_Center extends Fragment {
                         }
                     }
                 });
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateDialogAlertGroup(activity);
-            }
-        });
+
 
     }
     public  void CreateDialogAlertGroup(Context context) {
@@ -232,6 +237,24 @@ public class Fragment_Home_Center extends Fragment {
     public void showDetials(int layoutPosition) {
         Intent intent=new Intent(activity, CenterGroupDetailsActivity.class);
         intent.putExtra("data",centerGroupModelList.get(layoutPosition));
-        startActivity(intent);
+        startActivityForResult(intent,1);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1){
+            getCenterGroups();
+
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(preferences!=null){
+        userModel = preferences.getUserData(activity);
+        binding.setModel(userModel);
+    }}
 }

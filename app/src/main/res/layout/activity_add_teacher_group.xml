@@ -8,17 +8,63 @@
             name="lang"
             type="String" />
         <variable
-            name="listener"
-            type="com.t3leem_live.interfaces.Listeners.CenterSignUpListener" />
-        <variable
             name="model"
-            type="com.t3leem_live.models.CenterSignUpModel" />
+            type="com.t3leem_live.models.AddTeacherModel" />
+
     </data>
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                >
+                <LinearLayout
+                    android:id="@+id/llBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    >
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_left_arrow"
+                        app:tint="@color/white"
+                        android:padding="3dp"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        android:rotation='@{lang.equals("ar")?180:0}'
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="15sp"
+                        android:text="@string/add_teacher"
+                        android:textColor="@color/white"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:fillViewport="true"
         android:fitsSystemWindows="true"
+        android:layout_weight="1"
+
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,65 +73,6 @@
             android:orientation="vertical"
             >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/gradient_strait"
-                android:minHeight="170dp"
-                >
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image"
-                    android:layout_width="115dp"
-                    android:layout_height="115dp"
-                    android:src="@drawable/profile_img_boy"
-                    app:civ_border_color="@color/colorPrimary"
-                    app:civ_border_width="1dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
-                    android:onClick="@{()->listener.showImageChooserDialog()}"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/font"
-                    android:gravity="center"
-                    android:text="@string/add_photo"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:layout_gravity="center_horizontal"
-                    />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <com.google.android.exoplayer2.ui.PlayerView
-                        android:id="@+id/player"
-                        android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        app:use_controller="true"
-                        android:visibility="gone"
-                        app:auto_show="true"
-                        app:resize_mode="fit"
-                        />
-                    <ProgressBar
-                        android:id="@+id/progBarBuffering"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:indeterminateTint="@color/gray8"
-                        android:alpha=".3"
-                        android:layout_gravity="center"
-                        android:visibility="gone"
-
-                        />
-                </FrameLayout>
-
-
-
-            </LinearLayout>
 
 
             <LinearLayout
@@ -107,300 +94,6 @@
                     android:layout_width="0dp"
                     android:layout_weight=".3"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/font"
-                    android:text="@string/center_name"
-                    android:textSize="15sp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-
-                    />
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/grey_gradient"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:hint="@string/center_name"
-                    android:lines="1"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:text="@={model.name}"
-                    error="@{model.error_name}"
-                    />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                >
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:src="@color/color1"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".3"
-                    android:fontFamily="@font/font"
-                    android:text="@string/phone"
-                    android:textSize="15sp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-
-                    />
-                <FrameLayout
-                    android:id="@+id/flPhone"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="40dp"
-                    android:background="@drawable/grey_gradient"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-
-                    >
-                    <androidx.constraintlayout.widget.ConstraintLayout
-
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-
-
-                        >
-
-
-                        <TextView
-                            android:id="@+id/tv_code"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center"
-                            android:hint="@string/code"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:singleLine="true"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/gray7"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:text="+20"
-
-                            />
-
-                        <View
-                            android:id="@+id/view"
-                            android:layout_width="1px"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/tv_code"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:background="@color/gray4"
-
-                            />
-
-                        <EditText
-                            android:id="@+id/edt_phone"
-                            android:layout_width="0dp"
-                            android:layout_height="35dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:hint="@string/phone"
-                            android:inputType="phone"
-                            android:singleLine="true"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/gray7"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/view2"
-                            app:layout_constraintStart_toEndOf="@id/view"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:background="@color/transparent"
-                            android:text="@={model.phone}"
-                            error="@{model.error_phone}"
-                            />
-
-                        <View
-                            android:id="@+id/view2"
-                            android:layout_width="1px"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/gray4"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <!--<ImageView
-                            android:id="@+id/imagePhoneCode"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:padding="8dp"
-                            android:rotation='@{lang.equals("ar")?180:0}'
-                            android:src="@drawable/ic_right_arrow"
-                            app:tint="@color/black"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:onClick="@{()->listener.showCountryDialog()}"
-
-                            />-->
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </FrameLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                >
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:src="@color/color1"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".3"
-                    android:fontFamily="@font/font"
-                    android:text="@string/email"
-                    android:textSize="15sp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-
-                    />
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/grey_gradient"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:hint="@string/email"
-                    android:lines="1"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:inputType="textEmailAddress"
-                    android:text="@={model.email}"
-                    error="@{model.error_email}"
-                    />
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                >
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:src="@color/color1"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".3"
-                    android:fontFamily="@font/font"
-                    android:text="@string/password"
-                    android:textSize="15sp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-
-                    />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="40dp"
-                    android:background="@drawable/grey_gradient"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    app:hintEnabled="false"
-                    app:passwordToggleEnabled="true"
-
-
-                    >
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="@string/password"
-                        android:background="@color/transparent"
-                        android:lines="1"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:inputType="textPassword"
-                        android:text="@={model.password}"
-                        error="@{model.error_password}"
-                        />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                >
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:src="@color/color1"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".3"
                     android:fontFamily="@font/font"
                     android:text="@string/stage"
                     android:textSize="15sp"
@@ -417,66 +110,15 @@
                     android:layout_marginEnd="5dp"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
+
                     >
                     <Spinner
                         android:id="@+id/spinnerStage"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="wrap_content"/>
                 </FrameLayout>
 
-
             </LinearLayout>
-
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:visibility="gone"
-                >
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:src="@color/color1"
-                    />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".3"
-                    android:fontFamily="@font/font"
-                    android:text="@string/job_degree"
-                    android:textSize="15sp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-
-                    />
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/grey_gradient"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:hint="@string/job_degree"
-                    android:lines="1"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:inputType="textEmailAddress"
-                    android:text="@={model.degree}"
-                    error="@{model.error_degree}"
-                    />
-
-
-            </LinearLayout>
-
 
 
             <LinearLayout
@@ -499,13 +141,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".3"
                     android:fontFamily="@font/font"
-                    android:text="@string/address"
+                    android:text="@string/teacher_name"
                     android:textSize="15sp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
 
                     />
-                <EditText
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
@@ -514,18 +156,255 @@
                     android:layout_marginEnd="5dp"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:hint="@string/address"
+
+                    >
+                    <Spinner
+                        android:id="@+id/spinnerteacher"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </FrameLayout>
+
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@color/color1"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:fontFamily="@font/font"
+                    android:text="@string/teacher_price"
+                    android:textSize="15sp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+
+                    />
+                <EditText
+                    android:id="@+id/editteacherprice"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/grey_gradient"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
                     android:lines="1"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:text="@={model.address}"
-                    error="@{model.error_address}"
+                    android:text="@={model.teacher_price}"
+                    error="@{model.error_teacher_price}"
                     />
 
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@color/color1"
+                    />
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:fontFamily="@font/font"
+                    android:text="@string/discount_value"
+                    android:textSize="15sp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+
+                    />
+                <EditText
+                    android:id="@+id/editdiscount"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/grey_gradient"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:lines="1"
+
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text="@={model.discount_value}"
+                    error="@{model.error_discount_value}"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@color/color1"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:fontFamily="@font/font"
+                    android:text="@string/teacher_price_after_disount"
+                    android:textSize="15sp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+
+                    />
+                <EditText
+android:id="@+id/editafterdiscount"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/grey_gradient"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:lines="1"
+                    android:editable="false"
+                    android:enabled="false"                    android:inputType="numberDecimal"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text="@={model.teacher_price_after_discount}"
+                    error="@{model.error_price_after_discount}"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@color/color1"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:fontFamily="@font/font"
+                    android:text="@string/admin_precent"
+                    android:textSize="15sp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+
+                    />
+                <EditText
+                    android:id="@+id/edtadmin"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/grey_gradient"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:lines="1"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text="@={model.admin_value}"
+                    error="@{model.error_admin_value}"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@color/color1"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:fontFamily="@font/font"
+                    android:text="@string/final_teacher_price"
+                    android:textSize="15sp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+
+                    />
+                <EditText
+                    android:id="@+id/edit_final"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/grey_gradient"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:lines="1"
+                    android:editable="false"
+                    android:enabled="false"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text="@={model.final_price}"
+                    error="@{model.error_final_price}"
+                    />
+
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btnNext"
@@ -544,47 +423,11 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
-                android:gravity="center"
-                android:onClick="@{()->listener.validate()}"
 
                 />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal"
-                android:visibility="gone"
-                android:onClick="@{()->listener.showVideoChooserDialog()}"
-
-                >
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_play_button"
-                    app:tint="@color/color1"
-                    android:clickable="false"
-                    android:longClickable="false"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_video"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:clickable="false"
-                    android:longClickable="false"
-                    android:fontFamily="@font/font"
-                    android:textSize="18sp"
-                    />
-            </LinearLayout>
 
 
         </LinearLayout>
     </ScrollView>
-
+    </LinearLayout>
 </layout>

@@ -1,7 +1,6 @@
 package com.t3leem_live.services;
 
 import com.t3leem_live.models.CenterGroupDataModel;
-import com.t3leem_live.models.CenterGroupModel;
 import com.t3leem_live.models.CenterGroupTeacherDataModel;
 import com.t3leem_live.models.MessageDataModel;
 import com.t3leem_live.models.MySonsDataModel;
@@ -24,9 +23,7 @@ import com.t3leem_live.models.TeacherGroupDataModel;
 import com.t3leem_live.models.TeacherGroupModel;
 import com.t3leem_live.models.TeacherStudentsDataModel;
 import com.t3leem_live.models.TeachersDataModel;
-import com.t3leem_live.models.TeachersInsideCenterModel;
 import com.t3leem_live.models.UserModel;
-import com.t3leem_live.models.UsersDataModel;
 import com.t3leem_live.models.VideoLessonsDataModel;
 
 import org.androidannotations.annotations.rest.Get;
@@ -265,7 +262,6 @@ public interface Service {
             @Part("password") RequestBody password,
             @Part("address") RequestBody address,
             @Part("stage_id") RequestBody stage_id,
-            @Part("teacher_degree") RequestBody teacher_degree,
             @Part("software_type") RequestBody software_type
     );
 
@@ -279,7 +275,34 @@ public interface Service {
             @Part("password") RequestBody password,
             @Part("address") RequestBody address,
             @Part("stage_id") RequestBody stage_id,
-            @Part("teacher_degree") RequestBody teacher_degree,
+            @Part("software_type") RequestBody software_type,
+            @Part MultipartBody.Part logo
+    );
+    @Multipart
+    @POST("api/center-update-profile")
+    Call<UserModel> updateCenterWithoutImage(
+            @Header("Authorization") String bearer_token,
+            @Part("id") RequestBody id,
+            @Part("name") RequestBody name,
+            @Part("email") RequestBody email,
+            @Part("phone_code") RequestBody phone_code,
+            @Part("phone") RequestBody phone,
+            @Part("address") RequestBody address,
+            @Part("stage_id") RequestBody stage_id,
+            @Part("software_type") RequestBody software_type
+    );
+
+    @Multipart
+    @POST("api/center-update-profile")
+    Call<UserModel> updateCenterWithImage(
+            @Header("Authorization") String bearer_token,
+            @Part("id") RequestBody id,
+            @Part("name") RequestBody name,
+            @Part("email") RequestBody email,
+            @Part("phone_code") RequestBody phone_code,
+            @Part("phone") RequestBody phone,
+            @Part("address") RequestBody address,
+            @Part("stage_id") RequestBody stage_id,
             @Part("software_type") RequestBody software_type,
             @Part MultipartBody.Part logo
     );

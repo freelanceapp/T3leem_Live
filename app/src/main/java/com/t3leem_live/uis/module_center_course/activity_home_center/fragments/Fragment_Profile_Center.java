@@ -14,9 +14,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.t3leem_live.R;
+import com.t3leem_live.databinding.FragmentProfileCenterBinding;
 import com.t3leem_live.databinding.FragmentProfileTeacherBinding;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
+import com.t3leem_live.uis.module_center_course.activity_center_sign_up.CenterCourseSignUpActivity;
 import com.t3leem_live.uis.module_center_course.activity_home_center.CenterHomeActivity;
 import com.t3leem_live.uis.module_general.activity_chat_rooms.ChatRoomsActivity;
 import com.t3leem_live.uis.module_general.activity_contact_us.ContactUsActivity;
@@ -26,15 +28,15 @@ import com.t3leem_live.uis.module_teacher.activity_teacher_sign_up.TeacherSignUp
 
 import io.paperdb.Paper;
 
-public class Fragment_Profile_Teacher extends Fragment {
-    private FragmentProfileTeacherBinding binding;
+public class Fragment_Profile_Center extends Fragment {
+    private FragmentProfileCenterBinding binding;
     private CenterHomeActivity activity;
     private Preferences preferences;
     private UserModel userModel;
     private String lang;
 
-    public static Fragment_Profile_Teacher newInstance(){
-        return new Fragment_Profile_Teacher();
+    public static Fragment_Profile_Center newInstance(){
+        return new Fragment_Profile_Center();
     }
 
 
@@ -46,7 +48,7 @@ public class Fragment_Profile_Teacher extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_teacher,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_center,container,false);
         initView();
         return binding.getRoot();
     }
@@ -65,26 +67,12 @@ public class Fragment_Profile_Teacher extends Fragment {
         });
 
         binding.llEditProfile.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, TeacherSignUpActivity.class);
+            Intent intent = new Intent(activity, CenterCourseSignUpActivity.class);
             startActivityForResult(intent,100);
         });
 
 
-        binding.llCreateGroupChat.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, TeacherGroupChatActivity.class);
-            startActivity(intent);
-        });
 
-        binding.llCreateStudentChat.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, TeacherCreateStudentsChatActivity.class);
-            startActivity(intent);
-
-        });
-
-        binding.llChat.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, ChatRoomsActivity.class);
-            startActivity(intent);
-        });
     }
 
 

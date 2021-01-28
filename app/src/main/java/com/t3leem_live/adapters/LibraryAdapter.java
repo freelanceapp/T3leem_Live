@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
+import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Library_Center;
 import com.t3leem_live.uis.module_teacher.activity_home_teacher.fragments.Fragment_Library_Teacher;
 import com.t3leem_live.uis.module_student.activity_student_home.fragments.Fragment_Library_Student;
 import com.t3leem_live.databinding.LibraryRowBinding;
@@ -69,6 +70,10 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }else if (fragment instanceof Fragment_Library_Teacher){
                 Fragment_Library_Teacher fragment_library_teacher = (Fragment_Library_Teacher) fragment;
                 fragment_library_teacher.setItemData(classModel2);
+            }
+            else if (fragment instanceof Fragment_Library_Center){
+                Fragment_Library_Center fragment_library_center = (Fragment_Library_Center) fragment;
+                fragment_library_center.setItemData(classModel2);
             }
         });
 

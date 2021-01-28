@@ -143,20 +143,20 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
             model.setPhone(userModel.getData().getPhone());
 //            model.setVideoUri(userModel.getData().getTeacher_video());
             model.setAddress(userModel.getData().getAddress());
-            binding.progBarBuffering.setVisibility(View.VISIBLE);
+//            binding.progBarBuffering.setVisibility(View.VISIBLE);
 
             int stage_id = 0;
             if (userModel.getData().getStage_id() != null) {
                 stage_id = userModel.getData().getStage_fk().getId();
             }
             model.setStage_id(stage_id);
-            model.setDegree(userModel.getData().getTeacher_degree());
+          //  model.setDegree(userModel.getData().getTeacher_degree());
 
             if (userModel.getData().getLogo() != null && !userModel.getData().getLogo().isEmpty() && !userModel.getData().getLogo().equals("0")) {
                 Picasso.get().load(Uri.parse(Tags.IMAGE_URL + userModel.getData().getLogo())).into(binding.image);
             }
             binding.btnNext.setText(getString(R.string.update));
-            binding.player.setVisibility(View.VISIBLE);
+//            binding.player.setVisibility(View.VISIBLE);
             binding.llPassword.setVisibility(View.GONE);
 
 
@@ -335,21 +335,17 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
                     signUpWithImage();
                 }
             }
-//            }else {
-//                if (videoUri!=null&&imageUri!=null){
-//                    updateWithImageWithVideo();
-//                }else if (videoUri!=null&&imageUri==null){
-//                    updateWithoutImageWithVideo();
-//                }else if (videoUri==null&&imageUri!=null){
-//                    updateWithImageWithoutVideo();
-//                }else if (videoUri==null&&imageUri==null){
-//                    updateWithoutImageWithoutVideo();
-//                }
-//            }
+            else {
+                if (imageUri == null) {
+                    updateWithoutImage();
+                } else {
+                    updateWitImage();
+                }
+            }}
 
 
             //navigateToVerificationActivity();
-        }
+
     }
 
     private void navigateToVerificationActivity() {
@@ -372,13 +368,13 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
         RequestBody address_part = Common.getRequestBodyText(model.getAddress());
         // RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
         RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
-        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
+//        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
         RequestBody software_part = Common.getRequestBodyText("android");
 //        RequestBody user_type_part = Common.getRequestBodyText("center");
 
 
         Api.getService(Tags.base_url)
-                .signupCenterWithoutImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, stage_id_part, degree_part, software_part)
+                .signupCenterWithoutImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, stage_id_part, software_part)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -428,7 +424,7 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
         RequestBody address_part = Common.getRequestBodyText(model.getAddress());
 //        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
         RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
-        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
+      //  RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
         RequestBody software_part = Common.getRequestBodyText("android");
         // RequestBody user_type_part = Common.getRequestBodyText("teacher");
 //        MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
@@ -436,7 +432,7 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
 
 
         Api.getService(Tags.base_url)
-                .signupCenterWithImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, stage_id_part, degree_part, software_part, image)
+                .signupCenterWithImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, stage_id_part, software_part, image)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, @NotNull Response<UserModel> response) {
@@ -475,64 +471,123 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
     }
 
 
-//    private void updateWithoutImageWithoutVideo()
-//    {
-//        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
-//        dialog.setCancelable(false);
-//        dialog.show();
-//        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
-//        RequestBody name_part = Common.getRequestBodyText(model.getName());
-//        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
-//        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
-//        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
-//        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
-////        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
-//        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
-//        RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
-//        RequestBody software_part = Common.getRequestBodyText("android");
+    private void updateWithoutImage()
+    {
+        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
+        RequestBody name_part = Common.getRequestBodyText(model.getName());
+        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
+        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
+        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
+        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
+//        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
+        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
+    //    RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
+        RequestBody software_part = Common.getRequestBodyText("android");
 //        RequestBody user_type_part = Common.getRequestBodyText("teacher");
-//
-//
-////        Api.getService(Tags.base_url)
-////                .updateTeacherWithoutImageWithoutVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part)
-////                .enqueue(new Callback<UserModel>() {
-////                    @Override
-////                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
-////                        dialog.dismiss();
-////                        if (response.isSuccessful() && response.body() != null) {
-////
-////                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
-////                            setResult(RESULT_OK);
-////                            finish();
-////                        } else {
-////                            if (response.code() == 500) {
-////                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-////                            }else if (response.code()==422) {
-////                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-////                            }else {
-////                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-////                            }
-////                        }
-////                    }
-////
-////                    @Override
-////                    public void onFailure(Call<UserModel> call, Throwable t) {
-////                        try {
-////                            dialog.dismiss();
-////                            if (t.getMessage() != null) {
-////
-////                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-////                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-////                                } else {
-////                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-////                                }
-////                            }
-////                        } catch (Exception e) {
-////                            Log.e("Error", e.getMessage() + "__");
-////                        }
-////                    }
-////                });
-//    }
+
+
+        Api.getService(Tags.base_url)
+                .updateCenterWithoutImage("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, stage_id_part, software_part)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
+                            setResult(RESULT_OK);
+                            finish();
+                        } else {
+                            if (response.code() == 500) {
+                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==422) {
+                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+    }
+    private void updateWitImage()
+    {
+        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        RequestBody id_part = Common.getRequestBodyText(String.valueOf(userModel.getData().getId()));
+        RequestBody name_part = Common.getRequestBodyText(model.getName());
+        RequestBody phone_code_part = Common.getRequestBodyText(model.getPhone_code().replace("+", "00"));
+        RequestBody phone_part = Common.getRequestBodyText(model.getPhone());
+        RequestBody email_part = Common.getRequestBodyText(model.getEmail());
+        RequestBody address_part = Common.getRequestBodyText(model.getAddress());
+//        RequestBody school_name_part = Common.getRequestBodyText(model.getSchool_name());
+        RequestBody stage_id_part = Common.getRequestBodyText(String.valueOf(model.getStage_id()));
+    //    RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
+        RequestBody software_part = Common.getRequestBodyText("android");
+        MultipartBody.Part image = Common.getMultiPart(this, imageUri, "logo");
+//        RequestBody user_type_part = Common.getRequestBodyText("teacher");
+
+
+        Api.getService(Tags.base_url)
+                .updateCenterWithImage("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, stage_id_part, software_part,image)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            preferences.create_update_userdata(CenterCourseSignUpActivity.this,response.body());
+                            setResult(RESULT_OK);
+                            finish();
+                        } else {
+                            if (response.code() == 500) {
+                                Toast.makeText(CenterCourseSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==422) {
+                                Toast.makeText(CenterCourseSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(CenterCourseSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+    }
 //    private void updateWithImageWithoutVideo()
 //    {
 //        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
@@ -785,6 +840,11 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
                     signUpWithImage();
                 }
             } else {
+                if (imageUri == null) {
+                    updateWithoutImage();
+                } else {
+                    updateWitImage();
+                }
 //                if (videoUri!=null&&imageUri!=null){
 //                    updateWithImageWithVideo();
 //                }else if (videoUri!=null&&imageUri==null){
@@ -795,6 +855,7 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
 //                    updateWithoutImageWithoutVideo();
 //                }
             }
+
         }
     }
 
@@ -828,32 +889,32 @@ public class CenterCourseSignUpActivity extends AppCompatActivity implements Lis
             player.prepare(mediaSource);
         }
 
-        player.addListener(new Player.EventListener() {
-            @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                if (playWhenReady) {
-                    if (playbackState == Player.STATE_BUFFERING) {
-                        binding.progBarBuffering.setVisibility(View.VISIBLE);
-                    } else if (playbackState == Player.STATE_READY) {
-                        binding.progBarBuffering.setVisibility(View.GONE);
-
-                    } else if (playbackState == Player.STATE_ENDED) {
-                        binding.progBarBuffering.setVisibility(View.GONE);
-                        currentWindow = 0;
-                        currentPosition = 0;
-                        initPlayer(uri);
-                    } else if (playbackState == Player.TIMELINE_CHANGE_REASON_RESET) {
-                        binding.progBarBuffering.setVisibility(View.VISIBLE);
-
-                    } else {
-                        binding.progBarBuffering.setVisibility(View.GONE);
-
-                    }
-                }
-            }
-
-
-        });
+//        player.addListener(new Player.EventListener() {
+//            @Override
+//            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+//                if (playWhenReady) {
+//                    if (playbackState == Player.STATE_BUFFERING) {
+//                        binding.progBarBuffering.setVisibility(View.VISIBLE);
+//                    } else if (playbackState == Player.STATE_READY) {
+//                        binding.progBarBuffering.setVisibility(View.GONE);
+//
+//                    } else if (playbackState == Player.STATE_ENDED) {
+//                        binding.progBarBuffering.setVisibility(View.GONE);
+//                        currentWindow = 0;
+//                        currentPosition = 0;
+//                        initPlayer(uri);
+//                    } else if (playbackState == Player.TIMELINE_CHANGE_REASON_RESET) {
+//                        binding.progBarBuffering.setVisibility(View.VISIBLE);
+//
+//                    } else {
+//                        binding.progBarBuffering.setVisibility(View.GONE);
+//
+//                    }
+//                }
+//            }
+//
+//
+//        });
 
 
     }

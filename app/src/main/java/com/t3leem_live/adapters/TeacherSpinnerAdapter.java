@@ -11,22 +11,24 @@ import androidx.databinding.DataBindingUtil;
 
 import com.t3leem_live.R;
 import com.t3leem_live.databinding.SpinnerRowBinding;
-import com.t3leem_live.models.GroupOfTeacher;
 import com.t3leem_live.models.StageClassModel;
+import com.t3leem_live.models.TeacherModel;
 
 import java.util.List;
 
 import io.paperdb.Paper;
 
-public class SpinnerGroupOfTeacherAdapter extends BaseAdapter {
-    private List<GroupOfTeacher> list;
+public class TeacherSpinnerAdapter extends BaseAdapter {
+    private List<TeacherModel> list;
     private Context context;
     private String lang;
     private LayoutInflater inflater;
-    public SpinnerGroupOfTeacherAdapter(List<GroupOfTeacher> list, Context context) {
+    public TeacherSpinnerAdapter(List<TeacherModel> list, Context context) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
+        Paper.init(context);
+        lang = Paper.book().read("lang","ar");
 
     }
 
@@ -48,9 +50,8 @@ public class SpinnerGroupOfTeacherAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         @SuppressLint("ViewHolder") SpinnerRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.spinner_row,viewGroup,false);
-        GroupOfTeacher model= list.get(i);
-        binding.setTitle(model.getTitle()+" "+model.getDesc());
-
+        TeacherModel teacherModel = list.get(i);
+       binding.setTitle(teacherModel.getName());
         return binding.getRoot();
     }
 }

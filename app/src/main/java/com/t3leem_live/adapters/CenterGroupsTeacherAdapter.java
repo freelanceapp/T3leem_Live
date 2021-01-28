@@ -16,6 +16,7 @@ import com.t3leem_live.databinding.CenterGroupRowBinding;
 import com.t3leem_live.databinding.CenterTeacherGroupRowBinding;
 import com.t3leem_live.models.CenterGroupModel;
 import com.t3leem_live.models.CenterGroupTeacherModel;
+import com.t3leem_live.uis.module_center_course.activity_center_group_details.CenterGroupDetailsActivity;
 import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Home_Center;
 
 import java.util.List;
@@ -54,7 +55,15 @@ public class CenterGroupsTeacherAdapter extends RecyclerView.Adapter<RecyclerVie
         MyHolder myHolder = (MyHolder) holder;
         CenterGroupTeacherModel model = list.get(position);
         myHolder.binding.setModel(model);
-
+myHolder.binding.fldelete.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        if(context instanceof CenterGroupDetailsActivity){
+            CenterGroupDetailsActivity centerGroupDetailsActivity=(CenterGroupDetailsActivity)context;
+            centerGroupDetailsActivity.deleteTeacher(myHolder.getLayoutPosition());
+        }
+    }
+});
 
     }
 

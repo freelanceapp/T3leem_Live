@@ -7,7 +7,7 @@ public class CenterGroupModel implements Serializable {
     private String title;
     private String title_en;
     private int center_id;
-    private double group_price;
+    private int group_price;
     private int number_of_teachers;
     private String status;
     private String created_at;
@@ -30,7 +30,7 @@ public class CenterGroupModel implements Serializable {
         return center_id;
     }
 
-    public double getGroup_price() {
+    public int getGroup_price() {
         return group_price;
     }
 
@@ -52,5 +52,9 @@ public class CenterGroupModel implements Serializable {
 
     public int getTeachers_count() {
         return teachers_count;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

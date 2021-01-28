@@ -19,6 +19,7 @@ import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
 import com.t3leem_live.adapters.LibraryAdapter;
+import com.t3leem_live.databinding.FragmentLibraryCenterBinding;
 import com.t3leem_live.databinding.FragmentLibraryTeacherBinding;
 import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.StageDataModel;
@@ -35,8 +36,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Fragment_Library_Teacher extends Fragment {
-    private FragmentLibraryTeacherBinding binding;
+public class Fragment_Library_Center extends Fragment {
+    private FragmentLibraryCenterBinding binding;
     private LibraryAdapter adapter;
     private List<StageClassModel> stageClassModelList;
     private CenterHomeActivity activity;
@@ -47,14 +48,14 @@ public class Fragment_Library_Teacher extends Fragment {
         super.onAttach(context);
         activity = (CenterHomeActivity) context;
     }
-    public static Fragment_Library_Teacher newInstance(){
-        return new Fragment_Library_Teacher();
+    public static Fragment_Library_Center newInstance(){
+        return new Fragment_Library_Center();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_library_teacher,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_library_center,container,false);
         initView();
         return binding.getRoot();
     }

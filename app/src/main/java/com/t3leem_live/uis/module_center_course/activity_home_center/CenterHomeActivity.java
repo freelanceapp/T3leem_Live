@@ -24,8 +24,8 @@ import com.t3leem_live.remote.Api;
 import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
 import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Home_Center;
-import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Library_Teacher;
-import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Profile_Teacher;
+import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Library_Center;
+import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Profile_Center;
 import com.t3leem_live.uis.module_general.activity_login.LoginActivity;
 
 import java.io.IOException;
@@ -41,8 +41,8 @@ public class CenterHomeActivity extends AppCompatActivity {
     private UserModel userModel;
     private FragmentManager fragmentManager;
     private Fragment_Home_Center fragment_home_center;
-    private Fragment_Library_Teacher fragment_library_teacher;
-    private Fragment_Profile_Teacher fragment_profile_teacher;
+    private Fragment_Library_Center fragment_library_center;
+    private Fragment_Profile_Center fragment_profile_center;
     private int current_pos = 0;
 
     @Override
@@ -118,11 +118,11 @@ public class CenterHomeActivity extends AppCompatActivity {
             fragment_home_center = Fragment_Home_Center.newInstance();
         }
 
-        if (fragment_library_teacher != null && fragment_library_teacher.isVisible()) {
-            fragmentManager.beginTransaction().hide(fragment_library_teacher).commit();
+        if (fragment_library_center != null && fragment_library_center.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_library_center).commit();
         }
-        if (fragment_profile_teacher != null && fragment_profile_teacher.isVisible()) {
-            fragmentManager.beginTransaction().hide(fragment_profile_teacher).commit();
+        if (fragment_profile_center != null && fragment_profile_center.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_profile_center).commit();
         }
 
         if (fragment_home_center.isAdded()) {
@@ -138,22 +138,22 @@ public class CenterHomeActivity extends AppCompatActivity {
 
 
     public void displayFragmentLibraryTeacher() {
-        if (fragment_library_teacher == null) {
-            fragment_library_teacher = Fragment_Library_Teacher.newInstance();
+        if (fragment_library_center == null) {
+            fragment_library_center = Fragment_Library_Center.newInstance();
         }
 
         if (fragment_home_center != null && fragment_home_center.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_home_center).commit();
         }
-        if (fragment_profile_teacher != null && fragment_profile_teacher.isVisible()) {
-            fragmentManager.beginTransaction().hide(fragment_profile_teacher).commit();
+        if (fragment_profile_center != null && fragment_profile_center.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_profile_center).commit();
         }
 
 
-        if (fragment_library_teacher.isAdded()) {
-            fragmentManager.beginTransaction().show(fragment_library_teacher).commit();
+        if (fragment_library_center.isAdded()) {
+            fragmentManager.beginTransaction().show(fragment_library_center).commit();
         } else {
-            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_library_teacher, "fragment_library_teacher").addToBackStack("fragment_library_teacher").commit();
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_library_center, "fragment_library_teacher").addToBackStack("fragment_library_teacher").commit();
 
         }
         binding.setTitle(getString(R.string.library));
@@ -163,21 +163,21 @@ public class CenterHomeActivity extends AppCompatActivity {
 
 
     public void displayFragmentProfileTeacher() {
-        if (fragment_profile_teacher == null) {
-            fragment_profile_teacher = Fragment_Profile_Teacher.newInstance();
+        if (fragment_profile_center == null) {
+            fragment_profile_center = Fragment_Profile_Center.newInstance();
         }
 
         if (fragment_home_center != null && fragment_home_center.isVisible()) {
             fragmentManager.beginTransaction().hide(fragment_home_center).commit();
         }
-        if (fragment_library_teacher != null && fragment_library_teacher.isVisible()) {
-            fragmentManager.beginTransaction().hide(fragment_library_teacher).commit();
+        if (fragment_library_center != null && fragment_library_center.isVisible()) {
+            fragmentManager.beginTransaction().hide(fragment_library_center).commit();
         }
 
-        if (fragment_profile_teacher.isAdded()) {
-            fragmentManager.beginTransaction().show(fragment_profile_teacher).commit();
+        if (fragment_profile_center.isAdded()) {
+            fragmentManager.beginTransaction().show(fragment_profile_center).commit();
         } else {
-            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_profile_teacher, "fragment_profile_teacher").addToBackStack("fragment_profile_teacher").commit();
+            fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_profile_center, "fragment_profile_teacher").addToBackStack("fragment_profile_teacher").commit();
 
         }
         binding.setTitle(getString(R.string.profile));

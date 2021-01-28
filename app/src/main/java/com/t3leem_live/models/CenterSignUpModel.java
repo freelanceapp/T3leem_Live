@@ -44,7 +44,7 @@ public class CenterSignUpModel extends BaseObservable {
                 password.length()>=6 &&
                 Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
                 stage_id!=0&&
-                !degree.isEmpty() &&
+//                !degree.isEmpty() &&
                 !address.isEmpty()
 //                !videoUri.isEmpty()
 
@@ -106,12 +106,12 @@ public class CenterSignUpModel extends BaseObservable {
 
             }
 
-            if (degree.isEmpty()){
-                error_degree.set(context.getString(R.string.field_required));
-            }else {
-                error_degree.set(null);
-
-            }
+//            if (degree.isEmpty()){
+//                error_degree.set(context.getString(R.string.field_required));
+//            }else {
+//                error_degree.set(null);
+//
+//            }
 
 
 //            if (videoUri.isEmpty()){
