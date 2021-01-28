@@ -10,17 +10,14 @@
             name="lang"
             type="String" />
         <variable
-            name="model"
-            type="com.t3leem_live.models.TeacherModel" />
-
+            name="title"
+            type="String" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".uis.module_student.activity_student_teachers.StudentTeachersActivity"
-        android:background="@color/white"
-        >
+        tools:context=".uis.module_student.activity_student_teachers.StudentTeachersActivity">
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +25,7 @@
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/black"
+                android:background="@color/white"
                 >
                 <LinearLayout
                     android:id="@+id/llBack"
@@ -40,7 +37,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_left_arrow"
-                        app:tint="@color/white"
+                        app:tint="@color/color1"
                         android:padding="3dp"
                         android:clickable="false"
                         android:longClickable="false"
@@ -51,68 +48,66 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:textSize="18sp"
-                        android:text='@{model.name+" ("+model.teacher_degree+")"}'
-                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:text="@{title}"
+                        android:textStyle="bold"
+                        android:textColor="@color/color1"
                         android:clickable="false"
                         android:longClickable="false"
-                        android:textStyle="bold"
-                        android:singleLine="true"
-                        android:ellipsize="end"
                         />
                 </LinearLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/gray4"
-            />
 
-        <ScrollView
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:fitsSystemWindows="true"
-            android:background="@color/black"
+
             >
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="@color/black"
                 >
-
-
-                <com.google.android.exoplayer2.ui.PlayerView
-                    android:id="@+id/player"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:use_controller="true"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:controller_layout_id="@layout/exoplayer_controler_ui"
-                    app:fastforward_increment="1500"
-                    app:rewind_increment="1500"
-                    app:auto_show="false"
-                    android:background="@color/black"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     >
-
-                    <ProgressBar
-                        android:id="@+id/progBarBuffering"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:indeterminateTint="@color/gray3"
-                        android:alpha=".3"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:id="@+id/tvNoTeacher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:text="@string/no_teacher_to_show"
+                        android:visibility="gone"
                         />
 
-                </com.google.android.exoplayer2.ui.PlayerView>
+                </FrameLayout>
+
+                <Button
+                    android:id="@+id/btnBook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_color1"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:text="@string/book_now"
+                    android:visibility="gone"
+                    />
 
             </LinearLayout>
-        </ScrollView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 </layout>

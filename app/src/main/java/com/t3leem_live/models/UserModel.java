@@ -26,7 +26,7 @@ public class UserModel implements Serializable {
         private String live_status;
         private double teacher_live_price;
         private int teacher_ratio;
-        private int rates;
+        private double rates;
         private String phone_code;
         private String phone;
         private String parent_phone;
@@ -46,6 +46,7 @@ public class UserModel implements Serializable {
         private StageClassModel department_fk;
         private List<StudentRateModel> student_rates;
         private User exist_son;
+        private boolean isSelected = false;
 
         public User() {
         }
@@ -166,12 +167,20 @@ public class UserModel implements Serializable {
             return teacher_ratio;
         }
 
-        public int getRates() {
+        public double getRates() {
             return rates;
         }
 
         public User getExist_son() {
             return exist_son;
+        }
+
+        public boolean isSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
         }
     }
 }

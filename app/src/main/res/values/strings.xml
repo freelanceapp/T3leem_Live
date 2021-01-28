@@ -204,5 +204,17 @@
     <string name="center_group">مجموعات المركز</string>
     <string name="share">مشاركة</string>
     <string name="no_centers">لا توجد مراكز لعرضها</string>
+    <string name="selected">تم تحديد</string>
+    <string name="teacher_num">عدد المدرسين</string>
+    <string name="teacher_in_groups">عرض مدرسين المجموعة</string>
+    <string name="money_before_discount">السعر قبل الخصم</string>
+    <string name="follow">متابعة</string>
+    <string name="choose">إختر</string>
+    <string name="ch_time">إختر الميعاد المناسب</string>
+    <string name="book_now">إحجز الان</string>
+    <string name="already_booked">تم الحجز من قبل</string>
+    <string name="followed">تم المتابعة</string>
+    <string name="honor_board">لوحة الشرف</string>
+    <string name="summary">الملخصات</string>
 
 </resources>

@@ -11,282 +11,437 @@
             type="String" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         >
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-
-                >
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:background="@color/color1">
-
-                    <ImageView
-                        android:id="@+id/imageLogo"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:padding="5dp"
-                        android:src="@drawable/logo_circle"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias=".05"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/tvSubject"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:fontFamily="@font/font"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@id/icon"
-                        app:layout_constraintStart_toEndOf="@id/imageLogo"
-                        app:layout_constraintTop_toTopOf="@id/imageLogo"
-                        android:text="@{subject}"
-                        />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:fontFamily="@font/font"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        app:layout_constraintEnd_toStartOf="@id/icon"
-                        app:layout_constraintStart_toEndOf="@id/imageLogo"
-                        app:layout_constraintTop_toBottomOf="@id/tvSubject"
-                        android:text="@{className}"
-                        />
-
-
-                    <ImageView
-                        android:id="@+id/icon"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/upstairs_icon"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias=".95"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias=".5" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-
+            android:layoutDirection="ltr"
             >
 
-
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal">
+                android:layout_height="200dp"
+                android:background="@drawable/path_head">
 
-                <LinearLayout
-                    android:id="@+id/llVideo"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:background="@drawable/small_gradient1"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
+                <ImageView
+                    android:id="@+id/imageLogo"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:padding="5dp"
-                    >
+                    android:src="@drawable/logo_circle"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias=".05"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_video_camera"
-                        app:tint="@color/white"
-                        android:clickable="false"
-                        android:longClickable="false"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:fontFamily="@font/font"
-                        android:text="@string/videos"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:clickable="false"
-                        android:longClickable="false"
-                        />
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="5dp"
-                    android:layout_height="0dp" />
-
-                <LinearLayout
-                    android:id="@+id/llNote"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:background="@drawable/small_gradient2"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_book"
-                        app:tint="@color/white"
-                        android:clickable="false"
-                        android:longClickable="false"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:fontFamily="@font/font"
-                        android:text="@string/notes"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:clickable="false"
-                        android:longClickable="false"
-                        />
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="5dp"
-                    android:layout_height="0dp" />
-
-                <LinearLayout
-                    android:id="@+id/llLiveVideo"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:background="@drawable/small_gradient3"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_online_video"
-                        app:tint="@color/white"
-                        android:clickable="false"
-                        android:longClickable="false"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginEnd="2dp"
-                        android:fontFamily="@font/font"
-                        android:text="@string/live_lesson"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:clickable="false"
-                        android:longClickable="false"
-                        />
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="5dp"
-                    android:layout_height="0dp" />
-
-                <LinearLayout
-                    android:id="@+id/llQuiz"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:background="@drawable/small_gradient4"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="5dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_quiz"
-                        app:tint="@color/white"
-                        android:clickable="false"
-                        android:longClickable="false"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:fontFamily="@font/font"
-                        android:text="@string/quiz"
-                        android:textColor="@color/white"
-                        android:textSize="13sp"
-                        android:clickable="false"
-                        android:longClickable="false"
-
-                        />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
-
-                    />
                 <TextView
-                    android:id="@+id/tvNoSummary"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvSubject"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="150dp"
-                    android:text="@string/no_summary"
-                    android:textSize="20sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:fontFamily="@font/font"
-                    android:textColor="@color/black"
-                    android:visibility="gone"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toStartOf="@id/icon"
+                    app:layout_constraintStart_toEndOf="@id/imageLogo"
+                    app:layout_constraintTop_toTopOf="@id/imageLogo"
+                    android:text="@{subject}"
                     />
-            </FrameLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/font"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    app:layout_constraintEnd_toStartOf="@id/icon"
+                    app:layout_constraintStart_toEndOf="@id/imageLogo"
+                    app:layout_constraintTop_toBottomOf="@id/tvSubject"
+                    android:text="@{className}"
+                    />
+
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias=".95"
+                    app:layout_constraintVertical_bias=".8"
+                    android:src="@drawable/upstairs_icon"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
         </LinearLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:fitsSystemWindows="true"
+            android:overScrollMode="never"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    >
+
+                    <FrameLayout
+                        android:id="@+id/llVideo"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/small_gradient1"
+
+                        >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:padding="5dp"
+
+                            >
+
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_video_camera"
+                                app:tint="@color/white"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:layout_gravity="center"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/font"
+                                android:text="@string/videos"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
+                                />
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="0dp" />
+
+                    <FrameLayout
+                        android:id="@+id/llNote"
+
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/small_gradient2"
+
+                        >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="5dp">
+
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_book"
+                                app:tint="@color/white"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/font"
+                                android:text="@string/notes"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:layout_marginTop="5dp"
+                                />
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+
+
+
+
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    >
+
+                    <FrameLayout
+                        android:id="@+id/llLiveVideo"
+
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/small_gradient3"
+
+                        >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:padding="5dp"
+
+                            >
+
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_online_video"
+                                app:tint="@color/white"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:layout_gravity="center"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/font"
+                                android:text="@string/live_lesson"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
+                                />
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="0dp" />
+
+                    <FrameLayout
+                        android:id="@+id/llQuiz"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/small_gradient4"
+
+                        >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="5dp">
+
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_quiz"
+                                app:tint="@color/white"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/font"
+                                android:text="@string/quiz"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:layout_marginTop="5dp"
+                                />
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+
+
+
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    >
+
+                    <FrameLayout
+                        android:id="@+id/llHonoraryBoard"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/small_rounded_yellow"
+
+                        >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:padding="5dp"
+
+                            >
+
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_blackboard"
+                                app:tint="@color/white"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:layout_gravity="center"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/font"
+                                android:text="@string/honor_board"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
+                                />
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="0dp" />
+
+                    <FrameLayout
+                        android:id="@+id/llSummary"
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/small_rounded_primary"
+
+                        >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:padding="5dp"
+
+                            >
+
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_notes"
+                                app:tint="@color/white"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:layout_gravity="center"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/font"
+                                android:text="@string/summary"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="5dp"
+                                />
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+
+
+
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+
+    </LinearLayout>
 
 </layout>

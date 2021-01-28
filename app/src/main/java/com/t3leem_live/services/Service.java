@@ -1,6 +1,7 @@
 package com.t3leem_live.services;
 
 import com.t3leem_live.models.CenterGroupDataModel;
+import com.t3leem_live.models.CenterGroupModel;
 import com.t3leem_live.models.CenterGroupTeacherDataModel;
 import com.t3leem_live.models.MessageDataModel;
 import com.t3leem_live.models.MySonsDataModel;
@@ -23,6 +24,7 @@ import com.t3leem_live.models.TeacherGroupDataModel;
 import com.t3leem_live.models.TeacherGroupModel;
 import com.t3leem_live.models.TeacherStudentsDataModel;
 import com.t3leem_live.models.TeachersDataModel;
+import com.t3leem_live.models.TeachersInsideCenterModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.models.UsersDataModel;
 import com.t3leem_live.models.VideoLessonsDataModel;
@@ -642,6 +644,30 @@ public interface Service {
 
     @GET("api/StudentsInMyStage")
     Call<UsersDataModel> getStudentInMyStages(@Query(value = "student_id") int student_id
+    );
+
+    @GET("api/GetGroupsInsideCenter")
+    Call<List<CenterGroupModel>> getStudentCenterGroups(@Query(value = "center_id") int center_id);
+
+
+    @GET("api/teachersInsideGroup")
+    Call<List<TeachersInsideCenterModel>> getTeachersInsideCenterGroup(@Query(value = "center_group_id") int center_group_id,
+                                                                       @Query(value = "student_id") int student_id
+    );
+
+
+    @FormUrlEncoded
+    @POST("api/book-group")
+    Call<ResponseBody> studentBookGroup(@Field("student_id") int student_id,
+                                        @Field("center_group_id") int center_group_id,
+                                        @Field("teachers_group_id[]") List<Integer> to_user_id
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/student-follow")
+    Call<ResponseBody> studentFollow_UnFollow(@Field("student_id") int student_id,
+                                              @Field("teacher_id") int teacher_id
     );
 
 

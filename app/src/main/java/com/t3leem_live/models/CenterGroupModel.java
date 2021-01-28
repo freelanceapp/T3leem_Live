@@ -7,7 +7,7 @@ public class CenterGroupModel implements Serializable {
     private String title;
     private String title_en;
     private int center_id;
-    private int group_price;
+    private double group_price;
     private int number_of_teachers;
     private String status;
     private String created_at;
@@ -30,7 +30,7 @@ public class CenterGroupModel implements Serializable {
         return center_id;
     }
 
-    public int getGroup_price() {
+    public double getGroup_price() {
         return group_price;
     }
 

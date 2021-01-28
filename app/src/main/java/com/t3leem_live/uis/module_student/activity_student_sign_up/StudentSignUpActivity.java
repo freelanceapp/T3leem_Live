@@ -722,8 +722,6 @@ public class StudentSignUpActivity extends AppCompatActivity implements Listener
     private void updateWithoutImage()
     {
 
-        Log.e("parent_phone",model.getFather_phone());
-
         ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
