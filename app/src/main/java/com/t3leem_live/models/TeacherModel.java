@@ -19,6 +19,7 @@ public class TeacherModel implements Serializable {
     private String teacher_degree;
     private String teacher_video;
     private String logo;
+    private double rates;
     private StageClassModel stage_fk;
     private StageClassModel class_fk;
     private StageClassModel department_fk;
@@ -194,6 +195,10 @@ public class TeacherModel implements Serializable {
 
     public void setDepartment_fk(StageClassModel department_fk) {
         this.department_fk = department_fk;
+    }
+
+    public double getRates() {
+        return rates;
     }
 
     public List<StudentRateModel> getStudent_rates() {

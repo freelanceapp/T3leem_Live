@@ -22,6 +22,7 @@ import com.t3leem_live.models.SummaryDataModel;
 import com.t3leem_live.models.TeacherExamDataModel;
 import com.t3leem_live.models.TeacherGroupDataModel;
 import com.t3leem_live.models.TeacherGroupModel;
+import com.t3leem_live.models.TeacherModel;
 import com.t3leem_live.models.TeacherStudentsDataModel;
 import com.t3leem_live.models.TeachersDataModel;
 import com.t3leem_live.models.TeachersInsideCenterModel;
@@ -281,6 +282,7 @@ public interface Service {
             @Part("software_type") RequestBody software_type,
             @Part MultipartBody.Part logo
     );
+
     @Multipart
     @POST("api/center-update-profile")
     Call<UserModel> updateCenterWithoutImage(
@@ -720,17 +722,22 @@ public interface Service {
 
     @FormUrlEncoded
     @POST("api/add-center-group-teachers")
-    Call<ResponseBody> teacherAddToGroup(
-            @Header("Authorization") String bearer_token,
-            @Field("center_id") int center_id,
-            @Field("center_group_id") int center_group_id,
-            @Field("stage_id") String stage_id,
-            @Field("teacher_id") String teacher_id,
-            @Field("teacher_price") String teacher_price,
-            @Field("center_discount_value") String title,
-            @Field("teacher_price_after_center_discountce") String teacher_price_after_center_discountce,
-            @Field("admin_price") String admin_price,
-            @Field("teacher_price_after_all_discounts") String teacher_price_after_all_discounts);
+    Call<ResponseBody> teacherAddToGroup(@Header("Authorization") String bearer_token,
+                                         @Field("center_id") int center_id,
+                                         @Field("center_group_id") int center_group_id,
+                                         @Field("stage_id") String stage_id,
+                                         @Field("teacher_id") String teacher_id,
+                                         @Field("teacher_price") String teacher_price,
+                                         @Field("center_discount_value") String title,
+                                         @Field("teacher_price_after_center_discountce") String teacher_price_after_center_discountce,
+                                         @Field("admin_price") String admin_price,
+                                         @Field("teacher_price_after_all_discounts") String teacher_price_after_all_discounts);
+
+
+    @GET("api/get-teacher-rate")
+    Call<List<TeacherModel>> getHonoraryTeachers(@Query(value = "stage_id") int stage_id,
+                                                 @Query(value = "orderBy") String orderBy
+    );
 
 
 }

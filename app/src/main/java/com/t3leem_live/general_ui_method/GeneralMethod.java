@@ -17,6 +17,8 @@ import com.t3leem_live.tags.Tags;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
+import java.util.Locale;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GeneralMethod {
@@ -145,6 +147,17 @@ public class GeneralMethod {
             TextView textView = (TextView) view;
             textView.setText(d);
         }
+    }
+
+    @BindingAdapter("rate")
+    public static void rate(SimpleRatingBar ratingBar,double rate) {
+        ratingBar.setRating((float) rate);
+
+    }
+
+    @BindingAdapter("rate2")
+    public static void rate2(TextView textView,double rate2) {
+        textView.setText(String.format(Locale.ENGLISH,"(%.2f)",rate2));
     }
 }
 

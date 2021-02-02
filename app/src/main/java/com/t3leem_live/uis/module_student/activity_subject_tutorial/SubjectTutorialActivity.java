@@ -18,6 +18,7 @@ import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
 import com.t3leem_live.uis.module_student.activity_notes_pdf.NotesPdfActivity;
 import com.t3leem_live.uis.module_student.activity_student_exam.StudentExamActivity;
+import com.t3leem_live.uis.module_student.activity_student_honorary_board.HonoraryBoardActivity;
 import com.t3leem_live.uis.module_student.activity_student_teachers.StudentTeachersActivity;
 import com.t3leem_live.uis.module_student.activity_summary.SummaryActivity;
 import com.t3leem_live.uis.module_student.activity_videos.VideosActivity;
@@ -109,6 +110,11 @@ public class SubjectTutorialActivity extends AppCompatActivity {
         binding.llSummary.setOnClickListener(view -> {
             Intent intent = new Intent(this, SummaryActivity.class);
             intent.putExtra("data", stageClassModel);
+            startActivity(intent);
+        });
+
+        binding.llHonoraryBoard.setOnClickListener(view -> {
+            Intent intent = new Intent(this, HonoraryBoardActivity.class);
             startActivity(intent);
         });
 
