@@ -244,6 +244,11 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
+            android:name=".uis.module_center_course.activity_teacher_add_group.CenterGroupAddTeacherActivity"
+            android:configChanges="screenSize|keyboardHidden"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
             android:name=".uis.module_general.activity_splash.SplashActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
