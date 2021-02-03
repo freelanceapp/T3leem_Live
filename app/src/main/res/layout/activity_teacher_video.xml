@@ -63,11 +63,7 @@
                 </LinearLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/gray4"
-            />
+
 
         <ScrollView
             android:layout_width="match_parent"

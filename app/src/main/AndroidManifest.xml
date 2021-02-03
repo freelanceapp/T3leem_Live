@@ -27,8 +27,30 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:targetApi="m">
-        <activity android:name=".uis.module_student.activity_student_honorary_board.HonoraryBoardActivity"></activity>
-        <activity android:name=".uis.module_student.activity_summary.SummaryActivity" />
+        <activity android:name=".uis.module_student.activity_my_reservations.MyReservationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            />
+        <activity
+            android:name=".uis.module_student.activity_available_teacher.AvailableTeacherActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_student.activity_follow_teacher.FollowTeacherActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_student.joint_center_activity.JointCenterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_student.activity_student_honorary_board.HonoraryBoardActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity
+            android:name=".uis.module_student.activity_summary.SummaryActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".uis.module_student.activity_teachers_inside_center.TeachersInsideCenterActivity"
             android:screenOrientation="portrait"

@@ -2,6 +2,7 @@ package com.t3leem_live.uis.module_student.activity_notification;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -27,6 +28,7 @@ import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
+import com.t3leem_live.uis.module_general.activity_view.ViewActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_create_stream.TeacherCreateStreamActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_group.TeacherGroupActivity;
 
@@ -84,17 +86,23 @@ public class NotificationActivity extends AppCompatActivity {
                 .shimmer(true)
                 .show();
         binding.llBack.setOnClickListener(view -> finish());
+        binding.swipeRefresh.setColorSchemeResources(R.color.color1);
+
+        binding.swipeRefresh.setOnRefreshListener(this::getNotification);
+
         getNotification();
+
 
     }
 
     private void getNotification() {
 
-        Api.getService(Tags.base_url).getNotification("Bearer "+userModel.getData().getToken(),userModel.getData().getId())
+        Api.getService(Tags.base_url).getNotification(userModel.getData().getId())
                 .enqueue(new Callback<NotificationDataModel>() {
                     @Override
                     public void onResponse(Call<NotificationDataModel> call, Response<NotificationDataModel> response) {
                         skeletonScreen.hide();
+                        binding.swipeRefresh.setRefreshing(false);
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
                                 notificationModelList.clear();
@@ -109,9 +117,10 @@ public class NotificationActivity extends AppCompatActivity {
                                 }
 
 
-
                             }
                         } else {
+                            binding.swipeRefresh.setRefreshing(false);
+
                             skeletonScreen.hide();
                             try {
                                 Log.e("error_code", response.code() + response.errorBody().string());
@@ -126,6 +135,8 @@ public class NotificationActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<NotificationDataModel> call, Throwable t) {
                         skeletonScreen.hide();
+                        binding.swipeRefresh.setRefreshing(false);
+
                         try {
                             if (t.getMessage() != null) {
                                 Log.e("error", t.getMessage() + "__");
@@ -147,14 +158,13 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
 
-    public void acceptRefuseGroup(NotificationModel notificationModel, int adapterPosition,String status)
-    {
+    public void acceptRefuseGroup(NotificationModel notificationModel, int adapterPosition, String status) {
         ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .acceptRefuseRequest("Bearer "+userModel.getData().getToken(),status,notificationModel.getId())
+                .acceptRefuseRequest("Bearer " + userModel.getData().getToken(), status, notificationModel.getId())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -206,6 +216,11 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
 
+    public void setItemExam(NotificationModel model) {
+        String url = Tags.base_url + "student-exams/" + model.getExam_id() + "?student_id=" + userModel.getData().getId() + "&view_type=webView";
+        Intent intent = new Intent(this, ViewActivity.class);
+        intent.putExtra("url", url);
+        startActivity(intent);
 
-
+    }
 }

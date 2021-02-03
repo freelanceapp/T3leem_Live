@@ -40,22 +40,21 @@ public class StudentSliderAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view ==object;
+        return view == object;
     }
 
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
-        View view = inflater.inflate(R.layout.student_slider,container,false);
+        View view = inflater.inflate(R.layout.student_slider, container, false);
         ImageView imageView = view.findViewById(R.id.image);
         TextView tvTitle = view.findViewById(R.id.tvTitle);
         TextView tvDescription = view.findViewById(R.id.tvContent);
 
         tvTitle.setText(list.get(position).getTitle());
         tvDescription.setText(list.get(position).getText());
-        Log.e("dew",list.get(position).getText());
-        Picasso.get().load(Uri.parse(Tags.IMAGE_URL+list.get(position).getImage())).fit().into(imageView);
+        Picasso.get().load(Uri.parse(Tags.IMAGE_URL + list.get(position).getImage())).fit().into(imageView);
 
         container.addView(view);
         return view;

@@ -18,6 +18,7 @@ public class TeacherModel implements Serializable {
     private String parent_phone;
     private String teacher_degree;
     private String teacher_video;
+    private int number_of_groups;
     private String logo;
     private double rates;
     private StageClassModel stage_fk;
@@ -207,6 +208,10 @@ public class TeacherModel implements Serializable {
 
     public List<GroupOfTeacher> getTeacher_groups_fk() {
         return teacher_groups_fk;
+    }
+
+    public int getNumber_of_groups() {
+        return number_of_groups;
     }
 
     public static class FollowFk implements Serializable {

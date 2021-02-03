@@ -3,6 +3,7 @@ package com.t3leem_live.services;
 import com.t3leem_live.models.CenterGroupDataModel;
 import com.t3leem_live.models.CenterGroupModel;
 import com.t3leem_live.models.CenterGroupTeacherDataModel;
+import com.t3leem_live.models.JoinCenterDataModel;
 import com.t3leem_live.models.MessageDataModel;
 import com.t3leem_live.models.MySonsDataModel;
 import com.t3leem_live.models.NotificationCountModel;
@@ -605,9 +606,8 @@ public interface Service {
 
     );
 
-    @GET("api/get_my_notifications")
-    Call<NotificationDataModel> getNotification(@Header("Authorization") String user_token,
-                                                @Query(value = "user_id") int user_id
+    @GET("api/GetNotifications")
+    Call<NotificationDataModel> getNotification(@Query(value = "user_id") int user_id
     );
 
     @FormUrlEncoded
@@ -706,19 +706,16 @@ public interface Service {
 
     @FormUrlEncoded
     @POST("api/update-center-group")
-    Call<ResponseBody> centerEditGroups(
-            @Header("Authorization") String bearer_token,
-
-            @Field("center_group_id") String center_group_id,
-            @Field("title") String title
+    Call<ResponseBody> centerEditGroups(@Header("Authorization") String bearer_token,
+                                        @Field("center_group_id") String center_group_id,
+                                        @Field("title") String title
 
     );
 
     @FormUrlEncoded
     @POST("api/delete-center-group")
-    Call<ResponseBody> deleteGroup(
-            @Header("Authorization") String bearer_token,
-            @Field(value = "center_group_id") int id);
+    Call<ResponseBody> deleteGroup(@Header("Authorization") String bearer_token,
+                                   @Field(value = "center_group_id") int id);
 
     @FormUrlEncoded
     @POST("api/add-center-group-teachers")
@@ -739,5 +736,26 @@ public interface Service {
                                                  @Query(value = "orderBy") String orderBy
     );
 
+    @GET("api/student-books-or-centers")
+    Call<JoinCenterDataModel> getJointCenter(@Query(value = "student_id") int student_id,
+                                             @Query(value = "book_type") String book_type
+    );
 
+    @GET("api/teacher-followers")
+    Call<TeachersDataModel> getFollowTeacher(@Query(value = "student_id") int student_id
+    );
+
+    @GET("api/teacher-online")
+    Call<TeachersDataModel> getAvailableTeacher(@Query(value = "student_id") int student_id
+    );
+
+    @GET("api/search-teacher-online")
+    Call<TeachersDataModel> getSearchTeacher(@Query(value = "student_id") int student_id,
+                                             @Query(value = "search_val") String search_val
+    );
+
+    @GET("api/student-books-or-centers?")
+    Call<JoinCenterDataModel> getMyReservation(@Query(value = "student_id") int student_id,
+                                               @Query(value = "book_type") String book_type
+    );
 }

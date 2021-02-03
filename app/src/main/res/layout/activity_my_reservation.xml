@@ -155,11 +155,11 @@
                             android:layout_height="match_parent" />
 
                         <TextView
-                            android:id="@+id/tvNoCenters"
+                            android:id="@+id/tvNoGroups"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/no_centers"
+                            android:text="@string/no_groups_to_show"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:visibility="gone" />

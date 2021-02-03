@@ -1,12 +1,10 @@
-package com.t3leem_live.uis.module_student.activity_student_center_groups;
+package com.t3leem_live.uis.module_student.activity_my_reservations;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,41 +15,33 @@ import android.widget.Toast;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
-import com.t3leem_live.adapters.OtherStudentsAdapter;
-import com.t3leem_live.adapters.StudentCenterGroupsAdapter;
-import com.t3leem_live.databinding.ActivityStudentCenterGroupsBinding;
+import com.t3leem_live.adapters.JoinGroupAdapter;
+import com.t3leem_live.databinding.ActivityMyReservationBinding;
 import com.t3leem_live.language.Language;
-import com.t3leem_live.models.CenterGroupModel;
-import com.t3leem_live.models.StudentCenterModel;
+import com.t3leem_live.models.JoinCenterDataModel;
+import com.t3leem_live.models.JoinCenterModel;
 import com.t3leem_live.models.UserModel;
-import com.t3leem_live.models.UsersDataModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
-import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
-import com.t3leem_live.uis.module_student.activity_other_students.OtherStudentsActivity;
-import com.t3leem_live.uis.module_student.activity_teachers_inside_center.TeachersInsideCenterActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.paperdb.Paper;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StudentCenterGroupsActivity extends AppCompatActivity {
-
-    private ActivityStudentCenterGroupsBinding binding;
+public class MyReservationActivity extends AppCompatActivity {
+    private ActivityMyReservationBinding binding;
     private Preferences preferences;
     private UserModel userModel;
     private String lang = "ar";
-    private StudentCenterGroupsAdapter adapter;
-    private List<CenterGroupModel> centerGroupModelList;
+    private List<JoinCenterModel> groupModelList;
+    private JoinGroupAdapter adapter;
     private SkeletonScreen skeletonScreen;
-    private StudentCenterModel model;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -62,30 +52,28 @@ public class StudentCenterGroupsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_student_center_groups);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_my_reservation);
         binding.executePendingBindings();
-        getDataFromIntent();
         initView();
     }
 
-    private void getDataFromIntent() {
-        Intent intent = getIntent();
-        model = (StudentCenterModel) intent.getSerializableExtra("data");
-
-    }
 
     private void initView() {
-        centerGroupModelList = new ArrayList<>();
+        groupModelList = new ArrayList<>();
         Paper.init(this);
         lang = Paper.book().read("lang", "ar");
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         binding.setLang(lang);
-        binding.setTitle(model.getName());
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new StudentCenterGroupsAdapter(centerGroupModelList, this);
+        adapter = new JoinGroupAdapter(groupModelList, this);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        binding.recView.setLayoutManager(manager);
         binding.recView.setAdapter(adapter);
-
+        binding.recView.setNestedScrollingEnabled(true);
+        new Handler(Looper.myLooper()).postDelayed(() -> {
+            binding.scrollView.scrollTo(0, 0);
+        }, 200);
         skeletonScreen = Skeleton.bind(binding.recView)
                 .adapter(adapter)
                 .frozen(true)
@@ -95,87 +83,80 @@ public class StudentCenterGroupsActivity extends AppCompatActivity {
                 .show();
 
 
-        new Handler(Looper.myLooper()).postDelayed(() -> {
-            binding.scrollView.scrollTo(0, 0);
-        }, 200);
-
         binding.llBack.setOnClickListener(view -> {
             finish();
         });
 
 
         binding.swipeRefresh.setColorSchemeResources(R.color.color1);
-        binding.swipeRefresh.setOnRefreshListener(this::getGroups);
-        getGroups();
+        binding.swipeRefresh.setOnRefreshListener(this::getGroup);
 
-
+        getGroup();
     }
 
-    private void getGroups() {
-        Api.getService(Tags.base_url).getStudentCenterGroups(model.getId())
-                .enqueue(new Callback<List<CenterGroupModel>>() {
+    private void getGroup() {
+
+        Api.getService(Tags.base_url)
+                .getMyReservation(userModel.getData().getId(), "normal")
+                .enqueue(new Callback<JoinCenterDataModel>() {
                     @Override
-                    public void onResponse(Call<List<CenterGroupModel>> call, Response<List<CenterGroupModel>> response) {
+                    public void onResponse(Call<JoinCenterDataModel> call, Response<JoinCenterDataModel> response) {
                         skeletonScreen.hide();
                         binding.swipeRefresh.setRefreshing(false);
                         if (response.isSuccessful()) {
-                            if (response.body() != null) {
-                                centerGroupModelList.clear();
 
-                                if (response.body().size() > 0) {
+                            if (response.body() != null && response.body().getData() != null) {
+                                groupModelList.clear();
+                                groupModelList.addAll(response.body().getData());
+                                adapter.notifyDataSetChanged();
+
+
+                                if (groupModelList.size() > 0) {
                                     binding.tvNoGroups.setVisibility(View.GONE);
-                                    centerGroupModelList.addAll(response.body());
                                 } else {
                                     binding.tvNoGroups.setVisibility(View.VISIBLE);
 
                                 }
-
-                                adapter.notifyDataSetChanged();
-
-
                             }
+
                         } else {
+                            skeletonScreen.hide();
                             binding.swipeRefresh.setRefreshing(false);
 
-                            skeletonScreen.hide();
                             try {
-                                Log.e("error_code", response.code() + response.errorBody().string());
+                                Log.e("error", response.code() + "__" + response.errorBody().string());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+
+                            if (response.code() == 500) {
+                                Toast.makeText(MyReservationActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MyReservationActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
                         }
-
-
                     }
 
                     @Override
-                    public void onFailure(Call<List<CenterGroupModel>> call, Throwable t) {
-                        skeletonScreen.hide();
-                        binding.swipeRefresh.setRefreshing(false);
-
+                    public void onFailure(Call<JoinCenterDataModel> call, Throwable t) {
                         try {
+                            skeletonScreen.hide();
+                            binding.swipeRefresh.setRefreshing(false);
+
+
                             if (t.getMessage() != null) {
                                 Log.e("error", t.getMessage() + "__");
 
                                 if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    Toast.makeText(StudentCenterGroupsActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-                                } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
+                                    Toast.makeText(MyReservationActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(StudentCenterGroupsActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MyReservationActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
-
-
                         } catch (Exception e) {
-
+                            Log.e("Error", e.getMessage() + "__");
                         }
                     }
                 });
-    }
-
-    public void setItemData(CenterGroupModel model) {
-        Intent intent = new Intent(this, TeachersInsideCenterActivity.class);
-        intent.putExtra("data",model);
-        startActivity(intent);
     }
 }

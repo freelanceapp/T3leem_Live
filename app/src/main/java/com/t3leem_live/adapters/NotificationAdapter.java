@@ -1,18 +1,22 @@
 package com.t3leem_live.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 import com.t3leem_live.R;
 import com.t3leem_live.databinding.NotificationRowBinding;
 import com.t3leem_live.databinding.SonRowBinding;
 import com.t3leem_live.models.NotificationModel;
 import com.t3leem_live.models.UserModel;
+import com.t3leem_live.tags.Tags;
 import com.t3leem_live.uis.module_parent.activity_home_parent.fragments.Fragment_Home_Parent;
 import com.t3leem_live.uis.module_student.activity_notification.NotificationActivity;
 
@@ -48,22 +52,104 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
-        if (holder instanceof MyHolder){
+        if (holder instanceof MyHolder) {
             MyHolder myHolder = (MyHolder) holder;
-            NotificationModel model= list.get(position);
+            NotificationModel model = list.get(position);
             myHolder.binding.setModel(model);
 
+
+            if (model.getNotification_type().equals("admin_to_users")) {
+                myHolder.binding.tvTitle.setText(context.getString(R.string.admin));
+                myHolder.binding.tvContent.setVisibility(View.VISIBLE);
+                myHolder.binding.tvContent.setText(model.getTitle());
+                myHolder.binding.llAction.setVisibility(View.GONE);
+                myHolder.binding.image.setImageResource(R.drawable.admin);
+
+
+            } else if (model.getNotification_type().equals("relationship")) {
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getFrom_user_fk().getLogo())).resize(512, 512).onlyScaleDown().into(myHolder.binding.image);
+                if (model.getMessage().equals("new_request")) {
+
+                    myHolder.binding.tvTitle.setText(model.getFrom_user_fk().getName());
+                    myHolder.binding.tvContent.setVisibility(View.VISIBLE);
+                    myHolder.binding.tvContent.setText(R.string.new_req);
+
+                    if (model.getAction_type().equals("without_action")) {
+                        myHolder.binding.llAction.setVisibility(View.GONE);
+                    } else {
+                        myHolder.binding.llAction.setVisibility(View.VISIBLE);
+
+                    }
+                } else if (model.getMessage().equals("your_request_accepted")) {
+                    Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getFrom_user_fk().getLogo())).resize(512, 512).onlyScaleDown().into(myHolder.binding.image);
+
+                    myHolder.binding.tvTitle.setText(model.getFrom_user_fk().getName());
+                    myHolder.binding.tvContent.setVisibility(View.VISIBLE);
+                    myHolder.binding.tvContent.setText(context.getString(R.string.req_accepted));
+                    myHolder.binding.llAction.setVisibility(View.GONE);
+
+
+                } else if (model.getMessage().equals("your_request_refused")) {
+                    Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getFrom_user_fk().getLogo())).resize(512, 512).onlyScaleDown().into(myHolder.binding.image);
+
+                    myHolder.binding.tvTitle.setText(model.getFrom_user_fk().getName());
+                    myHolder.binding.tvContent.setVisibility(View.VISIBLE);
+                    myHolder.binding.tvContent.setText(context.getString(R.string.req_accepted));
+                    myHolder.binding.llAction.setVisibility(View.GONE);
+
+
+                }
+            } else if (model.getNotification_type().equals("share_teacher")) {
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getFrom_user_fk().getLogo())).resize(512, 512).onlyScaleDown().into(myHolder.binding.image);
+
+                myHolder.binding.tvTitle.setText(model.getFrom_user_fk().getName());
+                myHolder.binding.tvContent.setVisibility(View.VISIBLE);
+                myHolder.binding.tvContent.setText(model.getTitle());
+                myHolder.binding.llAction.setVisibility(View.GONE);
+
+            } else if (model.getNotification_type().equals("share_center")) {
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getFrom_user_fk().getLogo())).resize(512, 512).onlyScaleDown().into(myHolder.binding.image);
+
+                myHolder.binding.tvTitle.setText(model.getFrom_user_fk().getName());
+                myHolder.binding.tvContent.setVisibility(View.VISIBLE);
+                myHolder.binding.tvContent.setText(model.getTitle());
+                myHolder.binding.llAction.setVisibility(View.GONE);
+            } else if (model.getNotification_type().equals("exam")) {
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getFrom_user_fk().getLogo())).resize(512, 512).onlyScaleDown().into(myHolder.binding.image);
+
+                myHolder.binding.tvTitle.setText(model.getFrom_user_fk().getName());
+                myHolder.binding.tvContent.setVisibility(View.VISIBLE);
+                myHolder.binding.tvContent.setText(model.getTitle());
+                myHolder.binding.llAction.setVisibility(View.GONE);
+            } else if (model.getNotification_type().equals("live_stream")) {
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getFrom_user_fk().getLogo())).resize(512, 512).onlyScaleDown().into(myHolder.binding.image);
+
+                myHolder.binding.tvTitle.setText(model.getFrom_user_fk().getName());
+                myHolder.binding.tvContent.setVisibility(View.VISIBLE);
+                myHolder.binding.tvContent.setText(model.getTitle());
+                myHolder.binding.llAction.setVisibility(View.GONE);
+            }
+
+
             myHolder.binding.btnAccept.setOnClickListener(view -> {
-                NotificationModel model2= list.get(holder.getAdapterPosition());
-                activity.acceptRefuseGroup(model2,myHolder.getAdapterPosition(),"accepted");
+                NotificationModel model2 = list.get(holder.getAdapterPosition());
+                activity.acceptRefuseGroup(model2, myHolder.getAdapterPosition(), "accepted");
 
             });
 
 
             myHolder.binding.btnRefuse.setOnClickListener(view -> {
-                NotificationModel model2= list.get(holder.getAdapterPosition());
-                activity.acceptRefuseGroup(model2,myHolder.getAdapterPosition(),"no_accepted");
+                NotificationModel model2 = list.get(holder.getAdapterPosition());
+                activity.acceptRefuseGroup(model2, myHolder.getAdapterPosition(), "no_accepted");
 
+            });
+
+
+            myHolder.itemView.setOnClickListener(v -> {
+                NotificationModel model2 = list.get(holder.getAdapterPosition());
+                if (model.getNotification_type().equals("exam")) {
+                    activity.setItemExam(model2);
+                }
             });
         }
 

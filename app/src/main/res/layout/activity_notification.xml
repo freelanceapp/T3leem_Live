@@ -66,24 +66,32 @@
             android:background="@color/gray4"
             />
 
-        <FrameLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recView"
+            android:layout_height="match_parent">
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/tvNotification"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="@color/black"
-                android:layout_gravity="center"
-                android:text="@string/no_notification"
-                android:visibility="gone"
-                />
-        </FrameLayout>
+                android:layout_height="match_parent"
+                >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:id="@+id/tvNotification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    android:text="@string/no_notification"
+                    android:visibility="gone"
+                    />
+            </FrameLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     </LinearLayout>
 </layout>

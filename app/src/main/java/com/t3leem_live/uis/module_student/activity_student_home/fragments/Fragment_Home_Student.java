@@ -78,7 +78,6 @@ public class Fragment_Home_Student extends Fragment {
         userModel = preferences.getUserData(activity);
         Paper.init(activity);
         lang = Paper.book().read("lang", "ar");
-
         stageClassModelList = new ArrayList<>();
         adapter = new StageAdapter(stageClassModelList, activity, this);
         binding.recView.setLayoutManager(new GridLayoutManager(activity, 2));
@@ -94,6 +93,8 @@ public class Fragment_Home_Student extends Fragment {
 
         binding.swipeRefresh.setColorSchemeResources(R.color.color1);
         binding.swipeRefresh.setOnRefreshListener(this::getData);
+        getData();
+
     }
 
     private void getData() {
@@ -256,6 +257,8 @@ public class Fragment_Home_Student extends Fragment {
         }
 
     }
+
+
 
     public void stopTimer() {
         if (timer != null) {

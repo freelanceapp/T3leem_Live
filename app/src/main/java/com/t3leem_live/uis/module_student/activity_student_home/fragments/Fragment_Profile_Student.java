@@ -17,12 +17,16 @@ import com.t3leem_live.uis.module_general.activity_about_app.AboutAppActivity;
 import com.t3leem_live.uis.module_general.activity_chat_rooms.ChatRoomsActivity;
 import com.t3leem_live.uis.module_general.activity_contact_us.ContactUsActivity;
 import com.t3leem_live.uis.module_general.activity_view.ViewActivity;
+import com.t3leem_live.uis.module_student.activity_available_teacher.AvailableTeacherActivity;
+import com.t3leem_live.uis.module_student.activity_follow_teacher.FollowTeacherActivity;
+import com.t3leem_live.uis.module_student.activity_my_reservations.MyReservationActivity;
 import com.t3leem_live.uis.module_student.activity_student_center.StudentCenterActivity;
 import com.t3leem_live.uis.module_student.activity_student_home.StudentHomeActivity;
 import com.t3leem_live.uis.module_student.activity_student_sign_up.StudentSignUpActivity;
 import com.t3leem_live.databinding.FragmentProfileStudentBinding;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
+import com.t3leem_live.uis.module_student.joint_center_activity.JointCenterActivity;
 
 import io.paperdb.Paper;
 
@@ -57,8 +61,8 @@ public class Fragment_Profile_Student extends Fragment {
         binding.logout.setOnClickListener(view -> activity.logout());
 
 
-        binding.llAbout.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, AboutAppActivity.class);
+        binding.llJointCenter.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, JointCenterActivity.class);
             startActivity(intent);
         });
 
@@ -77,6 +81,18 @@ public class Fragment_Profile_Student extends Fragment {
             startActivity(intent);
         });
 
+        binding.llFollowTeacher.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, FollowTeacherActivity.class);
+            startActivity(intent);
+        });
+        binding.llAvailableTeacher.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, AvailableTeacherActivity.class);
+            startActivity(intent);
+        });
+        binding.llMyReservations.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, MyReservationActivity.class);
+            startActivity(intent);
+        });
         binding.llQuestions.setOnClickListener(view -> {
 
             String department_id = "";

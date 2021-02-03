@@ -224,5 +224,8 @@
     <string name="select_teacher">اختر المدرس</string>
     <string name="select_stage">اختر المرحله</string>
     <string name="no_group">لا يوجد جروبات</string>
+    <string name="search_by_email">ابحث عن طريق البريد الالكتروني</string>
+    <string name="admin">الإدارة</string>
+    <string name="new_req">طلب متابعة</string>
 
 </resources>

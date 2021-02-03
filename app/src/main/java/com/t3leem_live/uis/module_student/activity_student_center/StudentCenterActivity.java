@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -70,14 +72,16 @@ public class StudentCenterActivity extends AppCompatActivity {
     private void initView() {
         studentCenterModelList = new ArrayList<>();
         Paper.init(this);
-        lang = Paper.book().read("lang","ar");
+        lang = Paper.book().read("lang", "ar");
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         binding.setLang(lang);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new StudentCenterAdapter(studentCenterModelList,this);
+        adapter = new StudentCenterAdapter(studentCenterModelList, this);
         binding.recView.setAdapter(adapter);
-
+        new Handler(Looper.myLooper()).postDelayed(() -> {
+            binding.scrollView.scrollTo(0, 0);
+        }, 200);
         skeletonScreen = Skeleton.bind(binding.recView)
                 .adapter(adapter)
                 .frozen(true)
@@ -87,17 +91,18 @@ public class StudentCenterActivity extends AppCompatActivity {
                 .show();
 
 
-        binding.llBack.setOnClickListener(view -> {finish();});
+        binding.llBack.setOnClickListener(view -> {
+            finish();
+        });
 
-        getCenters();
 
         binding.swipeRefresh.setColorSchemeResources(R.color.color1);
         binding.swipeRefresh.setOnRefreshListener(this::getCenters);
+        getCenters();
 
     }
 
-    private void getCenters()
-    {
+    private void getCenters() {
 
         Api.getService(Tags.base_url).getStudentCenter(userModel.getData().getStage_fk().getId())
                 .enqueue(new Callback<List<StudentCenterModel>>() {
@@ -118,7 +123,6 @@ public class StudentCenterActivity extends AppCompatActivity {
                                 }
 
                                 adapter.notifyDataSetChanged();
-
 
 
                             }
@@ -163,13 +167,13 @@ public class StudentCenterActivity extends AppCompatActivity {
 
     public void setItemData(StudentCenterModel model, String group_share) {
         Intent intent;
-        if (group_share.equals("group")){
+        if (group_share.equals("group")) {
             intent = new Intent(this, StudentCenterGroupsActivity.class);
-            intent.putExtra("data",model);
-        }else {
+            intent.putExtra("data", model);
+        } else {
             intent = new Intent(this, OtherStudentsActivity.class);
-            intent.putExtra("data",model.getId());
-            intent.putExtra("data2","center");
+            intent.putExtra("data", model.getId());
+            intent.putExtra("data2", "center");
         }
         startActivity(intent);
     }

@@ -106,10 +106,10 @@ public class TeachersInsideCenterActivity extends AppCompatActivity {
         binding.btnBook.setOnClickListener(view -> {
             book();
         });
-        getTeacher();
 
         binding.swipeRefresh.setColorSchemeResources(R.color.color1);
         binding.swipeRefresh.setOnRefreshListener(this::getTeacher);
+        getTeacher();
 
     }
 

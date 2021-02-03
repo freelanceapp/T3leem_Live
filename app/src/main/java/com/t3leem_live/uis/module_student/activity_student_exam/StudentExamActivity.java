@@ -156,7 +156,6 @@ public class StudentExamActivity extends AppCompatActivity {
 
     public void setItemData(TeacherExamModel model) {
         String url = Tags.base_url+"student-exams/"+model.getId()+"?student_id="+userModel.getData().getId()+"&view_type=webView";
-        Log.e("url",url);
         Intent intent = new Intent(this, ViewActivity.class);
         intent.putExtra("url",url);
         startActivity(intent);
