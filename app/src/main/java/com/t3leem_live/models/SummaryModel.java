@@ -20,6 +20,8 @@ public class SummaryModel implements Serializable {
     private StageClassModel stage_fk;
     private StageClassModel class_fk;
     private StageClassModel subject_fk;
+    private SummaryFk summary_payment_fk;
+
 
     public int getId() {
         return id;
@@ -88,4 +90,10 @@ public class SummaryModel implements Serializable {
     public StageClassModel getSubject_fk() {
         return subject_fk;
     }
+
+    public SummaryFk getSummary_payment_fk() {
+        return summary_payment_fk;
+    }
+
+    public static class SummaryFk implements Serializable{}
 }

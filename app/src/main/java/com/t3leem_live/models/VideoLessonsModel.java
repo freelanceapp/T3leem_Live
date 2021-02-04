@@ -15,8 +15,11 @@ public class VideoLessonsModel implements Serializable {
     private String tutorial_id;
     private String file_doc;
     private String desc;
+    private double price;
     private boolean status = false;
     private UserModel.User teacher_fk;
+    private StudentPayment video_or_pdf__payment_fk;
+
 
 
     public int getId() {
@@ -75,7 +78,21 @@ public class VideoLessonsModel implements Serializable {
         this.status = status;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public StudentPayment getVideo_or_pdf__payment_fk() {
+        return video_or_pdf__payment_fk;
+    }
+
     public UserModel.User getTeacher_fk() {
         return teacher_fk;
     }
+
+    public static class StudentPayment implements Serializable{
+
+    }
+
+
 }

@@ -244,4 +244,12 @@ public class StudentCenterModel implements Serializable {
     public StageClassModel getStage_fk() {
         return stage_fk;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

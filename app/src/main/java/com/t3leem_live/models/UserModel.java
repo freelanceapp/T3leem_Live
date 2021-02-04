@@ -38,6 +38,7 @@ public class UserModel implements Serializable {
         private String class_id;
         private String address;
         private String user_type;
+        private double teacher_money;
         private String teacher_degree;
         private String teacher_video;
         private String fireBaseToken;
@@ -178,6 +179,11 @@ public class UserModel implements Serializable {
         public boolean isSelected() {
             return isSelected;
         }
+
+        public double getTeacher_money() {
+            return teacher_money;
+        }
+
 
         public void setSelected(boolean selected) {
             isSelected = selected;

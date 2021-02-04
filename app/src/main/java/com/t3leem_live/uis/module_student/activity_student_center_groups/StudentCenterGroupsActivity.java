@@ -71,6 +71,8 @@ public class StudentCenterGroupsActivity extends AppCompatActivity {
     private void getDataFromIntent() {
         Intent intent = getIntent();
         model = (StudentCenterModel) intent.getSerializableExtra("data");
+        Log.e("data",model.getName()+"___"+model.getId());
+
 
     }
 

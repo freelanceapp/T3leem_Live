@@ -5,12 +5,15 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -29,6 +32,8 @@ import com.google.android.exoplayer2.util.Util;
 import com.t3leem_live.R;
 import com.t3leem_live.adapters.VideoAdapter;
 import com.t3leem_live.databinding.ActivityVideosBinding;
+import com.t3leem_live.databinding.DialogAlertBinding;
+import com.t3leem_live.databinding.DialogPriceAlertBinding;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.UserModel;
@@ -36,13 +41,16 @@ import com.t3leem_live.models.VideoLessonsDataModel;
 import com.t3leem_live.models.VideoLessonsModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
+import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
+import com.t3leem_live.uis.module_center_course.activity_center_group_details.CenterGroupDetailsActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.paperdb.Paper;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,6 +69,7 @@ public class VideosActivity extends AppCompatActivity {
     private long currentPosition = 0;
     private boolean playWhenReady = true;
     private Uri uri = null;
+    private VideoLessonsModel selectedVideoLessonsModel;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -95,8 +104,6 @@ public class VideosActivity extends AppCompatActivity {
         adapter = new VideoAdapter(videoLessonsModelList, this);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
         binding.recView.setAdapter(adapter);
-
-
         getVideos();
 
     }
@@ -119,9 +126,9 @@ public class VideosActivity extends AppCompatActivity {
                                 if (videoLessonsModelList.size() > 0) {
                                     binding.recView.setVisibility(View.VISIBLE);
                                     binding.expandableLayout.expand(true);
-                                    VideoLessonsModel videoLessonsModel = videoLessonsModelList.get(0);
-                                    binding.setModel(videoLessonsModel);
-                                    uri = Uri.parse(Tags.IMAGE_URL + videoLessonsModel.getFile_doc());
+                                    selectedVideoLessonsModel = videoLessonsModelList.get(0);
+                                    binding.setModel(selectedVideoLessonsModel);
+                                    uri = Uri.parse(Tags.IMAGE_URL + selectedVideoLessonsModel.getFile_doc());
                                     initPlayer(uri);
                                     binding.llNoVideos.setVisibility(View.GONE);
                                 } else {
@@ -170,62 +177,156 @@ public class VideosActivity extends AppCompatActivity {
     }
 
     public void playVideo(VideoLessonsModel videoLessonsModel) {
-        binding.setModel(videoLessonsModel);
-        if (!binding.expandableLayout.isExpanded()) {
-            binding.expandableLayout.expand(true);
+        selectedVideoLessonsModel = videoLessonsModel;
+        if (videoLessonsModel.getVideo_or_pdf__payment_fk() != null) {
+            binding.setModel(videoLessonsModel);
+            if (!binding.expandableLayout.isExpanded()) {
+                binding.expandableLayout.expand(true);
+            }
+            uri = Uri.parse(Tags.IMAGE_URL + videoLessonsModel.getFile_doc());
+            initPlayer(uri);
+        } else {
+            createDialogAlert(videoLessonsModel.getPrice());
         }
-        uri = Uri.parse(Tags.IMAGE_URL + videoLessonsModel.getFile_doc());
-        initPlayer(uri);
+
+    }
+
+    private void createDialogAlert(double price) {
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .create();
+
+        DialogPriceAlertBinding binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.dialog_price_alert, null, false);
+
+        String pr = getString(R.string.watch_video_for) + " " + price + " " + getString(R.string.egp);
+        binding.tvMsg.setText(pr);
+        binding.btnCancel.setOnClickListener(v -> dialog.dismiss()
+
+        );
+        binding.btnAccept.setOnClickListener(v ->
+                {
+                    if (userModel.getData().getStudent_money() >= price) {
+                        discount();
+                    }else {
+                        Toast.makeText(this, R.string.balance_not_ava, Toast.LENGTH_SHORT).show();
+                    }
+                    dialog.dismiss();
+                }
+        );
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setView(binding.getRoot());
+        dialog.show();
+    }
+
+    private void discount() {
+
+        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        Api.getService(Tags.base_url)
+                .payment(userModel.getData().getId(),"video_or_pdf",selectedVideoLessonsModel.getId(),selectedVideoLessonsModel.getPrice())
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()) {
+                            playVideo(selectedVideoLessonsModel);
+
+                        } else {
+                            dialog.dismiss();
+                            try {
+                                Log.e("error", response.code() + "__" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (response.code() == 500) {
+                                Toast.makeText(VideosActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            }else if (response.code()==422){
+                                Toast.makeText(VideosActivity.this, R.string.already_paid, Toast.LENGTH_SHORT).show();
+
+                            }else {
+                                Toast.makeText(VideosActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(VideosActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(VideosActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
     }
 
 
     private void initPlayer(Uri uri) {
-        if (player == null) {
-            DefaultTrackSelector trackSelector = new DefaultTrackSelector();
-            trackSelector.setParameters(trackSelector.buildUponParameters().setMaxVideoSizeSd());
-            player = ExoPlayerFactory.newSimpleInstance(this);
-            binding.player.setPlayer(player);
-            MediaSource mediaSource = buildMediaSource(uri);
 
-            player.seekTo(currentWindow, currentPosition);
-            player.setPlayWhenReady(playWhenReady);
-            player.prepare(mediaSource);
-        } else {
-            currentWindow = 0;
-            currentPosition = 0;
-            MediaSource mediaSource = buildMediaSource(uri);
+        if (selectedVideoLessonsModel.getVideo_or_pdf__payment_fk()!=null){
+            if (player == null) {
+                DefaultTrackSelector trackSelector = new DefaultTrackSelector();
+                trackSelector.setParameters(trackSelector.buildUponParameters().setMaxVideoSizeSd());
+                player = ExoPlayerFactory.newSimpleInstance(this);
+                binding.player.setPlayer(player);
+                MediaSource mediaSource = buildMediaSource(uri);
 
-            player.seekTo(currentWindow, currentPosition);
-            player.setPlayWhenReady(playWhenReady);
-            player.prepare(mediaSource);
-        }
+                player.seekTo(currentWindow, currentPosition);
+                player.setPlayWhenReady(playWhenReady);
+                player.prepare(mediaSource);
+            } else {
+                currentWindow = 0;
+                currentPosition = 0;
+                MediaSource mediaSource = buildMediaSource(uri);
 
-        player.addListener(new Player.EventListener() {
-            @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                if (playWhenReady) {
-                    if (playbackState == Player.STATE_BUFFERING) {
-                        binding.progBarBuffering.setVisibility(View.VISIBLE);
-                    }else if (playbackState==Player.STATE_READY){
-                        binding.progBarBuffering.setVisibility(View.GONE);
-
-                    }else if (playbackState == Player.STATE_ENDED) {
-                        binding.progBarBuffering.setVisibility(View.GONE);
-                        currentWindow = 0;
-                        currentPosition = 0;
-                        initPlayer(uri);
-                    } else if (playbackState == Player.TIMELINE_CHANGE_REASON_RESET){
-                        binding.progBarBuffering.setVisibility(View.VISIBLE);
-
-                    }else {
-                        binding.progBarBuffering.setVisibility(View.GONE);
-
-                    }
-                }
+                player.seekTo(currentWindow, currentPosition);
+                player.setPlayWhenReady(playWhenReady);
+                player.prepare(mediaSource);
             }
 
+            player.addListener(new Player.EventListener() {
+                @Override
+                public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                    if (playWhenReady) {
+                        if (playbackState == Player.STATE_BUFFERING) {
+                            binding.progBarBuffering.setVisibility(View.VISIBLE);
+                        } else if (playbackState == Player.STATE_READY) {
+                            binding.progBarBuffering.setVisibility(View.GONE);
 
-        });
+                        } else if (playbackState == Player.STATE_ENDED) {
+                            binding.progBarBuffering.setVisibility(View.GONE);
+                            currentWindow = 0;
+                            currentPosition = 0;
+                            initPlayer(uri);
+                        } else if (playbackState == Player.TIMELINE_CHANGE_REASON_RESET) {
+                            binding.progBarBuffering.setVisibility(View.VISIBLE);
+
+                        } else {
+                            binding.progBarBuffering.setVisibility(View.GONE);
+
+                        }
+                    }
+                }
+
+
+            });
+
+        }else {
+            createDialogAlert(selectedVideoLessonsModel.getPrice());
+
+        }
 
 
     }

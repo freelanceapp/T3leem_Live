@@ -149,6 +149,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 NotificationModel model2 = list.get(holder.getAdapterPosition());
                 if (model.getNotification_type().equals("exam")) {
                     activity.setItemExam(model2);
+                } else if (model.getNotification_type().equals("share_teacher")) {
+                    activity.setItemShare(model2, "teacher");
+                } else if (model.getNotification_type().equals("share_center")) {
+                    activity.setItemShare(model2, "center");
                 }
             });
         }

@@ -14,6 +14,15 @@ public class CenterGroupModel implements Serializable {
     private String updated_at;
     private int teachers_count;
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle_en(String title_en) {
+        this.title_en = title_en;
+    }
+
+
     public int getId() {
         return id;
     }

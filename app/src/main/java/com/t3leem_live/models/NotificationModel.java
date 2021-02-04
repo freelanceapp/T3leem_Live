@@ -13,6 +13,7 @@ public class NotificationModel implements Serializable {
     private String notification_type;
     private String exam_id;
     private TeacherModel from_user_fk;
+    private String share_id;
     private String is_read;
     private String created_at;
     private String updated_at;
@@ -67,5 +68,9 @@ public class NotificationModel implements Serializable {
 
     public String getExam_id() {
         return exam_id;
+    }
+
+    public String getShare_id() {
+        return share_id;
     }
 }

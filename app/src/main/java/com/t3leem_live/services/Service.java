@@ -1,5 +1,7 @@
 package com.t3leem_live.services;
 
+import android.service.autofill.UserData;
+
 import com.t3leem_live.models.CenterGroupDataModel;
 import com.t3leem_live.models.CenterGroupModel;
 import com.t3leem_live.models.CenterGroupTeacherDataModel;
@@ -20,6 +22,7 @@ import com.t3leem_live.models.StreamModel;
 import com.t3leem_live.models.StudentCenterModel;
 import com.t3leem_live.models.StudentRateDataModel;
 import com.t3leem_live.models.SummaryDataModel;
+import com.t3leem_live.models.TeacherDataModel;
 import com.t3leem_live.models.TeacherExamDataModel;
 import com.t3leem_live.models.TeacherGroupDataModel;
 import com.t3leem_live.models.TeacherGroupModel;
@@ -754,8 +757,22 @@ public interface Service {
                                              @Query(value = "search_val") String search_val
     );
 
-    @GET("api/student-books-or-centers?")
+    @GET("api/student-books-or-centers")
     Call<JoinCenterDataModel> getMyReservation(@Query(value = "student_id") int student_id,
                                                @Query(value = "book_type") String book_type
     );
+
+    @FormUrlEncoded
+    @POST("api/studentPayment")
+    Call<ResponseBody> payment(@Field(value = "student_id") int student_id,
+                               @Field(value = "type") String type,
+                               @Field(value = "relation_id") int relation_id,
+                               @Field(value = "price") double price
+    );
+
+    @GET("api/show-teacher-profile")
+    Call<TeacherDataModel> getTeacherProfile(@Query(value = "student_id") int student_id,
+                                             @Query(value = "teacher_id") int teacher_id
+    );
+
 }

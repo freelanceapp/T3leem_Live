@@ -20,17 +20,22 @@ import com.t3leem_live.R;
 import com.t3leem_live.adapters.NotificationAdapter;
 import com.t3leem_live.databinding.ActivityNotificationBinding;
 import com.t3leem_live.language.Language;
+import com.t3leem_live.models.CenterGroupModel;
 import com.t3leem_live.models.NotificationDataModel;
 import com.t3leem_live.models.NotificationModel;
+import com.t3leem_live.models.StudentCenterModel;
 import com.t3leem_live.models.TeacherGroupModel;
+import com.t3leem_live.models.TeacherModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
 import com.t3leem_live.uis.module_general.activity_view.ViewActivity;
+import com.t3leem_live.uis.module_student.activity_student_center_groups.StudentCenterGroupsActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_create_stream.TeacherCreateStreamActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_group.TeacherGroupActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_profile.TeacherProfileActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,7 +60,6 @@ public class NotificationActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(Language.updateResources(newBase, "ar"));
-
     }
 
     @Override
@@ -65,7 +69,6 @@ public class NotificationActivity extends AppCompatActivity {
         initView();
 
     }
-
 
     private void initView() {
         preference = Preferences.getInstance();
@@ -157,7 +160,6 @@ public class NotificationActivity extends AppCompatActivity {
                 });
     }
 
-
     public void acceptRefuseGroup(NotificationModel notificationModel, int adapterPosition, String status) {
         ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
@@ -222,5 +224,20 @@ public class NotificationActivity extends AppCompatActivity {
         intent.putExtra("url", url);
         startActivity(intent);
 
+    }
+
+    public void setItemShare(NotificationModel model, String share_type) {
+        if (share_type.equals("teacher")){
+            Intent intent = new Intent(this, TeacherProfileActivity.class);
+            intent.putExtra("data",Integer.parseInt(model.getShare_id()));
+            startActivity(intent);
+        }else {
+            StudentCenterModel studentCenterModel = new StudentCenterModel();
+            studentCenterModel.setId(Integer.parseInt(model.getShare_id()));
+            studentCenterModel.setName(getString(R.string.back));
+            Intent intent = new Intent(this, StudentCenterGroupsActivity.class);
+            intent.putExtra("data",studentCenterModel);
+            startActivity(intent);
+        }
     }
 }

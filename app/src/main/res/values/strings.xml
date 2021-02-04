@@ -227,5 +227,9 @@
     <string name="search_by_email">ابحث عن طريق البريد الالكتروني</string>
     <string name="admin">الإدارة</string>
     <string name="new_req">طلب متابعة</string>
+    <string name="watch_video_for">شاهد الفيديو مقابل خصم </string>
+    <string name="balance_not_ava">ليس لديك رصيد كافي</string>
+    <string name="already_paid">تم الدفع</string>
+    <string name="paid">مدفوع</string>
 
 </resources>
