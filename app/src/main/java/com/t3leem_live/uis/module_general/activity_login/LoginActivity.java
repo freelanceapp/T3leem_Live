@@ -19,9 +19,8 @@ import android.widget.Toast;
 
 import com.t3leem_live.R;
 import com.t3leem_live.uis.module_center_course.activity_home_center.CenterHomeActivity;
-import com.t3leem_live.uis.module_general.activity_splash.SplashActivity;
 import com.t3leem_live.uis.module_parent.activity_home_parent.ParentHomeActivity;
-import com.t3leem_live.uis.module_teacher.activity_home_teacher.TeacherHomeActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_home.TeacherHomeActivity;
 import com.t3leem_live.uis.module_general.activity_sign_up_chooser.SignUpChooserActivity;
 import com.t3leem_live.uis.module_student.activity_student_home.StudentHomeActivity;
 import com.t3leem_live.uis.module_general.activity_verification_code.VerificationCodeActivity;

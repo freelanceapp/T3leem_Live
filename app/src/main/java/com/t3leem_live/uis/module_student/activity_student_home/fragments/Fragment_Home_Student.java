@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
-import com.t3leem_live.adapters.SliderAdapter;
 import com.t3leem_live.adapters.StudentSliderAdapter;
 import com.t3leem_live.models.SliderDataModel;
 import com.t3leem_live.models.SliderModel;
@@ -32,7 +31,6 @@ import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.tags.Tags;
-import com.t3leem_live.uis.module_teacher.activity_home_teacher.fragments.Fragment_Home_Teacher;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -13,9 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.t3leem_live.R;
-import com.t3leem_live.uis.module_general.activity_about_app.AboutAppActivity;
 import com.t3leem_live.uis.module_general.activity_chat_rooms.ChatRoomsActivity;
-import com.t3leem_live.uis.module_general.activity_contact_us.ContactUsActivity;
 import com.t3leem_live.uis.module_general.activity_view.ViewActivity;
 import com.t3leem_live.uis.module_student.activity_available_teacher.AvailableTeacherActivity;
 import com.t3leem_live.uis.module_student.activity_follow_teacher.FollowTeacherActivity;
@@ -26,7 +24,7 @@ import com.t3leem_live.uis.module_student.activity_student_sign_up.StudentSignUp
 import com.t3leem_live.databinding.FragmentProfileStudentBinding;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
-import com.t3leem_live.uis.module_student.joint_center_activity.JointCenterActivity;
+import com.t3leem_live.uis.module_student.activity_joint_center.JointCenterActivity;
 
 import io.paperdb.Paper;
 
@@ -158,4 +156,9 @@ public class Fragment_Profile_Student extends Fragment {
             updateUiUserData();
         }
     }
+
+   public void updateUserData(){
+       userModel = preferences.getUserData(activity);
+       binding.setModel(userModel);
+   }
 }

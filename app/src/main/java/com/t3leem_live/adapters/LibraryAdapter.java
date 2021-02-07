@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.t3leem_live.R;
 import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Library_Center;
-import com.t3leem_live.uis.module_teacher.activity_home_teacher.fragments.Fragment_Library_Teacher;
+import com.t3leem_live.uis.module_teacher.activity_teacher_home.fragments.Fragment_Library_Teacher;
 import com.t3leem_live.uis.module_student.activity_student_home.fragments.Fragment_Library_Student;
 import com.t3leem_live.databinding.LibraryRowBinding;
 import com.t3leem_live.models.StageClassModel;

@@ -171,6 +171,7 @@ public interface Service {
                                            @Part("teacher_degree") RequestBody teacher_degree,
                                            @Part("software_type") RequestBody software_type,
                                            @Part("user_type") RequestBody user_type,
+                                           @Part("is_parent") RequestBody is_parent,
                                            @Part MultipartBody.Part logo,
                                            @Part MultipartBody.Part video
     );
@@ -188,6 +189,7 @@ public interface Service {
                                               @Part("teacher_degree") RequestBody teacher_degree,
                                               @Part("software_type") RequestBody software_type,
                                               @Part("user_type") RequestBody user_type,
+                                              @Part("is_parent") RequestBody is_parent,
                                               @Part MultipartBody.Part video
     );
 
@@ -206,6 +208,7 @@ public interface Service {
                                                     @Part("teacher_degree") RequestBody teacher_degree,
                                                     @Part("software_type") RequestBody software_type,
                                                     @Part("user_type") RequestBody user_type,
+                                                    @Part("is_parent") RequestBody is_parent,
                                                     @Part MultipartBody.Part logo,
                                                     @Part MultipartBody.Part video
     );
@@ -224,6 +227,7 @@ public interface Service {
                                                        @Part("teacher_degree") RequestBody teacher_degree,
                                                        @Part("software_type") RequestBody software_type,
                                                        @Part("user_type") RequestBody user_type,
+                                                       @Part("is_parent") RequestBody is_parent,
                                                        @Part MultipartBody.Part video
     );
 
@@ -241,6 +245,8 @@ public interface Service {
                                                        @Part("teacher_degree") RequestBody teacher_degree,
                                                        @Part("software_type") RequestBody software_type,
                                                        @Part("user_type") RequestBody user_type,
+                                                       @Part("is_parent") RequestBody is_parent,
+
                                                        @Part MultipartBody.Part logo
     );
 
@@ -257,7 +263,9 @@ public interface Service {
                                                           @Part("stage_id") RequestBody stage_id,
                                                           @Part("teacher_degree") RequestBody teacher_degree,
                                                           @Part("software_type") RequestBody software_type,
-                                                          @Part("user_type") RequestBody user_type
+                                                          @Part("user_type") RequestBody user_type,
+                                                          @Part("is_parent") RequestBody is_parent
+
     );
 
     @Multipart
@@ -331,7 +339,8 @@ public interface Service {
 
 
     @GET("api/get-tutorials-details-by-subject-id")
-    Call<VideoLessonsDataModel> getVideos(@Query(value = "stage_id") String stage_id,
+    Call<VideoLessonsDataModel> getVideos(@Query(value = "student_id") int student_id,
+                                          @Query(value = "stage_id") String stage_id,
                                           @Query(value = "class_id") String class_id,
                                           @Query(value = "department_id") String department_id,
                                           @Query(value = "subject_id") String subject_id,
@@ -546,6 +555,8 @@ public interface Service {
 
     );
 
+
+
     @GET("api/get-all-live-stream")
     Call<List<StreamModel>> getStreams(@Query(value = "student_id") int student_id);
 
@@ -597,7 +608,9 @@ public interface Service {
 
     @GET("api/search-for-my-sons")
     Call<MySonsDataModel> search(@Header("Authorization") String user_token,
-                                 @Query(value = "search_val") String query
+                                 @Query(value = "search_val") String query,
+                                 @Query(value = "parent_id") int parent_id
+
     );
 
 
@@ -773,6 +786,11 @@ public interface Service {
     @GET("api/show-teacher-profile")
     Call<TeacherDataModel> getTeacherProfile(@Query(value = "student_id") int student_id,
                                              @Query(value = "teacher_id") int teacher_id
+    );
+
+    @GET("api/my-son-teacher")
+    Call<List<TeacherModel>> getParentSonTeacher(@Header("Authorization") String bearer_token,
+                                                 @Query(value = "parent_id") int parent_id
     );
 
 }

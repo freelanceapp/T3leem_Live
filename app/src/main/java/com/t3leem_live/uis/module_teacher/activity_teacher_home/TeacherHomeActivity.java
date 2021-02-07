@@ -1,4 +1,4 @@
-package com.t3leem_live.uis.module_teacher.activity_home_teacher;
+package com.t3leem_live.uis.module_teacher.activity_teacher_home;
 
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
@@ -17,11 +17,13 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.t3leem_live.R;
 import com.t3leem_live.databinding.ActivityTeacherHomeBinding;
-import com.t3leem_live.uis.module_teacher.activity_home_teacher.fragments.Fragment_Home_Teacher;
-import com.t3leem_live.uis.module_teacher.activity_home_teacher.fragments.Fragment_Library_Teacher;
-import com.t3leem_live.uis.module_teacher.activity_home_teacher.fragments.Fragment_Profile_Teacher;
+import com.t3leem_live.models.NotificationCountModel;
+import com.t3leem_live.uis.module_student.activity_notification.NotificationActivity;
+import com.t3leem_live.uis.module_student.activity_student_home.StudentHomeActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_home.fragments.Fragment_Home_Teacher;
+import com.t3leem_live.uis.module_teacher.activity_teacher_home.fragments.Fragment_Library_Teacher;
+import com.t3leem_live.uis.module_teacher.activity_teacher_home.fragments.Fragment_Profile_Teacher;
 import com.t3leem_live.uis.module_general.activity_login.LoginActivity;
-import com.t3leem_live.databinding.ActivityStudentHomeBinding;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
@@ -67,10 +69,101 @@ public class TeacherHomeActivity extends AppCompatActivity {
         userModel = preferences.getUserData(this);
         displayFragmentHomeTeacher();
         setUpBottomNavigation();
+        getNotificationCount();
+
+        binding.flNotification.setOnClickListener(view -> {
+            readNotificationCount();
+            Intent intent = new Intent(this, NotificationActivity.class);
+            startActivity(intent);
+        });
     }
 
-    private void setUpBottomNavigation()
-    {
+
+    private void getNotificationCount() {
+        Api.getService(Tags.base_url).getNotificationCount("Bearer " + userModel.getData().getToken(), userModel.getData().getId())
+                .enqueue(new Callback<NotificationCountModel>() {
+                    @Override
+                    public void onResponse(Call<NotificationCountModel> call, Response<NotificationCountModel> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                binding.setCount(String.valueOf(response.body().getData()));
+                            }
+                        } else {
+                            try {
+                                Log.e("error_code", response.code() + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<NotificationCountModel> call, Throwable t) {
+                        try {
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(TeacherHomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
+                                } else {
+                                    Toast.makeText(TeacherHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+                });
+    }
+
+    private void readNotificationCount() {
+        Api.getService(Tags.base_url).readNotificationCount("Bearer " + userModel.getData().getToken(), userModel.getData().getId())
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                binding.setCount("0");
+                            }
+                        } else {
+                            try {
+                                Log.e("error_code", response.code() + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(TeacherHomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
+                                } else {
+                                    Toast.makeText(TeacherHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+                });
+    }
+
+    private void setUpBottomNavigation() {
 
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(getString(R.string.home), R.drawable.ic_nav_home);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem(getString(R.string.library), R.drawable.ic_nav_library);
@@ -86,7 +179,6 @@ public class TeacherHomeActivity extends AppCompatActivity {
         binding.ahBottomNav.addItem(item1);
         binding.ahBottomNav.addItem(item2);
         binding.ahBottomNav.addItem(item3);
-
 
 
         binding.ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
@@ -177,6 +269,7 @@ public class TeacherHomeActivity extends AppCompatActivity {
 
         if (fragment_profile_teacher.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_profile_teacher).commit();
+            fragment_profile_teacher.updateUserData();
         } else {
             fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_profile_teacher, "fragment_profile_teacher").addToBackStack("fragment_profile_teacher").commit();
 
@@ -185,13 +278,13 @@ public class TeacherHomeActivity extends AppCompatActivity {
         updateBottomNavigationPosition(2);
     }
 
-    public void logout(){
-        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+    public void logout() {
+        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .logout("Bearer "+userModel.getData().getToken())
+                .logout("Bearer " + userModel.getData().getToken())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -199,8 +292,8 @@ public class TeacherHomeActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             preferences.clear(TeacherHomeActivity.this);
                             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                            if (notificationManager!=null){
-                                notificationManager.cancel(Tags.not_tag,Tags.not_id);
+                            if (notificationManager != null) {
+                                notificationManager.cancel(Tags.not_tag, Tags.not_id);
                             }
                             navigateToLoginActivity();
                         } else {
@@ -240,25 +333,25 @@ public class TeacherHomeActivity extends AppCompatActivity {
 
 
     }
+
     @Override
     public void onBackPressed() {
 
-        if (fragment_home_teacher!=null&&fragment_home_teacher.isAdded()&&fragment_home_teacher.isVisible()){
-            if (userModel==null){
+        if (fragment_home_teacher != null && fragment_home_teacher.isAdded() && fragment_home_teacher.isVisible()) {
+            if (userModel == null) {
                 navigateToLoginActivity();
-            }else {
+            } else {
                 finish();
             }
-        }else {
+        } else {
             displayFragmentHomeTeacher();
         }
-
 
 
     }
 
     private void navigateToLoginActivity() {
-        Intent  intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

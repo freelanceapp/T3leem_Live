@@ -2,6 +2,7 @@ package com.t3leem_live.adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -10,7 +11,9 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 import com.t3leem_live.R;
+import com.t3leem_live.tags.Tags;
 import com.t3leem_live.uis.module_general.activity_chat_rooms.ChatRoomsActivity;
 import com.t3leem_live.databinding.LoadMoreRowBinding;
 import com.t3leem_live.databinding.RoomRowBinding;
@@ -25,13 +28,14 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context context;
     private LayoutInflater inflater;
     private ChatRoomsActivity activity;
+    private String user_type;
 
-
-    public ChatRoomsAdapter(List<RoomModel> list, Context context) {
+    public ChatRoomsAdapter(List<RoomModel> list, Context context, String user_type) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
         activity = (ChatRoomsActivity) context;
+        this.user_type = user_type;
     }
 
 
@@ -39,10 +43,10 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        if (viewType==DATA){
+        if (viewType == DATA) {
             RoomRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.room_row, parent, false);
             return new MyHolder(binding);
-        }else {
+        } else {
             LoadMoreRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.load_more_row, parent, false);
             return new LoadMoreHolder(binding);
         }
@@ -52,20 +56,38 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
-        if (holder instanceof MyHolder){
+        if (holder instanceof MyHolder) {
             MyHolder myHolder = (MyHolder) holder;
-            RoomModel model= list.get(position);
+            RoomModel model = list.get(position);
             myHolder.binding.setModel(model);
+
+
+            if (model.getRoom_status().equals("group")) {
+                myHolder.binding.image.setImageResource(R.drawable.ic_chat_group);
+            } else {
+                if (model.getUser_type().equals("parent")) {
+                    if (user_type.equals("parent")) {
+                        Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getTo_user_fk().getLogo())).into(myHolder.binding.image);
+
+                    } else {
+                        Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getFrom_user_fk().getLogo())).into(myHolder.binding.image);
+
+                    }
+                } else {
+                    myHolder.binding.image.setImageResource(R.drawable.ic_avatar);
+
+                }
+            }
+
             myHolder.itemView.setOnClickListener(view -> {
-                RoomModel model2= list.get(myHolder.getAdapterPosition());
+                RoomModel model2 = list.get(myHolder.getAdapterPosition());
                 activity.navigateToChatActivity(model2);
             });
 
 
-
-        }else if (holder instanceof LoadMoreHolder){
+        } else if (holder instanceof LoadMoreHolder) {
             LoadMoreHolder loadMoreHolder = (LoadMoreHolder) holder;
-            loadMoreHolder.binding.prgBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(context,R.color.color1), PorterDuff.Mode.SRC_IN);
+            loadMoreHolder.binding.prgBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(context, R.color.color1), PorterDuff.Mode.SRC_IN);
             loadMoreHolder.binding.prgBar.setIndeterminate(true);
         }
 
@@ -102,9 +124,9 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        if (list.get(position)==null){
+        if (list.get(position) == null) {
             return LOAD;
-        }else {
+        } else {
             return DATA;
         }
     }

@@ -21,6 +21,7 @@ import com.t3leem_live.uis.module_parent.activity_parent_sign_up.ParentSignUpAct
 import com.t3leem_live.databinding.FragmentProfileParentBinding;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
+import com.t3leem_live.uis.module_parent.activity_son_teacher.ParentSonTeacherActivity;
 
 import io.paperdb.Paper;
 
@@ -49,15 +50,6 @@ public class Fragment_Profile_Parent extends Fragment {
         Paper.init(activity);
 
         binding.logout.setOnClickListener(view -> activity.logout());
-        binding.llContactUs.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, ContactUsActivity.class);
-            startActivity(intent);
-        });
-
-        binding.llAbout.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, AboutAppActivity.class);
-            startActivity(intent);
-        });
 
         binding.llUpdateProfile.setOnClickListener(view -> {
             Intent intent = new Intent(activity, ParentSignUpActivity.class);
@@ -66,6 +58,11 @@ public class Fragment_Profile_Parent extends Fragment {
 
         binding.llChat.setOnClickListener(view -> {
             Intent intent = new Intent(activity, ChatRoomsActivity.class);
+            startActivity(intent);
+        });
+
+        binding.llMySonTeacher.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, ParentSonTeacherActivity.class);
             startActivity(intent);
         });
 

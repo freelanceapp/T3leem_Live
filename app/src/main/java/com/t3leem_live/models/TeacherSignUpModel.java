@@ -24,6 +24,7 @@ public class TeacherSignUpModel extends BaseObservable {
     private String address;
     private String degree;
     private String school_name;
+    private String is_parent;
 
 
     public ObservableField<String> error_name = new ObservableField<>();
@@ -36,7 +37,6 @@ public class TeacherSignUpModel extends BaseObservable {
 
 
     public boolean isDataValid(Context context) {
-        Log.e("name",name+"__");
 
         if (!name.isEmpty() &&
                 !phone_code.isEmpty() &&
@@ -143,6 +143,7 @@ public class TeacherSignUpModel extends BaseObservable {
         degree ="";
         address = "";
         school_name = "";
+        is_parent = "no";
 
     }
 
@@ -258,5 +259,13 @@ public class TeacherSignUpModel extends BaseObservable {
     public void setDegree(String degree) {
         this.degree = degree;
         notifyPropertyChanged(BR.degree);
+    }
+
+    public String getIs_parent() {
+        return is_parent;
+    }
+
+    public void setIs_parent(String is_parent) {
+        this.is_parent = is_parent;
     }
 }

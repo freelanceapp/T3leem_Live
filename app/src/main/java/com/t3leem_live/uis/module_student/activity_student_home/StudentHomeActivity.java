@@ -83,13 +83,13 @@ public class StudentHomeActivity extends AppCompatActivity {
 
         binding.flNotification.setOnClickListener(view -> {
             readNotificationCount();
-            Intent intent = new Intent(this,NotificationActivity.class);
+            Intent intent = new Intent(this, NotificationActivity.class);
             startActivity(intent);
         });
     }
 
     private void getNotificationCount() {
-        Api.getService(Tags.base_url).getNotificationCount("Bearer "+userModel.getData().getToken(),userModel.getData().getId())
+        Api.getService(Tags.base_url).getNotificationCount("Bearer " + userModel.getData().getToken(), userModel.getData().getId())
                 .enqueue(new Callback<NotificationCountModel>() {
                     @Override
                     public void onResponse(Call<NotificationCountModel> call, Response<NotificationCountModel> response) {
@@ -131,7 +131,7 @@ public class StudentHomeActivity extends AppCompatActivity {
     }
 
     private void readNotificationCount() {
-        Api.getService(Tags.base_url).readNotificationCount("Bearer "+userModel.getData().getToken(),userModel.getData().getId())
+        Api.getService(Tags.base_url).readNotificationCount("Bearer " + userModel.getData().getToken(), userModel.getData().getId())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -172,8 +172,7 @@ public class StudentHomeActivity extends AppCompatActivity {
                 });
     }
 
-    private void setUpBottomNavigation()
-    {
+    private void setUpBottomNavigation() {
         binding.setTitle(getString(R.string.home));
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(getString(R.string.home), R.drawable.ic_nav_home);
         AHBottomNavigationItem item2 = new AHBottomNavigationItem(getString(R.string.library), R.drawable.ic_nav_library);
@@ -204,7 +203,7 @@ public class StudentHomeActivity extends AppCompatActivity {
                     displayFragmentLibraryStudent();
                     break;
                 case 2:
-                    Log.e("fff","tt");
+                    Log.e("fff", "tt");
                     displayFragmentLiveStudent();
                     break;
                 case 3:
@@ -314,6 +313,7 @@ public class StudentHomeActivity extends AppCompatActivity {
 
         if (fragment_profile_student.isAdded()) {
             fragmentManager.beginTransaction().show(fragment_profile_student).commit();
+            fragment_profile_student.updateUserData();
         } else {
             fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_profile_student, "fragment_profile_student").commit();
 
@@ -388,7 +388,7 @@ public class StudentHomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         List<Fragment> fragmentList = fragmentManager.getFragments();
-        for (Fragment fragment:fragmentList){
+        for (Fragment fragment : fragmentList) {
             fragment.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -397,19 +397,18 @@ public class StudentHomeActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         List<Fragment> fragmentList = fragmentManager.getFragments();
-        for (Fragment fragment:fragmentList){
+        for (Fragment fragment : fragmentList) {
             fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
-    public void logout()
-    {
-        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+    public void logout() {
+        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .logout("Bearer "+userModel.getData().getToken())
+                .logout("Bearer " + userModel.getData().getToken())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -417,8 +416,8 @@ public class StudentHomeActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             preferences.clear(StudentHomeActivity.this);
                             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                            if (notificationManager!=null){
-                                notificationManager.cancel(Tags.not_tag,Tags.not_id);
+                            if (notificationManager != null) {
+                                notificationManager.cancel(Tags.not_tag, Tags.not_id);
                             }
                             navigateToLoginActivity();
                         } else {
@@ -458,25 +457,24 @@ public class StudentHomeActivity extends AppCompatActivity {
 
 
     }
+
     @Override
-    public void onBackPressed()
-    {
-        if (fragment_home_student!=null&&fragment_home_student.isAdded()&&fragment_home_student.isVisible()){
-            if (userModel==null){
+    public void onBackPressed() {
+        if (fragment_home_student != null && fragment_home_student.isAdded() && fragment_home_student.isVisible()) {
+            if (userModel == null) {
                 navigateToLoginActivity();
-            }else {
+            } else {
                 finish();
             }
-        }else {
+        } else {
             displayFragmentHomeStudent();
         }
-
 
 
     }
 
     private void navigateToLoginActivity() {
-        Intent  intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

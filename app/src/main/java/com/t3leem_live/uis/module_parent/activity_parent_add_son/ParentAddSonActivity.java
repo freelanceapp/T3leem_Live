@@ -57,7 +57,6 @@ public class ParentAddSonActivity extends AppCompatActivity {
     private boolean refresh = false;
 
 
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(Language.updateResources(newBase, "ar"));
@@ -73,8 +72,7 @@ public class ParentAddSonActivity extends AppCompatActivity {
 
     }
 
-    private void initView()
-    {
+    private void initView() {
         sonsList = new ArrayList<>();
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
@@ -87,7 +85,7 @@ public class ParentAddSonActivity extends AppCompatActivity {
 
         binding.tvSearch.setOnClickListener(view -> {
             String query = binding.edtSearch.getText().toString();
-            if (!query.isEmpty()){
+            if (!query.isEmpty()) {
                 search(query);
             }
         });
@@ -106,7 +104,7 @@ public class ParentAddSonActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 String text = editable.toString();
-                if (text.isEmpty()){
+                if (text.isEmpty()) {
                     binding.tvNoSearchResult.setVisibility(View.VISIBLE);
                     sonsList.clear();
                     adapter.notifyDataSetChanged();
@@ -115,14 +113,13 @@ public class ParentAddSonActivity extends AppCompatActivity {
         });
     }
 
-    private void search(String query)
-    {
+    private void search(String query) {
         binding.tvNoSearchResult.setVisibility(View.GONE);
         binding.progBar.setVisibility(View.VISIBLE);
         sonsList.clear();
         adapter.notifyDataSetChanged();
 
-        Api.getService(Tags.base_url).search("Bearer " + userModel.getData().getToken(), query)
+        Api.getService(Tags.base_url).search("Bearer " + userModel.getData().getToken(), query, userModel.getData().getId())
                 .enqueue(new Callback<MySonsDataModel>() {
                     @Override
                     public void onResponse(Call<MySonsDataModel> call, Response<MySonsDataModel> response) {
@@ -178,21 +175,21 @@ public class ParentAddSonActivity extends AppCompatActivity {
                 });
     }
 
-    public void addSon(UserModel.User user){
+    public void addSon(UserModel.User user) {
 
         ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .addSon("Bearer "+userModel.getData().getToken(),userModel.getData().getId(),user.getId())
+                .addSon("Bearer " + userModel.getData().getToken(), userModel.getData().getId(), user.getId())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         dialog.dismiss();
                         if (response.isSuccessful()) {
                             refresh = true;
-                          CreateDialogAlert();
+                            CreateDialogAlert();
                         } else {
                             dialog.dismiss();
                             try {
@@ -203,10 +200,10 @@ public class ParentAddSonActivity extends AppCompatActivity {
 
                             if (response.code() == 500) {
                                 Toast.makeText(ParentAddSonActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==408){
+                            } else if (response.code() == 408) {
                                 Toast.makeText(ParentAddSonActivity.this, R.string.request_sent, Toast.LENGTH_SHORT).show();
 
-                            }else {
+                            } else {
                                 Toast.makeText(ParentAddSonActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -233,7 +230,7 @@ public class ParentAddSonActivity extends AppCompatActivity {
 
     }
 
-    private   void CreateDialogAlert() {
+    private void CreateDialogAlert() {
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .create();
 
@@ -258,12 +255,12 @@ public class ParentAddSonActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (refresh){
+        if (refresh) {
             setResult(RESULT_OK);
             finish();
             Toast.makeText(ParentAddSonActivity.this, R.string.suc, Toast.LENGTH_SHORT).show();
 
-        }else {
+        } else {
             super.onBackPressed();
 
         }

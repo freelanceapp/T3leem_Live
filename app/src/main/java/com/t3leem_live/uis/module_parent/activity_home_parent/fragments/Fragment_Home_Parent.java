@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
+import com.t3leem_live.models.NotificationCountModel;
 import com.t3leem_live.uis.module_parent.activity_home_parent.ParentHomeActivity;
 import com.t3leem_live.adapters.MySonsAdapter;
 import com.t3leem_live.databinding.FragmentHomeParentBinding;
@@ -28,12 +29,15 @@ import com.t3leem_live.remote.Api;
 import com.t3leem_live.tags.Tags;
 import com.t3leem_live.uis.module_parent.activity_parent_add_son.ParentAddSonActivity;
 import com.t3leem_live.uis.module_parent.activity_son_details.SonDetailsActivity;
+import com.t3leem_live.uis.module_student.activity_notification.NotificationActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_home.TeacherHomeActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.paperdb.Paper;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,13 +52,14 @@ public class Fragment_Home_Parent extends Fragment {
     private Preferences preferences;
     private String lang;
 
-    public static Fragment_Home_Parent newInstance(){
+    public static Fragment_Home_Parent newInstance() {
         return new Fragment_Home_Parent();
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_parent,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home_parent, container, false);
         initView();
         return binding.getRoot();
     }
@@ -65,10 +70,10 @@ public class Fragment_Home_Parent extends Fragment {
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(activity);
         Paper.init(activity);
-        lang = Paper.book().read("lang","ar");
+        lang = Paper.book().read("lang", "ar");
 
         binding.recView.setLayoutManager(new LinearLayoutManager(activity));
-        adapter = new MySonsAdapter(sonsList,activity,this);
+        adapter = new MySonsAdapter(sonsList, activity, this);
         binding.recView.setAdapter(adapter);
         skeletonScreen = Skeleton.bind(binding.recView)
                 .adapter(adapter)
@@ -79,22 +84,35 @@ public class Fragment_Home_Parent extends Fragment {
                 .show();
 
         getMySons();
+        getNotificationCount();
+
+        if (userModel.getData().getUser_type().equals("teacher")){
+            binding.flNotification.setVisibility(View.GONE);
+        }else {
+            binding.flNotification.setVisibility(View.VISIBLE);
+
+        }
 
         binding.fab.setOnClickListener(view -> {
             Intent intent = new Intent(activity, ParentAddSonActivity.class);
-            startActivityForResult(intent,100);
+            startActivityForResult(intent, 100);
+        });
+        binding.flNotification.setOnClickListener(view -> {
+            readNotificationCount();
+            Intent intent = new Intent(activity, NotificationActivity.class);
+            startActivity(intent);
         });
 
     }
 
     private void getMySons() {
-        Api.getService(Tags.base_url).getMySons("Bearer "+userModel.getData().getToken(),userModel.getData().getId())
+        Api.getService(Tags.base_url).getMySons("Bearer " + userModel.getData().getToken(), userModel.getData().getId())
                 .enqueue(new Callback<MySonsDataModel>() {
                     @Override
                     public void onResponse(Call<MySonsDataModel> call, Response<MySonsDataModel> response) {
                         skeletonScreen.hide();
                         if (response.isSuccessful()) {
-                            if (response.body() != null&&response.body().getData()!=null) {
+                            if (response.body() != null && response.body().getData() != null) {
                                 sonsList.clear();
 
                                 if (response.body().getData().size() > 0) {
@@ -106,7 +124,6 @@ public class Fragment_Home_Parent extends Fragment {
                                 }
 
                                 adapter.notifyDataSetChanged();
-
 
 
                             }
@@ -145,18 +162,101 @@ public class Fragment_Home_Parent extends Fragment {
                 });
     }
 
+    private void getNotificationCount() {
+        Api.getService(Tags.base_url).getNotificationCount("Bearer " + userModel.getData().getToken(), userModel.getData().getId())
+                .enqueue(new Callback<NotificationCountModel>() {
+                    @Override
+                    public void onResponse(Call<NotificationCountModel> call, Response<NotificationCountModel> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                binding.setCount(String.valueOf(response.body().getData()));
+                            }
+                        } else {
+                            try {
+                                Log.e("error_code", response.code() + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<NotificationCountModel> call, Throwable t) {
+                        try {
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(activity, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
+                                } else {
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+                });
+    }
+
+    private void readNotificationCount() {
+        Api.getService(Tags.base_url).readNotificationCount("Bearer " + userModel.getData().getToken(), userModel.getData().getId())
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                binding.setCount("0");
+                            }
+                        } else {
+                            try {
+                                Log.e("error_code", response.code() + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(activity, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
+                                } else {
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+                });
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==100&&resultCode == Activity.RESULT_OK){
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
             getMySons();
         }
     }
 
     public void navigateToSonDetailsActivity(UserModel.User user) {
         Intent intent = new Intent(activity, SonDetailsActivity.class);
-        intent.putExtra("data",user);
+        intent.putExtra("data", user);
         startActivity(intent);
 
     }

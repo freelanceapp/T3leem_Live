@@ -1,4 +1,4 @@
-package com.t3leem_live.uis.module_student.activity_follow_teacher;
+package com.t3leem_live.uis.module_parent.activity_son_teacher;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -10,15 +10,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
+import com.t3leem_live.adapters.ParentTeachersAdapter;
 import com.t3leem_live.adapters.StudentTeachersAdapter2;
-import com.t3leem_live.databinding.ActivityFollowTeacherBinding;
+import com.t3leem_live.databinding.ActivityAvailableTeacherBinding;
+import com.t3leem_live.databinding.ActivityParentSonTeacherBinding;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.TeacherModel;
@@ -28,7 +33,9 @@ import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
+import com.t3leem_live.uis.module_student.activity_available_teacher.AvailableTeacherActivity;
 import com.t3leem_live.uis.module_student.activity_student_teachers_group.StudentTeachersGroupActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_create_chat_group.TeacherCreateGroupChatActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_video.TeacherVideoActivity;
 
 import java.io.IOException;
@@ -41,14 +48,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FollowTeacherActivity extends AppCompatActivity {
-    private ActivityFollowTeacherBinding binding;
+public class ParentSonTeacherActivity extends AppCompatActivity {
+
+    private ActivityParentSonTeacherBinding binding;
     private Preferences preferences;
     private UserModel userModel;
     private String lang = "ar";
     private List<TeacherModel> teacherModelList;
-    private StudentTeachersAdapter2 adapter;
+    private ParentTeachersAdapter adapter;
     private SkeletonScreen skeletonScreen;
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -59,7 +68,7 @@ public class FollowTeacherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_follow_teacher);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_parent_son_teacher);
         binding.executePendingBindings();
         initView();
     }
@@ -73,7 +82,7 @@ public class FollowTeacherActivity extends AppCompatActivity {
         userModel = preferences.getUserData(this);
         binding.setLang(lang);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new StudentTeachersAdapter2(teacherModelList, this);
+        adapter = new ParentTeachersAdapter(teacherModelList, this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         binding.recView.setLayoutManager(manager);
         binding.recView.setAdapter(adapter);
@@ -96,24 +105,26 @@ public class FollowTeacherActivity extends AppCompatActivity {
 
 
         binding.swipeRefresh.setColorSchemeResources(R.color.color1);
-        binding.swipeRefresh.setOnRefreshListener(this::getJointCenter);
-        getJointCenter();
+        binding.swipeRefresh.setOnRefreshListener(this::getSonTeacher);
+
+        getSonTeacher();
+
     }
 
-    private void getJointCenter() {
+    private void getSonTeacher() {
 
         Api.getService(Tags.base_url)
-                .getFollowTeacher(userModel.getData().getId())
-                .enqueue(new Callback<TeachersDataModel>() {
+                .getParentSonTeacher("Bearer " + userModel.getData().getToken(), userModel.getData().getId())
+                .enqueue(new Callback<List<TeacherModel>>() {
                     @Override
-                    public void onResponse(Call<TeachersDataModel> call, Response<TeachersDataModel> response) {
+                    public void onResponse(Call<List<TeacherModel>> call, Response<List<TeacherModel>> response) {
                         skeletonScreen.hide();
                         binding.swipeRefresh.setRefreshing(false);
                         if (response.isSuccessful()) {
 
-                            if (response.body() != null && response.body().getData() != null) {
+                            if (response.body() != null) {
                                 teacherModelList.clear();
-                                teacherModelList.addAll(response.body().getData());
+                                teacherModelList.addAll(response.body());
                                 adapter.notifyDataSetChanged();
 
 
@@ -136,15 +147,15 @@ public class FollowTeacherActivity extends AppCompatActivity {
                             }
 
                             if (response.code() == 500) {
-                                Toast.makeText(FollowTeacherActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ParentSonTeacherActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(FollowTeacherActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ParentSonTeacherActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<TeachersDataModel> call, Throwable t) {
+                    public void onFailure(Call<List<TeacherModel>> call, Throwable t) {
                         try {
                             skeletonScreen.hide();
                             binding.swipeRefresh.setRefreshing(false);
@@ -154,9 +165,10 @@ public class FollowTeacherActivity extends AppCompatActivity {
                                 Log.e("error", t.getMessage() + "__");
 
                                 if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    Toast.makeText(FollowTeacherActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ParentSonTeacherActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else if (t.getMessage().toLowerCase().contains("socket") || t.getMessage().toLowerCase().contains("canceled")) {
                                 } else {
-                                    Toast.makeText(FollowTeacherActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ParentSonTeacherActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         } catch (Exception e) {
@@ -173,40 +185,40 @@ public class FollowTeacherActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void follow_un_follow(TeacherModel model, int pos) {
 
+    public void createRoom(TeacherModel model) {
+        List<Integer> selectedStudentList = new ArrayList<>();
+        selectedStudentList.add(model.getId());
         ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
-
         Api.getService(Tags.base_url)
-                .studentFollow_UnFollow(userModel.getData().getId(), model.getId())
+                .teacherCreateStudentChat("Bearer " + userModel.getData().getToken(), "", "", "Parent_To_Teacher", userModel.getData().getId(), selectedStudentList)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         dialog.dismiss();
-                        if (response.isSuccessful() && response.body() != null) {
-                            teacherModelList.remove(pos);
-                            adapter.notifyItemRemoved(pos);
+                        if (response.isSuccessful()) {
+                            setResult(RESULT_OK);
+                            finish();
+                            Toast.makeText(ParentSonTeacherActivity.this, R.string.suc, Toast.LENGTH_SHORT).show();
+
                         } else {
-
-
+                            dialog.dismiss();
                             try {
-                                Log.e("error_code", response.code() + "__" + response.errorBody().string());
+                                Log.e("error", response.code() + "__" + response.errorBody().string());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+
                             if (response.code() == 500) {
-                                Toast.makeText(FollowTeacherActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            } else if (response.code() == 409) {
-                                Toast.makeText(FollowTeacherActivity.this, R.string.already_booked, Toast.LENGTH_SHORT).show();
-
+                                Toast.makeText(ParentSonTeacherActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            } else if (response.code() == 404) {
+                                Common.CreateDialogAlert(ParentSonTeacherActivity.this, getString(R.string.no_student_to_create_group));
                             } else {
-                                Toast.makeText(FollowTeacherActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ParentSonTeacherActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
-
-
                         }
                     }
 
@@ -214,14 +226,13 @@ public class FollowTeacherActivity extends AppCompatActivity {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         try {
                             dialog.dismiss();
-
-
                             if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
 
                                 if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
-                                    Toast.makeText(FollowTeacherActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ParentSonTeacherActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(FollowTeacherActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ParentSonTeacherActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         } catch (Exception e) {
@@ -229,14 +240,5 @@ public class FollowTeacherActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    public void myReservation(TeacherModel model) {
-        Intent intent = new Intent(this, StudentTeachersGroupActivity.class);
-        StageClassModel stageClassModel = new StageClassModel();
-        stageClassModel.setId(Integer.parseInt(userModel.getData().getStage_id()));
-        intent.putExtra("data", model);
-        intent.putExtra("data2", stageClassModel);
-        startActivity(intent);
     }
 }

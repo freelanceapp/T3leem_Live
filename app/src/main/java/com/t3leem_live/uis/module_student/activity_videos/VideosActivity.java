@@ -32,7 +32,6 @@ import com.google.android.exoplayer2.util.Util;
 import com.t3leem_live.R;
 import com.t3leem_live.adapters.VideoAdapter;
 import com.t3leem_live.databinding.ActivityVideosBinding;
-import com.t3leem_live.databinding.DialogAlertBinding;
 import com.t3leem_live.databinding.DialogPriceAlertBinding;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.StageClassModel;
@@ -43,7 +42,6 @@ import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
-import com.t3leem_live.uis.module_center_course.activity_center_group_details.CenterGroupDetailsActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,6 +66,7 @@ public class VideosActivity extends AppCompatActivity {
     private int currentWindow = 0;
     private long currentPosition = 0;
     private boolean playWhenReady = true;
+    private int selectedPos = 0;
     private Uri uri = null;
     private VideoLessonsModel selectedVideoLessonsModel;
 
@@ -112,7 +111,7 @@ public class VideosActivity extends AppCompatActivity {
     private void getVideos() {
 
         Api.getService(Tags.base_url)
-                .getVideos(stageClassModel.getStage_id(), stageClassModel.getClass_id(), stageClassModel.getDepartment_id(), String.valueOf(stageClassModel.getId()), "video")
+                .getVideos(userModel.getData().getId(), stageClassModel.getStage_id(), stageClassModel.getClass_id(), stageClassModel.getDepartment_id(), String.valueOf(stageClassModel.getId()), "video")
                 .enqueue(new Callback<VideoLessonsDataModel>() {
                     @Override
                     public void onResponse(Call<VideoLessonsDataModel> call, Response<VideoLessonsDataModel> response) {
@@ -126,10 +125,15 @@ public class VideosActivity extends AppCompatActivity {
                                 if (videoLessonsModelList.size() > 0) {
                                     binding.recView.setVisibility(View.VISIBLE);
                                     binding.expandableLayout.expand(true);
-                                    selectedVideoLessonsModel = videoLessonsModelList.get(0);
-                                    binding.setModel(selectedVideoLessonsModel);
-                                    uri = Uri.parse(Tags.IMAGE_URL + selectedVideoLessonsModel.getFile_doc());
-                                    initPlayer(uri);
+                                    if (videoLessonsModelList.get(0).getVideo_or_pdf__payment_fk() != null) {
+                                        selectedPos = 0;
+                                        selectedVideoLessonsModel = videoLessonsModelList.get(selectedPos);
+                                        adapter.setSelectedPos(selectedPos);
+                                        binding.setModel(selectedVideoLessonsModel);
+                                        uri = Uri.parse(Tags.IMAGE_URL + selectedVideoLessonsModel.getFile_doc());
+                                        initPlayer(uri, selectedVideoLessonsModel, selectedPos);
+                                    }
+
                                     binding.llNoVideos.setVisibility(View.GONE);
                                 } else {
                                     binding.recView.setVisibility(View.GONE);
@@ -176,20 +180,24 @@ public class VideosActivity extends AppCompatActivity {
                 });
     }
 
-    public void playVideo(VideoLessonsModel videoLessonsModel) {
+    public void playVideo(VideoLessonsModel videoLessonsModel, int selectedPos) {
         selectedVideoLessonsModel = videoLessonsModel;
+        this.selectedPos = selectedPos;
+        if (!binding.expandableLayout.isExpanded()) {
+            binding.expandableLayout.expand(true);
+        }
         if (videoLessonsModel.getVideo_or_pdf__payment_fk() != null) {
+            Log.e("dd", "dd");
             binding.setModel(videoLessonsModel);
-            if (!binding.expandableLayout.isExpanded()) {
-                binding.expandableLayout.expand(true);
-            }
+
             uri = Uri.parse(Tags.IMAGE_URL + videoLessonsModel.getFile_doc());
-            initPlayer(uri);
+            initPlayer(uri, selectedVideoLessonsModel, selectedPos);
         } else {
             createDialogAlert(videoLessonsModel.getPrice());
         }
 
     }
+
 
     private void createDialogAlert(double price) {
         final AlertDialog dialog = new AlertDialog.Builder(this)
@@ -206,7 +214,7 @@ public class VideosActivity extends AppCompatActivity {
                 {
                     if (userModel.getData().getStudent_money() >= price) {
                         discount();
-                    }else {
+                    } else {
                         Toast.makeText(this, R.string.balance_not_ava, Toast.LENGTH_SHORT).show();
                     }
                     dialog.dismiss();
@@ -225,13 +233,22 @@ public class VideosActivity extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
         Api.getService(Tags.base_url)
-                .payment(userModel.getData().getId(),"video_or_pdf",selectedVideoLessonsModel.getId(),selectedVideoLessonsModel.getPrice())
+                .payment(userModel.getData().getId(), "video_or_pdf", selectedVideoLessonsModel.getId(), selectedVideoLessonsModel.getPrice())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         dialog.dismiss();
                         if (response.isSuccessful()) {
-                            playVideo(selectedVideoLessonsModel);
+                            selectedVideoLessonsModel.setVideo_or_pdf__payment_fk(new VideoLessonsModel.StudentPayment());
+                            videoLessonsModelList.set(selectedPos, selectedVideoLessonsModel);
+                            adapter.notifyItemChanged(selectedPos);
+                            uri = Uri.parse(Tags.IMAGE_URL + selectedVideoLessonsModel.getFile_doc());
+                            adapter.setSelectedPos(selectedPos);
+                            initPlayer(uri, selectedVideoLessonsModel, selectedPos);
+                            double balance = userModel.getData().getStudent_money() - selectedVideoLessonsModel.getPrice();
+                            userModel.getData().setStudent_money(balance);
+                            preferences.create_update_userdata(VideosActivity.this, userModel);
+                            //playVideo(selectedVideoLessonsModel,selectedPos);
 
                         } else {
                             dialog.dismiss();
@@ -243,10 +260,10 @@ public class VideosActivity extends AppCompatActivity {
 
                             if (response.code() == 500) {
                                 Toast.makeText(VideosActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==422){
+                            } else if (response.code() == 422) {
                                 Toast.makeText(VideosActivity.this, R.string.already_paid, Toast.LENGTH_SHORT).show();
 
-                            }else {
+                            } else {
                                 Toast.makeText(VideosActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -272,10 +289,15 @@ public class VideosActivity extends AppCompatActivity {
                 });
     }
 
+    public void initPlayer(Uri uri, VideoLessonsModel selectedVideoLessonsModel, int selectedPos) {
+        this.selectedPos = selectedPos;
+        this.selectedVideoLessonsModel = selectedVideoLessonsModel;
 
-    private void initPlayer(Uri uri) {
+        Log.e("pos", this.selectedPos + "____" + this.selectedVideoLessonsModel.getId());
 
-        if (selectedVideoLessonsModel.getVideo_or_pdf__payment_fk()!=null){
+        if (this.selectedVideoLessonsModel.getVideo_or_pdf__payment_fk() != null) {
+
+
             if (player == null) {
                 DefaultTrackSelector trackSelector = new DefaultTrackSelector();
                 trackSelector.setParameters(trackSelector.buildUponParameters().setMaxVideoSizeSd());
@@ -309,7 +331,7 @@ public class VideosActivity extends AppCompatActivity {
                             binding.progBarBuffering.setVisibility(View.GONE);
                             currentWindow = 0;
                             currentPosition = 0;
-                            initPlayer(uri);
+                            initPlayer(uri, selectedVideoLessonsModel, selectedPos);
                         } else if (playbackState == Player.TIMELINE_CHANGE_REASON_RESET) {
                             binding.progBarBuffering.setVisibility(View.VISIBLE);
 
@@ -323,8 +345,8 @@ public class VideosActivity extends AppCompatActivity {
 
             });
 
-        }else {
-            createDialogAlert(selectedVideoLessonsModel.getPrice());
+        } else {
+            createDialogAlert(this.selectedVideoLessonsModel.getPrice());
 
         }
 
@@ -368,7 +390,7 @@ public class VideosActivity extends AppCompatActivity {
         super.onStart();
         if (Util.SDK_INT >= 24) {
             if (uri != null) {
-                initPlayer(uri);
+                initPlayer(uri, selectedVideoLessonsModel, selectedPos);
 
             }
         }
@@ -379,7 +401,7 @@ public class VideosActivity extends AppCompatActivity {
         super.onResume();
         if (Util.SDK_INT < 24 || player == null) {
             if (uri != null) {
-                initPlayer(uri);
+                initPlayer(uri, selectedVideoLessonsModel, selectedPos);
 
             }
         }

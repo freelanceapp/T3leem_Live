@@ -1,4 +1,4 @@
-package com.t3leem_live.uis.module_teacher.activity_home_teacher.fragments;
+package com.t3leem_live.uis.module_teacher.activity_teacher_home.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
-import com.t3leem_live.uis.module_teacher.activity_home_teacher.TeacherHomeActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_home.TeacherHomeActivity;
 import com.t3leem_live.uis.module_general.activity_library_details.LibraryDetailsActivity;
 import com.t3leem_live.adapters.LibraryAdapter;
 import com.t3leem_live.databinding.FragmentLibraryTeacherBinding;

@@ -31,7 +31,7 @@ public class VideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context context;
     private LayoutInflater inflater;
     private String lang;
-    private int selectedPos = 0;
+    private int selectedPos =-1;
     private VideosActivity activity;
 
     public VideoAdapter(List<VideoLessonsModel> list, Context context) {
@@ -83,8 +83,15 @@ public class VideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (selectedPos!=pos){
                 selectedPos = pos;
                 VideoLessonsModel v2 = list.get(selectedPos);
-                activity.playVideo(v2);
-                notifyDataSetChanged();
+                Uri uri = Uri.parse(Tags.IMAGE_URL + videoLessonsModel.getFile_doc());
+                if (v2.getVideo_or_pdf__payment_fk()!=null){
+                    activity.initPlayer(uri,v2,selectedPos);
+                    notifyDataSetChanged();
+                }else {
+                    activity.initPlayer(uri,v2,selectedPos);
+
+                }
+
 
             }
 
@@ -163,4 +170,8 @@ public class VideoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    public void setSelectedPos(int selectedPos) {
+        this.selectedPos = selectedPos;
+        notifyDataSetChanged();
+    }
 }

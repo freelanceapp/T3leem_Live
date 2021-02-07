@@ -86,6 +86,10 @@ public class VideoLessonsModel implements Serializable {
         return video_or_pdf__payment_fk;
     }
 
+    public void setVideo_or_pdf__payment_fk(StudentPayment video_or_pdf__payment_fk) {
+        this.video_or_pdf__payment_fk = video_or_pdf__payment_fk;
+    }
+
     public UserModel.User getTeacher_fk() {
         return teacher_fk;
     }

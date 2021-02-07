@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -68,7 +69,14 @@ public class ParentHomeActivity extends AppCompatActivity {
         userModel = preferences.getUserData(this);
 
         displayFragmentHomeParent();
-        setUpBottomNavigation();
+        if (userModel.getData().getUser_type().equals("parent")){
+            setUpBottomNavigation();
+            binding.ahBottomNav.setVisibility(View.VISIBLE);
+
+        }else {
+            binding.ahBottomNav.setVisibility(View.GONE);
+
+        }
     }
 
     private void setUpBottomNavigation()

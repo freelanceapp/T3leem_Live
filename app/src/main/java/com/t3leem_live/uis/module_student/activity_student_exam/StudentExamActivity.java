@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -46,11 +48,9 @@ public class StudentExamActivity extends AppCompatActivity {
     private StageClassModel stageClassModel;
 
 
-
-
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(Language.updateResources(newBase,"ar"));
+        super.attachBaseContext(Language.updateResources(newBase, "ar"));
 
     }
 
@@ -71,13 +71,13 @@ public class StudentExamActivity extends AppCompatActivity {
 
     private void initView() {
         studentExamModelList = new ArrayList<>();
-        preferences  = Preferences.getInstance();
+        preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         Paper.init(this);
-        lang = Paper.book().read("lang","ar");
+        lang = Paper.book().read("lang", "ar");
+        binding.setLang(lang);
 
-
-        adapter = new StudentExamsAdapter(studentExamModelList,this);
+        adapter = new StudentExamsAdapter(studentExamModelList, this);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
         binding.recView.setAdapter(adapter);
 
@@ -89,28 +89,38 @@ public class StudentExamActivity extends AppCompatActivity {
                 .shimmer(true)
                 .show();
 
+        binding.llBack.setOnClickListener(v -> {
+            finish();
+        });
+        new Handler(Looper.myLooper()).postDelayed(() -> {
+            binding.scrollView.scrollTo(0, 0);
+        }, 200);
+
+        binding.swipeRefresh.setColorSchemeResources(R.color.color1);
+        binding.swipeRefresh.setOnRefreshListener(this::getExams);
         getExams();
 
     }
 
-    private void getExams()
-    {
+    private void getExams() {
 
         Api.getService(Tags.base_url)
-                .getStudentExams("Bearer "+userModel.getData().getToken(),stageClassModel.getId())
+                .getStudentExams("Bearer " + userModel.getData().getToken(), stageClassModel.getId())
                 .enqueue(new Callback<TeacherExamDataModel>() {
                     @Override
                     public void onResponse(Call<TeacherExamDataModel> call, Response<TeacherExamDataModel> response) {
                         skeletonScreen.hide();
+                        binding.swipeRefresh.setRefreshing(false);
+
                         if (response.isSuccessful()) {
 
-                            if (response.body()!=null&&response.body().getData()!=null){
+                            if (response.body() != null && response.body().getData() != null) {
                                 studentExamModelList.clear();
                                 studentExamModelList.addAll(response.body().getData());
                                 adapter.notifyDataSetChanged();
-                                if (studentExamModelList.size()>0){
+                                if (studentExamModelList.size() > 0) {
                                     binding.tvNoExams.setVisibility(View.GONE);
-                                }else {
+                                } else {
                                     binding.tvNoExams.setVisibility(View.VISIBLE);
 
                                 }
@@ -118,6 +128,7 @@ public class StudentExamActivity extends AppCompatActivity {
 
                         } else {
                             skeletonScreen.hide();
+                            binding.swipeRefresh.setRefreshing(false);
 
                             try {
                                 Log.e("error", response.code() + "__" + response.errorBody().string());
@@ -137,6 +148,7 @@ public class StudentExamActivity extends AppCompatActivity {
                     public void onFailure(Call<TeacherExamDataModel> call, Throwable t) {
                         try {
                             skeletonScreen.hide();
+                            binding.swipeRefresh.setRefreshing(false);
 
                             if (t.getMessage() != null) {
                                 Log.e("error", t.getMessage() + "__");
@@ -155,9 +167,9 @@ public class StudentExamActivity extends AppCompatActivity {
     }
 
     public void setItemData(TeacherExamModel model) {
-        String url = Tags.base_url+"student-exams/"+model.getId()+"?student_id="+userModel.getData().getId()+"&view_type=webView";
+        String url = Tags.base_url + "student-exams/" + model.getId() + "?student_id=" + userModel.getData().getId() + "&view_type=webView";
         Intent intent = new Intent(this, ViewActivity.class);
-        intent.putExtra("url",url);
+        intent.putExtra("url", url);
         startActivity(intent);
 
     }

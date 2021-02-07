@@ -184,6 +184,13 @@ public class UserModel implements Serializable {
             return teacher_money;
         }
 
+        public void setStudent_money(double student_money) {
+            this.student_money = student_money;
+        }
+
+        public void setTeacher_money(double teacher_money) {
+            this.teacher_money = teacher_money;
+        }
 
         public void setSelected(boolean selected) {
             isSelected = selected;

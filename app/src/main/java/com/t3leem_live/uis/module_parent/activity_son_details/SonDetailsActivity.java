@@ -28,6 +28,7 @@ import com.t3leem_live.remote.Api;
 import com.t3leem_live.tags.Tags;
 import com.t3leem_live.uis.module_general.activity_view.ViewActivity;
 import com.t3leem_live.uis.module_parent.activity_son_profile.SonProfileActivity;
+import com.t3leem_live.uis.module_parent.activity_subjects.SubjectActivity;
 import com.t3leem_live.uis.module_student.activity_son_subjects.SonSubjectActivity;
 import com.t3leem_live.uis.module_student.activity_student_exam.StudentExamActivity;
 import com.t3leem_live.uis.module_student.activity_student_profile.StudentProfileActivity;
@@ -83,9 +84,8 @@ public class SonDetailsActivity extends AppCompatActivity {
         });
 
         binding.cardTest.setOnClickListener(view -> {
-            TeacherModel model = new TeacherModel(user.getId(),user.getEmail(),user.getName(),user.getCode(),user.getUser_type(),user.getPhone_code(),user.getPhone(),user.getStage_id(),user.getClass_id(),"","",user.getParent_phone(),user.getTeacher_degree(),user.getTeacher_video(),user.getLogo(),user.getStage_fk(),user.getClass_fk(),user.getDepartment_fk(),user.getStudent_rates());
-            Intent intent = new Intent(this, SonSubjectActivity.class);
-            intent.putExtra("data",model);
+            Intent intent = new Intent(this, SubjectActivity.class);
+            intent.putExtra("data", user);
             startActivity(intent);
         });
 

@@ -20,12 +20,7 @@ import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.uis.module_center_course.activity_center_sign_up.CenterCourseSignUpActivity;
 import com.t3leem_live.uis.module_center_course.activity_home_center.CenterHomeActivity;
-import com.t3leem_live.uis.module_general.activity_chat_rooms.ChatRoomsActivity;
 import com.t3leem_live.uis.module_general.activity_contact_us.ContactUsActivity;
-import com.t3leem_live.uis.module_teacher.activity_teacher_create_students_chat.TeacherCreateStudentsChatActivity;
-import com.t3leem_live.uis.module_teacher.activity_teacher_groups_chat.TeacherGroupChatActivity;
-import com.t3leem_live.uis.module_teacher.activity_teacher_sign_up.TeacherSignUpActivity;
-
 import io.paperdb.Paper;
 
 public class Fragment_Profile_Center extends Fragment {

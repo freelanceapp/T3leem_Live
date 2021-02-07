@@ -152,7 +152,7 @@
                             android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
                             android:textColor="@color/white"
-                            android:textSize="35sp"
+                            android:textSize="30sp"
                             android:text="@string/rate"
                             android:fontFamily="@font/font"
                             />
@@ -193,7 +193,7 @@
                     app:cardCornerRadius="5dp"
                     app:contentPadding="8dp"
                     app:cardBackgroundColor="@color/color1"
-                    android:visibility="gone"
+                    android:visibility="visible"
 
                     >
                     <LinearLayout
@@ -230,8 +230,8 @@
                             android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
                             android:textColor="@color/white"
-                            android:textSize="35sp"
-                            android:text="@string/Test2"
+                            android:textSize="30sp"
+                            android:text="@string/test_degree"
                             android:fontFamily="@font/font"
                             />
                         <FrameLayout

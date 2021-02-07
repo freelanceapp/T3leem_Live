@@ -8,11 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.t3leem_live.R;
 import com.t3leem_live.uis.module_general.activity_chat.ChatActivity;
 import com.t3leem_live.adapters.ChatRoomsAdapter;
@@ -43,6 +45,7 @@ public class ChatRoomsActivity extends AppCompatActivity {
     private List<RoomModel> roomModelList;
     private int current_page = 1;
     private boolean isLoading = false;
+    private String type = "normal";
 
 
     @Override
@@ -62,17 +65,19 @@ public class ChatRoomsActivity extends AppCompatActivity {
     private void initView() {
         roomModelList = new ArrayList<>();
         Paper.init(this);
-        lang = Paper.book().read("lang","ar");
+        lang = Paper.book().read("lang", "ar");
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         binding.setLang(lang);
         binding.setModel(userModel);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ChatRoomsAdapter(roomModelList,this);
+        adapter = new ChatRoomsAdapter(roomModelList, this, userModel.getData().getUser_type());
         binding.recView.setAdapter(adapter);
 
 
-        binding.llBack.setOnClickListener(view -> {finish();});
+        binding.llBack.setOnClickListener(view -> {
+            finish();
+        });
 
         binding.recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -82,20 +87,25 @@ public class ChatRoomsActivity extends AppCompatActivity {
                     LinearLayoutManager manager = (LinearLayoutManager) binding.recView.getLayoutManager();
                     int last_item_pos = manager.findLastCompletelyVisibleItemPosition();
                     int total_items_count = binding.recView.getAdapter().getItemCount();
-                    if (total_items_count>=20&&last_item_pos == (total_items_count - 4) && !isLoading) {
+                    if (total_items_count >= 20 && last_item_pos == (total_items_count - 4) && !isLoading) {
                         int page = current_page + 1;
                         loadMore(page);
                     }
                 }
             }
         });
-        getStudents();
+
+        if (userModel.getData().getUser_type().equals("student") || userModel.getData().getUser_type().equals("teacher")) {
+            type = "all";
+        } else {
+            type = "normal";
+        }
+        getRooms();
 
     }
 
-    private void getStudents()
-    {
-        Api.getService(Tags.base_url).getRooms("Bearer "+userModel.getData().getToken(),"on", 20, 1,userModel.getData().getId(),userModel.getData().getUser_type(),"all")
+    private void getRooms() {
+        Api.getService(Tags.base_url).getRooms("Bearer " + userModel.getData().getToken(), "on", 20, 1, userModel.getData().getId(), userModel.getData().getUser_type(), type)
                 .enqueue(new Callback<RoomDataModel>() {
                     @Override
                     public void onResponse(Call<RoomDataModel> call, Response<RoomDataModel> response) {
@@ -114,7 +124,6 @@ public class ChatRoomsActivity extends AppCompatActivity {
                                 }
 
                                 adapter.notifyDataSetChanged();
-
 
 
                             }
@@ -152,12 +161,12 @@ public class ChatRoomsActivity extends AppCompatActivity {
                     }
                 });
     }
-    private void loadMore(int page)
-    {
+
+    private void loadMore(int page) {
         adapter.notifyItemInserted(roomModelList.size() - 1);
         isLoading = true;
 
-        Api.getService(Tags.base_url).getRooms("Bearer "+userModel.getData().getToken(),"on", 20,page,userModel.getData().getId(),userModel.getData().getUser_type(),"all")
+        Api.getService(Tags.base_url).getRooms("Bearer " + userModel.getData().getToken(), "on", 20, page, userModel.getData().getId(), userModel.getData().getUser_type(), type)
                 .enqueue(new Callback<RoomDataModel>() {
                     @Override
                     public void onResponse(Call<RoomDataModel> call, Response<RoomDataModel> response) {
@@ -222,10 +231,25 @@ public class ChatRoomsActivity extends AppCompatActivity {
 
     public void navigateToChatActivity(RoomModel model) {
 
-        RoomModel.RoomFkModel roomFkModel = new RoomModel.RoomFkModel(model.getId(),model.getRoom_fk().getTitle(),model.getRoom_fk().getDesc(),model.getRoom_status(),model.getRoom_fk().getRoom_type());
+        String title = "";
+        String desc = "";
+        if (model.getUser_type().equals("parent")) {
+            desc ="";
+            if (userModel.getData().getUser_type().equals("parent")) {
+                title = model.getTo_user_fk().getName();
+            } else {
+                title = model.getFrom_user_fk().getName();
+
+            }
+        } else {
+            title = model.getRoom_fk().getTitle();
+            desc = model.getRoom_fk().getDesc();
+
+        }
+        RoomModel.RoomFkModel roomFkModel = new RoomModel.RoomFkModel(model.getId(), title, desc, model.getRoom_status(), model.getRoom_fk().getRoom_type());
 
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("data",roomFkModel);
+        intent.putExtra("data", roomFkModel);
         startActivity(intent);
     }
 

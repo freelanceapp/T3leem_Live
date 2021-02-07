@@ -1,11 +1,10 @@
-package com.t3leem_live.uis.module_student.joint_center_activity;
+package com.t3leem_live.uis.module_student.activity_joint_center;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,18 +16,14 @@ import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
 import com.t3leem_live.adapters.JoinCenterAdapter;
-import com.t3leem_live.adapters.SummaryAdapter;
 import com.t3leem_live.databinding.ActivityJointCenterBinding;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.JoinCenterDataModel;
 import com.t3leem_live.models.JoinCenterModel;
-import com.t3leem_live.models.StageClassModel;
-import com.t3leem_live.models.SummaryDataModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.tags.Tags;
-import com.t3leem_live.uis.module_student.activity_summary.SummaryActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;

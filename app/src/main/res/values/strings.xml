@@ -173,7 +173,7 @@
     <string name="parent">انا ولي امر</string>
     <string name="my_sons">أبنائي</string>
     <string name="no_sons_to_show">لا يوجد ابناء لعرضها</string>
-    <string name="search_name_phone">إبحث بالاسم او رقم الهاتف</string>
+    <string name="search_name_phone">إبحث بالبريد الإلكتروني او رقم الهاتف</string>
     <string name="search2">بحث</string>
     <string name="no_search_result">لا توجد نتائج للبحث</string>
     <string name="add">إضافة</string>
@@ -231,5 +231,8 @@
     <string name="balance_not_ava">ليس لديك رصيد كافي</string>
     <string name="already_paid">تم الدفع</string>
     <string name="paid">مدفوع</string>
+    <string name="teacher_parent">ولي امر/مدرس</string>
+    <string name="my_son_teacher">مدرسين ابنائي</string>
+    <string name="test_degree">الإختبارات والدرجات</string>
 
 </resources>

@@ -41,7 +41,8 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 import com.t3leem_live.R;
-import com.t3leem_live.uis.module_teacher.activity_home_teacher.TeacherHomeActivity;
+import com.t3leem_live.adapters.TeacherParentSpinnerAdapter;
+import com.t3leem_live.uis.module_teacher.activity_teacher_home.TeacherHomeActivity;
 import com.t3leem_live.uis.module_general.activity_sign_up_chooser.SignUpChooserActivity;
 import com.t3leem_live.uis.module_general.activity_verification_code.VerificationCodeActivity;
 import com.t3leem_live.adapters.CountriesAdapter;
@@ -94,6 +95,8 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     private int currentWindow = 0;
     private long currentPosition = 0;
     private boolean playWhenReady = true;
+    private TeacherParentSpinnerAdapter teacherParentSpinnerAdapter;
+    private List<String> teacherTypeList;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -113,6 +116,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         stageModelList = new ArrayList<>();
+        teacherTypeList = new ArrayList<>();
         StageClassModel stageClassModel = new StageClassModel();
         stageClassModel.setId(0);
         stageClassModel.setTitle("إختر المرحلة");
@@ -123,9 +127,31 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         lang = Paper.book().read("lang", "ar");
         binding.progBarBuffering.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.gray5), PorterDuff.Mode.SRC_IN);
 
+        teacherTypeList.add(getString(R.string.teacher));
+        teacherTypeList.add(getString(R.string.teacher_parent));
+
+        teacherParentSpinnerAdapter = new TeacherParentSpinnerAdapter(teacherTypeList, this);
+        binding.spinnerTeacherParent.setAdapter(teacherParentSpinnerAdapter);
+        binding.spinnerTeacherParent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position==0){
+                    model.setIs_parent("no");
+                }else {
+                    model.setIs_parent("yes");
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         model = new TeacherSignUpModel();
 
-        if (userModel==null){
+        if (userModel == null) {
             model.setPhone_code(phone_code);
             binding.setModel(model);
             binding.btnNext.setText(getString(R.string.save));
@@ -133,7 +159,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
             binding.llPassword.setVisibility(View.VISIBLE);
             binding.progBarBuffering.setVisibility(View.GONE);
 
-        }else {
+        } else {
             model.setName(userModel.getData().getName());
             model.setEmail(userModel.getData().getEmail());
             model.setPassword("123456");
@@ -142,17 +168,24 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
             model.setVideoUri(userModel.getData().getTeacher_video());
             model.setAddress(userModel.getData().getAddress());
             model.setSchool_name(userModel.getData().getSchool_name());
+            model.setIs_parent(userModel.getData().getIs_parent());
+            if (model.getIs_parent().equals("yes")){
+                binding.spinnerTeacherParent.setSelection(1);
+            }else {
+                binding.spinnerTeacherParent.setSelection(0);
+
+            }
             binding.progBarBuffering.setVisibility(View.VISIBLE);
 
-            int stage_id =0;
-            if (userModel.getData().getStage_id()!=null){
+            int stage_id = 0;
+            if (userModel.getData().getStage_id() != null) {
                 stage_id = userModel.getData().getStage_fk().getId();
             }
             model.setStage_id(stage_id);
             model.setDegree(userModel.getData().getTeacher_degree());
 
-            if (userModel.getData().getLogo()!=null&&!userModel.getData().getLogo().isEmpty()&&!userModel.getData().getLogo().equals("0")){
-                Picasso.get().load(Uri.parse(Tags.IMAGE_URL+userModel.getData().getLogo())).into(binding.image);
+            if (userModel.getData().getLogo() != null && !userModel.getData().getLogo().isEmpty() && !userModel.getData().getLogo().equals("0")) {
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL + userModel.getData().getLogo())).into(binding.image);
             }
             binding.btnNext.setText(getString(R.string.update));
             binding.player.setVisibility(View.VISIBLE);
@@ -202,7 +235,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
             @Override
             public void afterTextChanged(Editable editable) {
                 String phone = editable.toString();
-                if (phone.startsWith("0")){
+                if (phone.startsWith("0")) {
                     binding.edtPhone.setText(null);
                 }
             }
@@ -240,9 +273,9 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                         if (response.isSuccessful()) {
                             stageModelList.addAll(response.body().getData());
                             runOnUiThread(() -> adapter.notifyDataSetChanged());
-                            if (userModel!=null){
+                            if (userModel != null) {
                                 int pos = getUserStagePos();
-                                if (pos!=-1){
+                                if (pos != -1) {
                                     binding.spinnerStage.setSelection(pos);
                                 }
                             }
@@ -283,11 +316,11 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
 
     }
 
-    private int getUserStagePos(){
+    private int getUserStagePos() {
         int pos = -1;
-        for (int index=0;index<stageModelList.size();index++){
+        for (int index = 0; index < stageModelList.size(); index++) {
             StageClassModel model = stageModelList.get(index);
-            if (model.getId()==userModel.getData().getStage_fk().getId()){
+            if (model.getId() == userModel.getData().getStage_fk().getId()) {
                 pos = index;
                 return pos;
             }
@@ -327,26 +360,26 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     public void validate() {
         if (model.isDataValid(this)) {
 
-            if (userModel==null){
-                 if (imageUri == null) {
-                signUpWithoutImage();
+            if (userModel == null) {
+                if (imageUri == null) {
+                    signUpWithoutImage();
+                } else {
+                    signUpWithImage();
+                }
             } else {
-                signUpWithImage();
-            }
-            }else {
-                if (videoUri!=null&&imageUri!=null){
+                if (videoUri != null && imageUri != null) {
                     updateWithImageWithVideo();
-                }else if (videoUri!=null&&imageUri==null){
+                } else if (videoUri != null && imageUri == null) {
                     updateWithoutImageWithVideo();
-                }else if (videoUri==null&&imageUri!=null){
+                } else if (videoUri == null && imageUri != null) {
                     updateWithImageWithoutVideo();
-                }else if (videoUri==null&&imageUri==null){
+                } else if (videoUri == null && imageUri == null) {
                     updateWithoutImageWithoutVideo();
                 }
             }
 
 
-             //navigateToVerificationActivity();
+            //navigateToVerificationActivity();
         }
     }
 
@@ -374,10 +407,11 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         RequestBody software_part = Common.getRequestBodyText("android");
         RequestBody user_type_part = Common.getRequestBodyText("teacher");
         MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
+        RequestBody is_parent_part = Common.getRequestBodyText(model.getIs_parent());
 
 
         Api.getService(Tags.base_url)
-                .signUpTeacherWithoutImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part, video)
+                .signUpTeacherWithoutImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,is_parent_part, video)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -388,9 +422,9 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                         } else {
                             if (response.code() == 500) {
                                 Toast.makeText(TeacherSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==422) {
+                            } else if (response.code() == 422) {
                                 Toast.makeText(TeacherSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(TeacherSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -430,12 +464,13 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
         RequestBody software_part = Common.getRequestBodyText("android");
         RequestBody user_type_part = Common.getRequestBodyText("teacher");
+        RequestBody is_parent_part = Common.getRequestBodyText(model.getIs_parent());
         MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
         MultipartBody.Part image = Common.getMultiPart(this, imageUri, "logo");
 
 
         Api.getService(Tags.base_url)
-                .signUpTeacherWithImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part, image, video)
+                .signUpTeacherWithImage(name_part, email_part, phone_code_part, phone_part, password_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,is_parent_part, image, video)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -446,7 +481,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                         } else {
                             if (response.code() == 500) {
                                 Toast.makeText(TeacherSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            } else if (response.code()==422) {
+                            } else if (response.code() == 422) {
                                 Toast.makeText(TeacherSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(TeacherSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
@@ -474,8 +509,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     }
 
 
-    private void updateWithoutImageWithoutVideo()
-    {
+    private void updateWithoutImageWithoutVideo() {
         ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
@@ -490,25 +524,26 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         RequestBody degree_part = Common.getRequestBodyText(String.valueOf(model.getDegree()));
         RequestBody software_part = Common.getRequestBodyText("android");
         RequestBody user_type_part = Common.getRequestBodyText("teacher");
+        RequestBody is_parent_part = Common.getRequestBodyText(model.getIs_parent());
 
 
         Api.getService(Tags.base_url)
-                .updateTeacherWithoutImageWithoutVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part)
+                .updateTeacherWithoutImageWithoutVideo("Bearer " + userModel.getData().getToken(), id_part, name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,is_parent_part)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                         dialog.dismiss();
                         if (response.isSuccessful() && response.body() != null) {
 
-                            preferences.create_update_userdata(TeacherSignUpActivity.this,response.body());
+                            preferences.create_update_userdata(TeacherSignUpActivity.this, response.body());
                             setResult(RESULT_OK);
                             finish();
                         } else {
                             if (response.code() == 500) {
                                 Toast.makeText(TeacherSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==422) {
+                            } else if (response.code() == 422) {
                                 Toast.makeText(TeacherSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(TeacherSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -532,8 +567,8 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                     }
                 });
     }
-    private void updateWithImageWithoutVideo()
-    {
+
+    private void updateWithImageWithoutVideo() {
         ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
@@ -549,25 +584,26 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         RequestBody software_part = Common.getRequestBodyText("android");
         RequestBody user_type_part = Common.getRequestBodyText("teacher");
         MultipartBody.Part image = Common.getMultiPart(this, imageUri, "logo");
+        RequestBody is_parent_part = Common.getRequestBodyText(model.getIs_parent());
 
 
         Api.getService(Tags.base_url)
-                .updateTeacherWithImageWithoutVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,image)
+                .updateTeacherWithImageWithoutVideo("Bearer " + userModel.getData().getToken(), id_part, name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,is_parent_part, image)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                         dialog.dismiss();
                         if (response.isSuccessful() && response.body() != null) {
-                            preferences.create_update_userdata(TeacherSignUpActivity.this,response.body());
+                            preferences.create_update_userdata(TeacherSignUpActivity.this, response.body());
 
                             setResult(RESULT_OK);
                             finish();
                         } else {
                             if (response.code() == 500) {
                                 Toast.makeText(TeacherSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==422) {
+                            } else if (response.code() == 422) {
                                 Toast.makeText(TeacherSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(TeacherSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -592,8 +628,7 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                 });
     }
 
-    private void updateWithoutImageWithVideo()
-    {
+    private void updateWithoutImageWithVideo() {
         ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
@@ -609,25 +644,26 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         RequestBody software_part = Common.getRequestBodyText("android");
         RequestBody user_type_part = Common.getRequestBodyText("teacher");
         MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
+        RequestBody is_parent_part = Common.getRequestBodyText(model.getIs_parent());
 
 
         Api.getService(Tags.base_url)
-                .updateTeacherWithoutImageWithVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,video)
+                .updateTeacherWithoutImageWithVideo("Bearer " + userModel.getData().getToken(), id_part, name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,is_parent_part, video)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                         dialog.dismiss();
                         if (response.isSuccessful() && response.body() != null) {
-                            preferences.create_update_userdata(TeacherSignUpActivity.this,response.body());
+                            preferences.create_update_userdata(TeacherSignUpActivity.this, response.body());
 
                             setResult(RESULT_OK);
                             finish();
                         } else {
                             if (response.code() == 500) {
                                 Toast.makeText(TeacherSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==422) {
+                            } else if (response.code() == 422) {
                                 Toast.makeText(TeacherSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(TeacherSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -651,8 +687,8 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                     }
                 });
     }
-    private void updateWithImageWithVideo()
-    {
+
+    private void updateWithImageWithVideo() {
         ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
@@ -669,24 +705,25 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         RequestBody user_type_part = Common.getRequestBodyText("teacher");
         MultipartBody.Part image = Common.getMultiPart(this, imageUri, "logo");
         MultipartBody.Part video = Common.getMultiPartVideo(this, videoUri, "teacher_video");
+        RequestBody is_parent_part = Common.getRequestBodyText(model.getIs_parent());
 
 
         Api.getService(Tags.base_url)
-                .updateTeacherWithImageWithVideo("Bearer "+userModel.getData().getToken(),id_part,name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,image,video)
+                .updateTeacherWithImageWithVideo("Bearer " + userModel.getData().getToken(), id_part, name_part, email_part, phone_code_part, phone_part, address_part, school_name_part, stage_id_part, degree_part, software_part, user_type_part,is_parent_part, image, video)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                         dialog.dismiss();
                         if (response.isSuccessful() && response.body() != null) {
-                            preferences.create_update_userdata(TeacherSignUpActivity.this,response.body());
+                            preferences.create_update_userdata(TeacherSignUpActivity.this, response.body());
                             setResult(RESULT_OK);
                             finish();
                         } else {
                             if (response.code() == 500) {
                                 Toast.makeText(TeacherSignUpActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
-                            }else if (response.code()==422) {
+                            } else if (response.code() == 422) {
                                 Toast.makeText(TeacherSignUpActivity.this, R.string.phone_exist, Toast.LENGTH_SHORT).show();
-                            }else {
+                            } else {
                                 Toast.makeText(TeacherSignUpActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -777,20 +814,20 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
             }
         } else if (requestCode == 300 && resultCode == RESULT_OK) {
 
-            if (userModel==null){
+            if (userModel == null) {
                 if (imageUri == null) {
                     signUpWithoutImage();
                 } else {
                     signUpWithImage();
                 }
-            }else {
-                if (videoUri!=null&&imageUri!=null){
+            } else {
+                if (videoUri != null && imageUri != null) {
                     updateWithImageWithVideo();
-                }else if (videoUri!=null&&imageUri==null){
+                } else if (videoUri != null && imageUri == null) {
                     updateWithoutImageWithVideo();
-                }else if (videoUri==null&&imageUri!=null){
+                } else if (videoUri == null && imageUri != null) {
                     updateWithImageWithoutVideo();
-                }else if (videoUri==null&&imageUri==null){
+                } else if (videoUri == null && imageUri == null) {
                     updateWithoutImageWithoutVideo();
                 }
             }
@@ -804,7 +841,6 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(factory).createMediaSource(uri);
         player.prepare(mediaSource);
     }
-
 
 
     private void initPlayer(Uri uri) {
@@ -834,18 +870,18 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
                 if (playWhenReady) {
                     if (playbackState == Player.STATE_BUFFERING) {
                         binding.progBarBuffering.setVisibility(View.VISIBLE);
-                    }else if (playbackState==Player.STATE_READY){
+                    } else if (playbackState == Player.STATE_READY) {
                         binding.progBarBuffering.setVisibility(View.GONE);
 
-                    }else if (playbackState == Player.STATE_ENDED) {
+                    } else if (playbackState == Player.STATE_ENDED) {
                         binding.progBarBuffering.setVisibility(View.GONE);
                         currentWindow = 0;
                         currentPosition = 0;
                         initPlayer(uri);
-                    } else if (playbackState == Player.TIMELINE_CHANGE_REASON_RESET){
+                    } else if (playbackState == Player.TIMELINE_CHANGE_REASON_RESET) {
                         binding.progBarBuffering.setVisibility(View.VISIBLE);
 
-                    }else {
+                    } else {
                         binding.progBarBuffering.setVisibility(View.GONE);
 
                     }
@@ -889,10 +925,10 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     @Override
     public void onBackPressed() {
 
-        if (userModel==null){
+        if (userModel == null) {
             navigateToSignUpChooserActivity();
 
-        }else {
+        } else {
             finish();
         }
     }
@@ -914,13 +950,13 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     protected void onStart() {
         super.onStart();
         if (Util.SDK_INT >= 24) {
-            if (userModel!=null&&videoUri==null){
-                Uri uri = Uri.parse(Tags.IMAGE_URL+userModel.getData().getTeacher_video());
+            if (userModel != null && videoUri == null) {
+                Uri uri = Uri.parse(Tags.IMAGE_URL + userModel.getData().getTeacher_video());
                 if (uri != null) {
                     initPlayer(uri);
 
                 }
-            }else {
+            } else {
                 if (videoUri != null) {
                     playVideo(videoUri);
 
@@ -934,13 +970,13 @@ public class TeacherSignUpActivity extends AppCompatActivity implements Listener
     protected void onResume() {
         super.onResume();
         if (Util.SDK_INT < 24 || player == null) {
-            if (userModel!=null&&videoUri==null){
-                Uri uri = Uri.parse(Tags.IMAGE_URL+userModel.getData().getTeacher_video());
+            if (userModel != null && videoUri == null) {
+                Uri uri = Uri.parse(Tags.IMAGE_URL + userModel.getData().getTeacher_video());
                 if (uri != null) {
                     initPlayer(uri);
 
                 }
-            }else {
+            } else {
                 if (videoUri != null) {
                     playVideo(videoUri);
 

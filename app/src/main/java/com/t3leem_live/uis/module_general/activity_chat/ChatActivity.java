@@ -29,7 +29,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.t3leem_live.R;
-import com.t3leem_live.uis.module_teacher.activity_home_teacher.TeacherHomeActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_home.TeacherHomeActivity;
 import com.t3leem_live.uis.module_student.activity_student_home.StudentHomeActivity;
 import com.t3leem_live.adapters.ChatAdapter;
 import com.t3leem_live.databinding.ActivityChatBinding;

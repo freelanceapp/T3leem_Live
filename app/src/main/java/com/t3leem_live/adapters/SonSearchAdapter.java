@@ -1,6 +1,7 @@
 package com.t3leem_live.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

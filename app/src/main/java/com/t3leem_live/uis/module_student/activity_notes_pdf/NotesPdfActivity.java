@@ -98,7 +98,7 @@ public class NotesPdfActivity extends AppCompatActivity {
     {
 
         Api.getService(Tags.base_url)
-                .getVideos(stageClassModel.getStage_id(),stageClassModel.getClass_id(),stageClassModel.getDepartment_id(),String.valueOf(stageClassModel.getId()),"pdf")
+                .getVideos(userModel.getData().getId(),stageClassModel.getStage_id(),stageClassModel.getClass_id(),stageClassModel.getDepartment_id(),String.valueOf(stageClassModel.getId()),"pdf")
                 .enqueue(new Callback<VideoLessonsDataModel>() {
                     @Override
                     public void onResponse(Call<VideoLessonsDataModel> call, Response<VideoLessonsDataModel> response) {

@@ -5,8 +5,11 @@ import java.io.Serializable;
 public class RoomModel implements Serializable {
     private int id;
     private String room_status;
+    private String user_type;
     private RoomFkModel room_fk;
     private String created_at;
+    private UserModel.User from_user_fk;
+    private UserModel.User to_user_fk;
 
     public int getId() {
         return id;
@@ -64,4 +67,15 @@ public class RoomModel implements Serializable {
         }
     }
 
+    public UserModel.User getFrom_user_fk() {
+        return from_user_fk;
+    }
+
+    public UserModel.User getTo_user_fk() {
+        return to_user_fk;
+    }
+
+    public String getUser_type() {
+        return user_type;
+    }
 }
