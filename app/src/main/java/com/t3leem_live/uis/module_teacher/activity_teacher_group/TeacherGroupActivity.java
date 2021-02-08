@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.t3leem_live.R;
+import com.t3leem_live.models.VideoLessonsModel;
+import com.t3leem_live.uis.module_student.activity_videos.VideosActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_add_group.TeacherAddGroupActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_create_stream.TeacherCreateStreamActivity;
 import com.t3leem_live.adapters.TeacherGroupsAdapter;
@@ -46,6 +49,8 @@ public class TeacherGroupActivity extends AppCompatActivity {
     private Preferences preference;
     private UserModel userModel;
     private SkeletonScreen skeletonScreen;
+    private int selectedPos = -1;
+    private TeacherGroupModel teacherGroupModel;
 
 
     @Override
@@ -84,7 +89,7 @@ public class TeacherGroupActivity extends AppCompatActivity {
 
         binding.fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, TeacherAddGroupActivity.class);
-            startActivityForResult(intent,100);
+            startActivityForResult(intent, 100);
         });
         getGroups();
 
@@ -109,7 +114,6 @@ public class TeacherGroupActivity extends AppCompatActivity {
                                     binding.tvNoGroups.setVisibility(View.VISIBLE);
 
                                 }
-
 
 
                             }
@@ -208,17 +212,88 @@ public class TeacherGroupActivity extends AppCompatActivity {
 
 
     public void startLiveStream(TeacherGroupModel model2, int adapterPosition) {
+        teacherGroupModel = model2;
+        selectedPos = adapterPosition;
         Intent intent = new Intent(this, TeacherCreateStreamActivity.class);
-        intent.putExtra("data",model2);
-        startActivity(intent);
+        intent.putExtra("data", model2);
+        startActivityForResult(intent, 200);
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode ==100&&resultCode==RESULT_OK){
+        if (requestCode == 100 && resultCode == RESULT_OK) {
             getGroups();
+        } else if (requestCode == 200 && resultCode == RESULT_OK && data != null) {
+            String url = data.getStringExtra("url");
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+            finish();
         }
+    }
+
+    public void endLive(TeacherGroupModel model2, int adapterPosition) {
+        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        Api.getService(Tags.base_url)
+                .endChat("Bearer " + userModel.getData().getToken(), Integer.parseInt(model2.getTeacher_id()), "off")
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()) {
+                            model2.setLive_stream_fk(null);
+                            teacherGroupModelList.set(adapterPosition, model2);
+                            adapter.notifyItemChanged(adapterPosition);
+                        } else {
+                            dialog.dismiss();
+                            try {
+                                Log.e("error", response.code() + "__" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (response.code() == 500) {
+                                Toast.makeText(TeacherGroupActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                            } else if (response.code() == 422) {
+                                Toast.makeText(TeacherGroupActivity.this, R.string.already_paid, Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(TeacherGroupActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            dialog.dismiss();
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(TeacherGroupActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(TeacherGroupActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+    }
+
+
+    public void continueLive(TeacherGroupModel model2, int adapterPosition) {
+        String url = model2.getLive_stream_fk().getStart_url();
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+
     }
 }

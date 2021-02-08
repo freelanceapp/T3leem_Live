@@ -25,6 +25,7 @@ import com.t3leem_live.adapters.StudentTeachersAdapter2;
 import com.t3leem_live.databinding.ActivityAvailableTeacherBinding;
 import com.t3leem_live.databinding.ActivityParentSonTeacherBinding;
 import com.t3leem_live.language.Language;
+import com.t3leem_live.models.RoomModel;
 import com.t3leem_live.models.StageClassModel;
 import com.t3leem_live.models.TeacherModel;
 import com.t3leem_live.models.TeachersDataModel;
@@ -33,6 +34,7 @@ import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
+import com.t3leem_live.uis.module_general.activity_chat.ChatActivity;
 import com.t3leem_live.uis.module_student.activity_available_teacher.AvailableTeacherActivity;
 import com.t3leem_live.uis.module_student.activity_student_teachers_group.StudentTeachersGroupActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_create_chat_group.TeacherCreateGroupChatActivity;
@@ -240,5 +242,12 @@ public class ParentSonTeacherActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    public void startChat(TeacherModel model) {
+        RoomModel.RoomFkModel roomFkModel = new RoomModel.RoomFkModel(model.getRoom_user_fk().getRoom_info_id(), model.getRoom_user_fk().getTo_user_fk().getName(), "", model.getRoom_user_fk().getRoom_status(), model.getRoom_user_fk().getRoom_fk().getRoom_type());
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("data", roomFkModel);
+        startActivity(intent);
     }
 }

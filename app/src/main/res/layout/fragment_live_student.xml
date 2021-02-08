@@ -2,25 +2,31 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        >
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recView"
+        android:layout_height="match_parent">
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <TextView
-            android:id="@+id/tvNoStream"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:layout_gravity="center"
-            android:text="@string/no_stream"
-            android:visibility="gone"
-            />
-    </FrameLayout>
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            >
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/tvNoStream"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:text="@string/no_stream"
+                android:visibility="gone"
+                />
+        </FrameLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

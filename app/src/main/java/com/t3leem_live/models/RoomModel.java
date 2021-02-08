@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class RoomModel implements Serializable {
     private int id;
+    private int room_info_id;
     private String room_status;
     private String user_type;
     private RoomFkModel room_fk;
@@ -77,5 +78,9 @@ public class RoomModel implements Serializable {
 
     public String getUser_type() {
         return user_type;
+    }
+
+    public int getRoom_info_id() {
+        return room_info_id;
     }
 }

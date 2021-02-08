@@ -98,7 +98,7 @@ public class TeacherCreateStudentsChatActivity extends AppCompatActivity {
 
         binding.llBack.setOnClickListener(view -> {finish();});
 
-        binding.recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        /*binding.recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -112,7 +112,7 @@ public class TeacherCreateStudentsChatActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
 
         binding.flCounter.setOnClickListener(view -> {
             if(selectedStudentModelList.size()>0){
@@ -136,19 +136,18 @@ public class TeacherCreateStudentsChatActivity extends AppCompatActivity {
 
     private void getStudents()
     {
-        Api.getService(Tags.base_url).getStudents("on", 20, 1, userModel.getData().getId())
-                .enqueue(new Callback<TeacherStudentsDataModel>() {
+        Api.getService(Tags.base_url).getStudents("off", 20, 1, userModel.getData().getId())
+                .enqueue(new Callback<List<TeacherStudentsModel>>() {
                     @Override
-                    public void onResponse(Call<TeacherStudentsDataModel> call, Response<TeacherStudentsDataModel> response) {
+                    public void onResponse(Call<List<TeacherStudentsModel>> call, Response<List<TeacherStudentsModel>> response) {
                         skeletonScreen.hide();
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
                                 teacherModelList.clear();
 
-                                if (response.body().getData().size() > 0) {
+                                if (response.body().size() > 0) {
                                     binding.tvNoStudents.setVisibility(View.GONE);
-                                    teacherModelList.addAll(response.body().getData());
-                                    current_page = response.body().getCurrent_page();
+                                    teacherModelList.addAll(response.body());
                                 } else {
                                     binding.tvNoStudents.setVisibility(View.VISIBLE);
 
@@ -172,7 +171,7 @@ public class TeacherCreateStudentsChatActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<TeacherStudentsDataModel> call, Throwable t) {
+                    public void onFailure(Call<List<TeacherStudentsModel>> call, Throwable t) {
                         skeletonScreen.hide();
                         try {
                             if (t.getMessage() != null) {
@@ -198,20 +197,19 @@ public class TeacherCreateStudentsChatActivity extends AppCompatActivity {
         adapter.notifyItemInserted(teacherModelList.size() - 1);
         isLoading = true;
 
-        Api.getService(Tags.base_url).getStudents("on", 20, page,userModel.getData().getId())
-                .enqueue(new Callback<TeacherStudentsDataModel>() {
+        Api.getService(Tags.base_url).getStudents("off", 20, page,userModel.getData().getId())
+                .enqueue(new Callback<List<TeacherStudentsModel>>() {
                     @Override
-                    public void onResponse(Call<TeacherStudentsDataModel> call, Response<TeacherStudentsDataModel> response) {
+                    public void onResponse(Call<List<TeacherStudentsModel>> call, Response<List<TeacherStudentsModel>> response) {
                         isLoading = false;
                         if (teacherModelList.get(teacherModelList.size() - 1) == null) {
                             teacherModelList.remove(teacherModelList.size() - 1);
                             adapter.notifyItemRemoved(teacherModelList.size() - 1);
                         }
                         if (response.isSuccessful()) {
-                            if (response.body() != null && response.body().getData().size() > 0) {
-                                current_page = response.body().getCurrent_page();
+                            if (response.body() != null && response.body().size() > 0) {
                                 int old_pos = teacherModelList.size() - 1;
-                                teacherModelList.addAll(response.body().getData());
+                                teacherModelList.addAll(response.body());
                                 int new_pos = teacherModelList.size();
                                 adapter.notifyItemRangeInserted(old_pos, new_pos);
 
@@ -233,7 +231,7 @@ public class TeacherCreateStudentsChatActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<TeacherStudentsDataModel> call, Throwable t) {
+                    public void onFailure(Call<List<TeacherStudentsModel>> call, Throwable t) {
                         isLoading = false;
                         if (teacherModelList.get(teacherModelList.size() - 1) == null) {
                             teacherModelList.remove(teacherModelList.size() - 1);

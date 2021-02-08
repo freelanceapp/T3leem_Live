@@ -65,13 +65,13 @@ public class TeacherStudentsActivity extends AppCompatActivity {
     private void initView() {
         teacherModelList = new ArrayList<>();
         Paper.init(this);
-        lang = Paper.book().read("lang","ar");
+        lang = Paper.book().read("lang", "ar");
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         binding.setLang(lang);
 
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new StudentsAdapter(teacherModelList,this);
+        adapter = new StudentsAdapter(teacherModelList, this);
         binding.recView.setAdapter(adapter);
 
         skeletonScreen = Skeleton.bind(binding.recView)
@@ -83,9 +83,11 @@ public class TeacherStudentsActivity extends AppCompatActivity {
                 .show();
 
 
-        binding.llBack.setOnClickListener(view -> {finish();});
+        binding.llBack.setOnClickListener(view -> {
+            finish();
+        });
 
-        binding.recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+       /* binding.recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -99,33 +101,30 @@ public class TeacherStudentsActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
         getStudents();
 
     }
 
-    private void getStudents()
-    {
-        Api.getService(Tags.base_url).getStudents("on", 20, 1, userModel.getData().getId())
-                .enqueue(new Callback<TeacherStudentsDataModel>() {
+    private void getStudents() {
+        Api.getService(Tags.base_url).getStudents("off", 20, 1, userModel.getData().getId())
+                .enqueue(new Callback<List<TeacherStudentsModel>>() {
                     @Override
-                    public void onResponse(Call<TeacherStudentsDataModel> call, Response<TeacherStudentsDataModel> response) {
+                    public void onResponse(Call<List<TeacherStudentsModel>> call, Response<List<TeacherStudentsModel>> response) {
                         skeletonScreen.hide();
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
                                 teacherModelList.clear();
 
-                                if (response.body().getData().size() > 0) {
+                                if (response.body().size() > 0) {
                                     binding.tvNoTeacher.setVisibility(View.GONE);
-                                    teacherModelList.addAll(response.body().getData());
-                                    current_page = response.body().getCurrent_page();
+                                    teacherModelList.addAll(response.body());
                                 } else {
                                     binding.tvNoTeacher.setVisibility(View.VISIBLE);
 
                                 }
 
                                 adapter.notifyDataSetChanged();
-
 
 
                             }
@@ -142,7 +141,7 @@ public class TeacherStudentsActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<TeacherStudentsDataModel> call, Throwable t) {
+                    public void onFailure(Call<List<TeacherStudentsModel>> call, Throwable t) {
                         skeletonScreen.hide();
                         try {
                             if (t.getMessage() != null) {
@@ -163,25 +162,24 @@ public class TeacherStudentsActivity extends AppCompatActivity {
                     }
                 });
     }
-    private void loadMore(int page)
-    {
+
+    private void loadMore(int page) {
         adapter.notifyItemInserted(teacherModelList.size() - 1);
         isLoading = true;
 
-        Api.getService(Tags.base_url).getStudents("on", 20, page,userModel.getData().getId())
-                .enqueue(new Callback<TeacherStudentsDataModel>() {
+        Api.getService(Tags.base_url).getStudents("on", 20, page, userModel.getData().getId())
+                .enqueue(new Callback<List<TeacherStudentsModel>>() {
                     @Override
-                    public void onResponse(Call<TeacherStudentsDataModel> call, Response<TeacherStudentsDataModel> response) {
+                    public void onResponse(Call<List<TeacherStudentsModel>> call, Response<List<TeacherStudentsModel>> response) {
                         isLoading = false;
                         if (teacherModelList.get(teacherModelList.size() - 1) == null) {
                             teacherModelList.remove(teacherModelList.size() - 1);
                             adapter.notifyItemRemoved(teacherModelList.size() - 1);
                         }
                         if (response.isSuccessful()) {
-                            if (response.body() != null && response.body().getData().size() > 0) {
-                                current_page = response.body().getCurrent_page();
+                            if (response.body() != null && response.body().size() > 0) {
                                 int old_pos = teacherModelList.size() - 1;
-                                teacherModelList.addAll(response.body().getData());
+                                teacherModelList.addAll(response.body());
                                 int new_pos = teacherModelList.size();
                                 adapter.notifyItemRangeInserted(old_pos, new_pos);
 
@@ -203,7 +201,7 @@ public class TeacherStudentsActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<TeacherStudentsDataModel> call, Throwable t) {
+                    public void onFailure(Call<List<TeacherStudentsModel>> call, Throwable t) {
                         isLoading = false;
                         if (teacherModelList.get(teacherModelList.size() - 1) == null) {
                             teacherModelList.remove(teacherModelList.size() - 1);
@@ -233,7 +231,7 @@ public class TeacherStudentsActivity extends AppCompatActivity {
 
     public void navigateToStudentProfileActivity(TeacherStudentsModel model) {
         Intent intent = new Intent(this, StudentProfileActivity.class);
-        intent.putExtra("data",model.getStudent_fk());
+        intent.putExtra("data", model.getStudent_fk());
         startActivity(intent);
     }
 }

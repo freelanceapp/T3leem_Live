@@ -28,6 +28,7 @@ import com.t3leem_live.models.TeacherGroupDataModel;
 import com.t3leem_live.models.TeacherGroupModel;
 import com.t3leem_live.models.TeacherModel;
 import com.t3leem_live.models.TeacherStudentsDataModel;
+import com.t3leem_live.models.TeacherStudentsModel;
 import com.t3leem_live.models.TeachersDataModel;
 import com.t3leem_live.models.TeachersInsideCenterModel;
 import com.t3leem_live.models.UserModel;
@@ -334,7 +335,9 @@ public interface Service {
     Call<SummaryDataModel> getSummary(@Query(value = "stage_id") int stage_id,
                                       @Query(value = "class_id") int class_id,
                                       @Query(value = "department_id") String department_id,
-                                      @Query(value = "subject_id") int subject_id
+                                      @Query(value = "subject_id") int subject_id,
+                                      @Query(value = "student_id") int student_id
+
     );
 
 
@@ -508,10 +511,10 @@ public interface Service {
 
 
     @GET("api/my-students")
-    Call<TeacherStudentsDataModel> getStudents(@Query(value = "pagination_status") String pagination_status,
-                                               @Query(value = "per_link_") int per_link,
-                                               @Query(value = "page") int page,
-                                               @Query(value = "teacher_id") int teacher_id
+    Call<List<TeacherStudentsModel>> getStudents(@Query(value = "pagination_status") String pagination_status,
+                                                 @Query(value = "per_link_") int per_link,
+                                                 @Query(value = "page") int page,
+                                                 @Query(value = "teacher_id") int teacher_id
     );
 
     @FormUrlEncoded
@@ -556,7 +559,6 @@ public interface Service {
     );
 
 
-
     @GET("api/get-all-live-stream")
     Call<List<StreamModel>> getStreams(@Query(value = "student_id") int student_id);
 
@@ -576,14 +578,14 @@ public interface Service {
                                            @Query(value = "pagination_status") String pagination_status,
                                            @Query(value = "per_link_") int per_link_,
                                            @Query(value = "page") int page,
-                                           @Query(value = "room_id") int room_id
+                                           @Query(value = "room_info_id") int room_info_id
 
     );
 
     @FormUrlEncoded
     @POST("api/add-msg")
     Call<SingleMessageDataModel> sendChatMessage(@Header("Authorization") String bearer_token,
-                                                 @Field("room_id") int room_id,
+                                                 @Field("room_info_id") int room_id,
                                                  @Field("from_user_id") int from_user_id,
                                                  @Field("type") String type,
                                                  @Field("message") String message
@@ -594,7 +596,7 @@ public interface Service {
     @Multipart
     @POST("api/add-msg")
     Call<SingleMessageDataModel> sendChatAttachment(@Header("Authorization") String user_token,
-                                                    @Part("room_id") RequestBody room_id,
+                                                    @Part("room_info_id") RequestBody room_id,
                                                     @Part("from_user_id") RequestBody from_user_id,
                                                     @Part("type") RequestBody message_type,
                                                     @Part MultipartBody.Part attachment
@@ -792,5 +794,13 @@ public interface Service {
     Call<List<TeacherModel>> getParentSonTeacher(@Header("Authorization") String bearer_token,
                                                  @Query(value = "parent_id") int parent_id
     );
+
+    @FormUrlEncoded
+    @POST("api/update_live_status")
+    Call<ResponseBody> endChat(@Header("Authorization") String bearer_token,
+                               @Field(value = "teacher_id") int teacher_id,
+                               @Field(value = "live_status") String live_status
+    );
+
 
 }

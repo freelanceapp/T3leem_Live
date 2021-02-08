@@ -86,10 +86,12 @@ public class TeacherCreateStreamActivity extends AppCompatActivity {
     }
     private void createStream()
     {
-        String department_id ="";
+        String department_id ="empty";
         if (teacherGroupModel.getDepartment_fk()!=null){
-            department_id = String.valueOf(teacherGroupModel.getId());
+            department_id = String.valueOf(teacherGroupModel.getDepartment_fk().getId());
         }
+
+        Log.e("data",userModel.getData().getId()+"__"+teacherGroupModel.getStage_fk().getId()+"__"+teacherGroupModel.getClass_fk().getId()+"__"+department_id+"__"+teacherGroupModel.getSubject_id()+"__"+teacherGroupModel.getId()+"__"+model.getTitle()+model.getSubject()+"___"+model.getPrice()+"__"+model.getDuration());
         ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
@@ -103,9 +105,9 @@ public class TeacherCreateStreamActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             if (response.body()!=null&&response.body().data!=null){
                                 String url = response.body().data.getStart_url();
-                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                intent.setData(Uri.parse(url));
-                                startActivity(intent);
+                                Intent intent = getIntent();
+                                intent.putExtra("url",url);
+                                setResult(RESULT_OK,intent);
                                 finish();
 
                             }
@@ -145,6 +147,8 @@ public class TeacherCreateStreamActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 
 
 }

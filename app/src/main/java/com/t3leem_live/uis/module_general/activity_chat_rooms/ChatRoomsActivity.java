@@ -246,7 +246,9 @@ public class ChatRoomsActivity extends AppCompatActivity {
             desc = model.getRoom_fk().getDesc();
 
         }
-        RoomModel.RoomFkModel roomFkModel = new RoomModel.RoomFkModel(model.getId(), title, desc, model.getRoom_status(), model.getRoom_fk().getRoom_type());
+
+
+        RoomModel.RoomFkModel roomFkModel = new RoomModel.RoomFkModel(model.getRoom_info_id(), title, desc, model.getRoom_status(), model.getRoom_fk().getRoom_type());
 
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra("data", roomFkModel);

@@ -284,7 +284,6 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -296,6 +295,21 @@
             android:name=".uis.module_general.activity_chat.ServiceUploadAttachment"
             android:enabled="true"
             android:stopWithTask="false" />
+
+        <service
+            android:name=".services.ServiceDownload"
+            android:enabled="true"
+            android:stopWithTask="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_path" />
+        </provider>
     </application>
 
 </manifest>

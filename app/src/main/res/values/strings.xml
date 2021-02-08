@@ -234,5 +234,10 @@
     <string name="teacher_parent">ولي امر/مدرس</string>
     <string name="my_son_teacher">مدرسين ابنائي</string>
     <string name="test_degree">الإختبارات والدرجات</string>
+    <string name="chat">محادثة</string>
+    <string name="end_live">إنهاء البث</string>
+    <string name="start">بدء</string>
+    <string name="down_done">تم التنزيل</string>
+    <string name="download">تنزيل</string>
 
 </resources>

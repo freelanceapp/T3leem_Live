@@ -52,7 +52,7 @@ public class StreamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         MyHolder myHolder = (MyHolder) holder;
         StreamModel streamModel = list.get(position);
         myHolder.binding.setModel(streamModel);
-        myHolder.binding.btnJoin.setOnClickListener(view -> {
+        myHolder.binding.flJoin.setOnClickListener(view -> {
             StreamModel streamModel2 = list.get(myHolder.getAdapterPosition());
             fragment.setItemData(streamModel2,myHolder.getAdapterPosition());
 

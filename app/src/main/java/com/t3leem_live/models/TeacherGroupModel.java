@@ -18,6 +18,7 @@ public class TeacherGroupModel implements Serializable {
     private StageClassModel department_fk;
     private TeacherModel teacher_fk;
     private StudentBook student_book;
+    private LiveStreamFk live_stream_fk;
 
     public int getId() {
         return id;
@@ -83,6 +84,14 @@ public class TeacherGroupModel implements Serializable {
         this.student_book = student_book;
     }
 
+    public void setLive_stream_fk(LiveStreamFk live_stream_fk) {
+        this.live_stream_fk = live_stream_fk;
+    }
+
+    public LiveStreamFk getLive_stream_fk() {
+        return live_stream_fk;
+    }
+
     public static class StudentBook implements Serializable{
         private int id;
         private String student_id;
@@ -103,6 +112,14 @@ public class TeacherGroupModel implements Serializable {
 
         public String getSubject_id() {
             return subject_id;
+        }
+    }
+    
+    public static class LiveStreamFk implements Serializable{
+        private String start_url;
+
+        public String getStart_url() {
+            return start_url;
         }
     }
 }

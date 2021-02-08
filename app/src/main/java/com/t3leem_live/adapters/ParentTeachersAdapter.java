@@ -68,7 +68,12 @@ public class ParentTeachersAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             myHolder.binding.llCreateRoom.setOnClickListener(v -> {
                 TeacherModel model2= list.get(myHolder.getAdapterPosition());
-                activity.createRoom(model2);
+                if (model2.getRoom_user_fk()==null){
+                    activity.createRoom(model2);
+
+                }else {
+                   activity.startChat(model2);
+                }
 
             });
 

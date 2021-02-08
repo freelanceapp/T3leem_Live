@@ -64,16 +64,20 @@ public class ChatRoomsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             if (model.getRoom_status().equals("group")) {
                 myHolder.binding.image.setImageResource(R.drawable.ic_chat_group);
+                myHolder.binding.tvName.setText(model.getRoom_fk().getTitle());
             } else {
                 if (model.getUser_type().equals("parent")) {
                     if (user_type.equals("parent")) {
                         Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getTo_user_fk().getLogo())).into(myHolder.binding.image);
+                        myHolder.binding.tvName.setText(model.getTo_user_fk().getName());
 
                     } else {
                         Picasso.get().load(Uri.parse(Tags.IMAGE_URL + model.getFrom_user_fk().getLogo())).into(myHolder.binding.image);
+                        myHolder.binding.tvName.setText(model.getFrom_user_fk().getName());
 
                     }
                 } else {
+                    myHolder.binding.tvName.setText(model.getRoom_fk().getTitle());
                     myHolder.binding.image.setImageResource(R.drawable.ic_avatar);
 
                 }

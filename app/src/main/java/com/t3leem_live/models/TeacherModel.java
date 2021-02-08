@@ -27,6 +27,7 @@ public class TeacherModel implements Serializable {
     private List<StudentRateModel> student_rates;
     private List<GroupOfTeacher> teacher_groups_fk;
     private FollowFk follow_fk;
+    private RoomModel room_user_fk;
 
 
     public TeacherModel() {
@@ -220,5 +221,9 @@ public class TeacherModel implements Serializable {
 
     public void setFollow_fk(FollowFk follow_fk) {
         this.follow_fk = follow_fk;
+    }
+
+    public RoomModel getRoom_user_fk() {
+        return room_user_fk;
     }
 }

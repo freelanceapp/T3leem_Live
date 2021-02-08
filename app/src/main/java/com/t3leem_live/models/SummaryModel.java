@@ -6,7 +6,7 @@ public class SummaryModel implements Serializable {
     private int id;
     private String title;
     private String title_en;
-    private String price;
+    private double price;
     private String teacher_id;
     private String stage_id;
     private String class_id;
@@ -35,7 +35,7 @@ public class SummaryModel implements Serializable {
         return title_en;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -93,6 +93,10 @@ public class SummaryModel implements Serializable {
 
     public SummaryFk getSummary_payment_fk() {
         return summary_payment_fk;
+    }
+
+    public void setSummary_payment_fk(SummaryFk summary_payment_fk) {
+        this.summary_payment_fk = summary_payment_fk;
     }
 
     public static class SummaryFk implements Serializable{}

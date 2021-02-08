@@ -57,10 +57,20 @@ public class TeacherGroupsAdapter extends RecyclerView.Adapter<RecyclerView.View
         });
         myHolder.binding.llLive.setOnClickListener(view -> {
             TeacherGroupModel model2 = list.get(myHolder.getAdapterPosition());
-            activity.startLiveStream(model2,myHolder.getAdapterPosition());
+            if (model2.getLive_stream_fk()==null){
+                activity.startLiveStream(model2,myHolder.getAdapterPosition());
+
+            }else {
+                activity.endLive(model2,myHolder.getAdapterPosition());
+
+            }
         });
 
+        myHolder.binding.llContinue.setOnClickListener(view -> {
+            TeacherGroupModel model2 = list.get(myHolder.getAdapterPosition());
+            activity.continueLive(model2,myHolder.getAdapterPosition());
 
+        });
 
 
 

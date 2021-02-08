@@ -18,7 +18,7 @@ public class StreamModel implements Serializable {
     private String host_id;
     private String topic;
     private String agenda;
-    private String teacher_live_price;
+    private double teacher_live_price;
     private String start_url;
     private String join_url;
     private String duration;
@@ -32,6 +32,7 @@ public class StreamModel implements Serializable {
     private StageClassModel class_fk;
     private StageClassModel department_fk;
     private StageClassModel subject_fk;
+    private TeacherModel user_stream_fk;
 
     public int getId() {
         return id;
@@ -93,7 +94,7 @@ public class StreamModel implements Serializable {
         return agenda;
     }
 
-    public String getTeacher_live_price() {
+    public double getTeacher_live_price() {
         return teacher_live_price;
     }
 
@@ -147,5 +148,13 @@ public class StreamModel implements Serializable {
 
     public StageClassModel getSubject_fk() {
         return subject_fk;
+    }
+
+    public TeacherModel getUser_stream_fk() {
+        return user_stream_fk;
+    }
+
+    public void setUser_stream_fk(TeacherModel user_stream_fk) {
+        this.user_stream_fk = user_stream_fk;
     }
 }

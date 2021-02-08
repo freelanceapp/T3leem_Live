@@ -236,17 +236,19 @@ public class ChatActivity extends AppCompatActivity {
 
 
                         } else {
+                            try {
+                                Log.e("error code", response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                             if (response.code() == 500) {
                                 Toast.makeText(ChatActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(ChatActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
 
-                            try {
-                                Log.e("error code", response.errorBody().string());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+
                         }
 
                     }
