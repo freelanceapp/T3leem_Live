@@ -114,7 +114,6 @@ public class ChatActivity extends AppCompatActivity {
                     }, 1);
         }
         roomFkModel = (RoomModel.RoomFkModel) intent.getSerializableExtra("data");
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -206,6 +205,10 @@ public class ChatActivity extends AppCompatActivity {
 
         EventBus.getDefault().register(this);
         getAllMessages();
+
+        preferences.create_room_id(this, String.valueOf(roomFkModel.getId()));
+
+
 
     }
 
