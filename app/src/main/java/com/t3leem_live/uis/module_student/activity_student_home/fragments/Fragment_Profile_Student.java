@@ -56,7 +56,7 @@ public class Fragment_Profile_Student extends Fragment {
         lang = Paper.book().read("lang", "ar");
         updateUiUserData();
 
-        binding.logout.setOnClickListener(view -> activity.logout());
+        binding.logout.setOnClickListener(view -> activity.deleteFirebaseToken());
 
 
         binding.llJointCenter.setOnClickListener(view -> {

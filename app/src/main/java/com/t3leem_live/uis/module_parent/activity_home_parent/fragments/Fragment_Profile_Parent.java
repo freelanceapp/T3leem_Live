@@ -49,7 +49,7 @@ public class Fragment_Profile_Parent extends Fragment {
         binding.setModel(userModel);
         Paper.init(activity);
 
-        binding.logout.setOnClickListener(view -> activity.logout());
+        binding.logout.setOnClickListener(view -> activity.deleteFirebaseToken());
 
         binding.llUpdateProfile.setOnClickListener(view -> {
             Intent intent = new Intent(activity, ParentSignUpActivity.class);

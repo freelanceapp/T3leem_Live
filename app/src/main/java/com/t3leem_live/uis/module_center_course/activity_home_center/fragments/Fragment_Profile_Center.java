@@ -55,7 +55,7 @@ public class Fragment_Profile_Center extends Fragment {
         Paper.init(activity);
         lang = Paper.book().read("lang","ar");
 
-        binding.logout.setOnClickListener(view -> activity.logout());
+        binding.logout.setOnClickListener(view -> activity.deleteFirebaseToken());
         binding.llContactUs.setOnClickListener(view -> {
             Intent intent = new Intent(activity, ContactUsActivity.class);
             startActivity(intent);

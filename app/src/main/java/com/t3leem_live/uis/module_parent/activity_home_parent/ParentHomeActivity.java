@@ -19,7 +19,9 @@ import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.t3leem_live.R;
+import com.t3leem_live.uis.module_center_course.activity_home_center.CenterHomeActivity;
 import com.t3leem_live.uis.module_parent.activity_home_parent.fragments.Fragment_Home_Parent;
 import com.t3leem_live.uis.module_parent.activity_home_parent.fragments.Fragment_Profile_Parent;
 import com.t3leem_live.uis.module_general.activity_login.LoginActivity;
@@ -72,6 +74,7 @@ public class ParentHomeActivity extends AppCompatActivity {
         if (userModel.getData().getUser_type().equals("parent")){
             setUpBottomNavigation();
             binding.ahBottomNav.setVisibility(View.VISIBLE);
+            updateTokenFireBase();
 
         }else {
             binding.ahBottomNav.setVisibility(View.GONE);
@@ -166,34 +169,119 @@ public class ParentHomeActivity extends AppCompatActivity {
     }
 
 
+    private void updateTokenFireBase() {
+
+        FirebaseInstanceId.getInstance()
+                .getInstanceId().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String token = task.getResult().getToken();
+
+                try {
+                    Api.getService(Tags.base_url)
+                            .updateFirebaseToken("Bearer "+userModel.getData().getToken(),token, userModel.getData().getId(), "android")
+                            .enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        userModel.getData().setFireBaseToken(token);
+                                        preferences.create_update_userdata(ParentHomeActivity.this, userModel);
+                                        Log.e("token", "updated successfully");
+                                    } else {
+                                        try {
+
+                                            Log.e("errorToken", response.code() + "_" + response.errorBody().string());
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    try {
+
+                                        if (t.getMessage() != null) {
+                                            Log.e("errorToken2", t.getMessage());
+                                            if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                                Toast.makeText(ParentHomeActivity.this, R.string.something, Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(ParentHomeActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            });
+                } catch (Exception e) {
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        List<Fragment> fragmentList = fragmentManager.getFragments();
-        for (Fragment fragment:fragmentList){
-            fragment.onActivityResult(requestCode, resultCode, data);
-        }
+                }
+
+            }
+        });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        List<Fragment> fragmentList = fragmentManager.getFragments();
-        for (Fragment fragment:fragmentList){
-            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public void deleteFirebaseToken() {
+        if (userModel == null) {
+            return;
+        } else {
+            ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(true);
+            dialog.show();
+
+            Api.getService(Tags.base_url)
+                    .deleteFirebaseToken("Bearer "+userModel.getData().getToken(),userModel.getData().getFireBaseToken(), userModel.getData().getId())
+                    .enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+
+                                logout(dialog);
+
+
+                            } else {
+                                dialog.dismiss();
+                                try {
+                                    Log.e("error", response.code() + "__" + response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (response.code() == 500) {
+                                    Toast.makeText(ParentHomeActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ParentHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            try {
+                                dialog.dismiss();
+                                if (t.getMessage() != null) {
+                                    Log.e("error", t.getMessage() + "__");
+
+                                    if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                        Toast.makeText(ParentHomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(ParentHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                Log.e("Error", e.getMessage() + "__");
+                            }
+                        }
+                    });
         }
+
     }
 
-    public void logout()
-    {
-        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+    public void logout(ProgressDialog dialog) {
         Api.getService(Tags.base_url)
-                .logout("Bearer "+userModel.getData().getToken())
+                .logout("Bearer " + userModel.getData().getToken())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -201,8 +289,8 @@ public class ParentHomeActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             preferences.clear(ParentHomeActivity.this);
                             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                            if (notificationManager!=null){
-                                notificationManager.cancel(Tags.not_tag,Tags.not_id);
+                            if (notificationManager != null) {
+                                notificationManager.cancel(Tags.not_tag, Tags.not_id);
                             }
                             navigateToLoginActivity();
                         } else {
@@ -242,6 +330,26 @@ public class ParentHomeActivity extends AppCompatActivity {
 
 
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        List<Fragment> fragmentList = fragmentManager.getFragments();
+        for (Fragment fragment:fragmentList){
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        List<Fragment> fragmentList = fragmentManager.getFragments();
+        for (Fragment fragment:fragmentList){
+            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     @Override
     public void onBackPressed()
     {

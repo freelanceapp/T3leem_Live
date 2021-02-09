@@ -802,5 +802,21 @@ public interface Service {
                                @Field(value = "live_status") String live_status
     );
 
+    @FormUrlEncoded
+    @POST("api/firebase-tokens")
+    Call<ResponseBody> updateFirebaseToken(@Header("Authorization") String bearer_token,
+                                           @Field("phone_token") String firebase_token,
+                                           @Field("user_id") int user_id,
+                                           @Field("software_type") String software_type
+
+    );
+
+    @FormUrlEncoded
+    @POST("api/firebase/token/delete")
+    Call<ResponseBody> deleteFirebaseToken(@Header("Authorization") String bearer_token,
+                                           @Field("phone_token") String firebase_token,
+                                           @Field("user_id") int user_id
+
+    );
 
 }

@@ -20,6 +20,8 @@ import com.t3leem_live.tags.Tags;
 import com.t3leem_live.uis.module_parent.activity_home_parent.fragments.Fragment_Home_Parent;
 import com.t3leem_live.uis.module_student.activity_notification.NotificationActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import io.paperdb.Paper;
@@ -175,6 +177,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
     }
+
+
 
 
 }

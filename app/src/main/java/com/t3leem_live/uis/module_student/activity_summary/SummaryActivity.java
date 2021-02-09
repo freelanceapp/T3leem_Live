@@ -1,16 +1,19 @@
 package com.t3leem_live.uis.module_student.activity_summary;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,30 +21,20 @@ import android.widget.Toast;
 
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
-import com.google.android.exoplayer2.offline.DownloadService;
 import com.t3leem_live.R;
-import com.t3leem_live.adapters.StudentCenterGroupsAdapter;
 import com.t3leem_live.adapters.SummaryAdapter;
-import com.t3leem_live.databinding.ActivityStudentCenterGroupsBinding;
 import com.t3leem_live.databinding.ActivitySummaryBinding;
 import com.t3leem_live.databinding.DialogPriceAlertBinding;
 import com.t3leem_live.language.Language;
-import com.t3leem_live.models.CenterGroupModel;
 import com.t3leem_live.models.StageClassModel;
-import com.t3leem_live.models.StreamModel;
-import com.t3leem_live.models.StudentCenterModel;
 import com.t3leem_live.models.SummaryDataModel;
 import com.t3leem_live.models.SummaryModel;
-import com.t3leem_live.models.TeacherModel;
 import com.t3leem_live.models.UserModel;
 import com.t3leem_live.preferences.Preferences;
 import com.t3leem_live.remote.Api;
 import com.t3leem_live.services.ServiceDownload;
 import com.t3leem_live.share.Common;
 import com.t3leem_live.tags.Tags;
-import com.t3leem_live.uis.module_student.activity_student_center_groups.StudentCenterGroupsActivity;
-import com.t3leem_live.uis.module_student.activity_subject_tutorial.SubjectTutorialActivity;
-import com.t3leem_live.uis.module_student.activity_teachers_inside_center.TeachersInsideCenterActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,6 +57,8 @@ public class SummaryActivity extends AppCompatActivity {
     private SkeletonScreen skeletonScreen;
     private int selectedPos = -1;
     private SummaryModel selectedSummaryModel;
+    private final String write_permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    private final int write_REQ = 1;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -121,9 +116,9 @@ public class SummaryActivity extends AppCompatActivity {
     }
 
     private void getSummary() {
-        Log.e("data",stageClassModel.getStage_id()+"__"+stageClassModel.getClass_id()+"__"+stageClassModel.getDepartment_id()+"__"+stageClassModel.getId()+"__"+userModel.getData().getId());
+        Log.e("data", stageClassModel.getStage_id() + "__" + stageClassModel.getClass_id() + "__" + stageClassModel.getDepartment_id() + "__" + stageClassModel.getId() + "__" + userModel.getData().getId());
         Api.getService(Tags.base_url)
-                .getSummary(Integer.parseInt(stageClassModel.getStage_id()), Integer.parseInt(stageClassModel.getClass_id()), stageClassModel.getDepartment_id(), stageClassModel.getId(),userModel.getData().getId())
+                .getSummary(Integer.parseInt(stageClassModel.getStage_id()), Integer.parseInt(stageClassModel.getClass_id()), stageClassModel.getDepartment_id(), stageClassModel.getId(), userModel.getData().getId())
                 .enqueue(new Callback<SummaryDataModel>() {
                     @Override
                     public void onResponse(Call<SummaryDataModel> call, Response<SummaryDataModel> response) {
@@ -194,14 +189,14 @@ public class SummaryActivity extends AppCompatActivity {
             createDialogAlert(model);
 
         } else {
-            startService(model);
+            checkWritePermission();
         }
     }
 
     private void startService(SummaryModel model) {
         Intent intent = new Intent(this, ServiceDownload.class);
         intent.putExtra("file_url", Tags.IMAGE_URL + model.getFile_doc());
-        intent.putExtra("file_name", Tags.IMAGE_URL + model.getTitle());
+        intent.putExtra("file_name", model.getTitle());
         startService(intent);
 
     }
@@ -252,8 +247,7 @@ public class SummaryActivity extends AppCompatActivity {
                             selectedSummaryModel.setSummary_payment_fk(new SummaryModel.SummaryFk());
                             summaryModelList.set(selectedPos, selectedSummaryModel);
                             adapter.notifyItemChanged(selectedPos);
-                            startService(model);
-
+                            checkWritePermission();
                         } else {
                             dialog.dismiss();
                             try {
@@ -293,4 +287,30 @@ public class SummaryActivity extends AppCompatActivity {
                 });
     }
 
+    public void checkWritePermission() {
+
+
+        if (ContextCompat.checkSelfPermission(this, write_permission) == PackageManager.PERMISSION_GRANTED
+        ) {
+            startService(selectedSummaryModel);
+
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{write_permission}, write_REQ);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == write_REQ) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                startService(selectedSummaryModel);
+            } else {
+                Toast.makeText(this, getString(R.string.perm_image_denied), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

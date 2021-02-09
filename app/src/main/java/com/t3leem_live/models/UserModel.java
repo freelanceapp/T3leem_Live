@@ -195,5 +195,7 @@ public class UserModel implements Serializable {
         public void setSelected(boolean selected) {
             isSelected = selected;
         }
+
+
     }
 }

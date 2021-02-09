@@ -21,6 +21,7 @@ import com.t3leem_live.adapters.NotificationAdapter;
 import com.t3leem_live.databinding.ActivityNotificationBinding;
 import com.t3leem_live.language.Language;
 import com.t3leem_live.models.CenterGroupModel;
+import com.t3leem_live.models.NotFireModel;
 import com.t3leem_live.models.NotificationDataModel;
 import com.t3leem_live.models.NotificationModel;
 import com.t3leem_live.models.StudentCenterModel;
@@ -36,6 +37,10 @@ import com.t3leem_live.uis.module_student.activity_student_center_groups.Student
 import com.t3leem_live.uis.module_teacher.activity_teacher_create_stream.TeacherCreateStreamActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_group.TeacherGroupActivity;
 import com.t3leem_live.uis.module_teacher.activity_teacher_profile.TeacherProfileActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,7 +97,9 @@ public class NotificationActivity extends AppCompatActivity {
         binding.swipeRefresh.setColorSchemeResources(R.color.color1);
 
         binding.swipeRefresh.setOnRefreshListener(this::getNotification);
-
+        if(!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
         getNotification();
 
 
@@ -238,6 +245,19 @@ public class NotificationActivity extends AppCompatActivity {
             Intent intent = new Intent(this, StudentCenterGroupsActivity.class);
             intent.putExtra("data",studentCenterModel);
             startActivity(intent);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void listenForNotification(NotFireModel notFireModel){
+        getNotification();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().unregister(this);
         }
     }
 }

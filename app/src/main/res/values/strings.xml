@@ -50,7 +50,7 @@
     <string name="refuse">رفض</string>
     <string name="no_requests">لا توجد طلبات</string>
     <string name="req_refused">تم رفض طلبك</string>
-    <string name="req_accepted">تم قبول طلبك</string>
+    <string name="req_accepted">تم قبول الطلب</string>
     <string name="no_conversation">لا توجد محادثات</string>
     <string name="next">التالي</string>
     <string name="forget_password">نسيت كلمة المرور ؟</string>
@@ -239,5 +239,9 @@
     <string name="start">بدء</string>
     <string name="down_done">تم التنزيل</string>
     <string name="download">تنزيل</string>
+    <string name="new_req_parent">تم إرسال طلب متابعة جديد</string>
+    <string name="share_techer">مشاركة مدرس</string>
+    <string name="share_center">مشاركة مركز</string>
+    <string name="new_exam">إمتحان جيد</string>
 
 </resources>

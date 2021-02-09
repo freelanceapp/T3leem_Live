@@ -61,7 +61,7 @@ public class Fragment_Profile_Teacher extends Fragment {
         Paper.init(activity);
         lang = Paper.book().read("lang", "ar");
 
-        binding.logout.setOnClickListener(view -> activity.logout());
+        binding.logout.setOnClickListener(view -> activity.deleteFirebaseToken());
 
 
         binding.llEditProfile.setOnClickListener(view -> {

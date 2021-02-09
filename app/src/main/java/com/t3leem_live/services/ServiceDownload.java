@@ -81,13 +81,16 @@ public class ServiceDownload extends Service{
         @Override
         protected String doInBackground(String... strings) {
             try {
-                File outFile = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/t3leem_App");
+
+                String extension  = file_url.substring(file_url.lastIndexOf("."));
+
+                File outFile = new File(Environment.getExternalStorageDirectory().getAbsoluteFile() + "/Ta3leem_App");
 
                 if (!outFile.exists()) {
                     outFile.mkdir();
                 }
-                String extension  = file_url.substring(file_url.lastIndexOf("."));
-                file_local_path = outFile.getAbsolutePath() + "/" +file_name+"."+extension;
+
+                file_local_path = outFile.getAbsolutePath() + "/" + file_name.replaceAll(" ","_")+extension;
 
                 File finalFile = new File(file_local_path);
 
@@ -102,8 +105,8 @@ public class ServiceDownload extends Service{
                 if (length > 0) {
                     data = new byte[length];
                 } else {
-                    length = 2048;
-                    data = new byte[2048];
+                    length = 1024;
+                    data = new byte[1024];
                 }
                 long total = 0;
 

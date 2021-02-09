@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.t3leem_live.R;
 import com.t3leem_live.databinding.ActivityCenterHomeBinding;
 import com.t3leem_live.language.Language;
@@ -27,6 +28,7 @@ import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.F
 import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Library_Center;
 import com.t3leem_live.uis.module_center_course.activity_home_center.fragments.Fragment_Profile_Center;
 import com.t3leem_live.uis.module_general.activity_login.LoginActivity;
+import com.t3leem_live.uis.module_teacher.activity_teacher_home.TeacherHomeActivity;
 
 import java.io.IOException;
 
@@ -66,6 +68,7 @@ public class CenterHomeActivity extends AppCompatActivity {
         userModel = preferences.getUserData(this);
         displayFragmentHomeCenter();
         setUpBottomNavigation();
+        updateTokenFireBase();
     }
 
     private void setUpBottomNavigation() {
@@ -185,11 +188,117 @@ public class CenterHomeActivity extends AppCompatActivity {
         updateBottomNavigationPosition(2);
     }
 
-    public void logout() {
-        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+    private void updateTokenFireBase() {
+
+        FirebaseInstanceId.getInstance()
+                .getInstanceId().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String token = task.getResult().getToken();
+
+                try {
+                    Api.getService(Tags.base_url)
+                            .updateFirebaseToken("Bearer "+userModel.getData().getToken(),token, userModel.getData().getId(), "android")
+                            .enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        userModel.getData().setFireBaseToken(token);
+                                        preferences.create_update_userdata(CenterHomeActivity.this, userModel);
+                                        Log.e("token", "updated successfully");
+                                    } else {
+                                        try {
+
+                                            Log.e("errorToken", response.code() + "_" + response.errorBody().string());
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    try {
+
+                                        if (t.getMessage() != null) {
+                                            Log.e("errorToken2", t.getMessage());
+                                            if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                                Toast.makeText(CenterHomeActivity.this, R.string.something, Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(CenterHomeActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            });
+                } catch (Exception e) {
+
+
+                }
+
+            }
+        });
+    }
+
+    public void deleteFirebaseToken() {
+        if (userModel == null) {
+            return;
+        } else {
+            ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(true);
+            dialog.show();
+
+            Api.getService(Tags.base_url)
+                    .deleteFirebaseToken("Bearer "+userModel.getData().getToken(),userModel.getData().getFireBaseToken(), userModel.getData().getId())
+                    .enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+
+                                logout(dialog);
+
+
+                            } else {
+                                dialog.dismiss();
+                                try {
+                                    Log.e("error", response.code() + "__" + response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (response.code() == 500) {
+                                    Toast.makeText(CenterHomeActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(CenterHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            try {
+                                dialog.dismiss();
+                                if (t.getMessage() != null) {
+                                    Log.e("error", t.getMessage() + "__");
+
+                                    if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                        Toast.makeText(CenterHomeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(CenterHomeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                Log.e("Error", e.getMessage() + "__");
+                            }
+                        }
+                    });
+        }
+
+    }
+
+    public void logout(ProgressDialog dialog) {
         Api.getService(Tags.base_url)
                 .logout("Bearer " + userModel.getData().getToken())
                 .enqueue(new Callback<ResponseBody>() {
@@ -240,6 +349,7 @@ public class CenterHomeActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public void onBackPressed() {
