@@ -6,10 +6,13 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -76,6 +79,15 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void initView() {
+          new Handler(Looper.myLooper())
+                .postDelayed(() -> {
+                    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    if (manager != null) {
+                        manager.cancel(Tags.not_tag, Tags.not_id);
+
+                    }
+                }, 1);
+
         preference = Preferences.getInstance();
         userModel = preference.getUserData(this);
         notificationModelList = new ArrayList<>();

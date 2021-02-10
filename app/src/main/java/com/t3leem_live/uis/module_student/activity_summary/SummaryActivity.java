@@ -206,7 +206,7 @@ public class SummaryActivity extends AppCompatActivity {
                 .create();
 
         DialogPriceAlertBinding binding = DataBindingUtil.inflate(LayoutInflater.from(SummaryActivity.this), R.layout.dialog_price_alert, null, false);
-        String pr = getString(R.string.watch_video_for) + " " + model.getPrice() + " " + getString(R.string.egp);
+        String pr = getString(R.string.download_file) + " " + model.getPrice() + " " + getString(R.string.egp);
 
         binding.tvMsg.setText(pr);
         binding.btnCancel.setOnClickListener(v -> dialog.dismiss()

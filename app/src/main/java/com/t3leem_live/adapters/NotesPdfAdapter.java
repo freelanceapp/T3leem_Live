@@ -55,6 +55,11 @@ public class NotesPdfAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         myHolder.binding.setModel(videoLessonsModel);
 
 
+        myHolder.binding.imageDownload.setOnClickListener(v -> {
+            VideoLessonsModel model = list.get(myHolder.getAdapterPosition());
+            activity.download(model,myHolder.getAdapterPosition());
+
+        });
 
 
 

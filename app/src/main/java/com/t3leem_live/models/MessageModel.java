@@ -17,6 +17,22 @@ public class MessageModel implements Serializable {
     private int max_duration =0;
     private boolean isImageLoaded = false;
 
+
+    public MessageModel() {
+    }
+
+    public MessageModel(int id, String room_id, String from_user_id, String type, String message, String image, String date, String voice, UserModel.User from_user_fk) {
+        this.id = id;
+        this.room_id = room_id;
+        this.from_user_id = from_user_id;
+        this.type = type;
+        this.message = message;
+        this.image = image;
+        this.date = date;
+        this.voice = voice;
+        this.from_user_fk = from_user_fk;
+    }
+
     public int getId() {
         return id;
     }

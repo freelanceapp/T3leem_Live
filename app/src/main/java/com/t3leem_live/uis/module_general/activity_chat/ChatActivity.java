@@ -102,17 +102,15 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getDataFromIntent() {
         Intent intent = getIntent();
-        if (intent.hasExtra("from_fire")) {
-            isFromFireBase = true;
-            new Handler()
-                    .postDelayed(() -> {
-                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                        if (manager != null) {
-                            manager.cancel(Tags.not_tag, Tags.not_id);
+        new Handler()
+                .postDelayed(() -> {
+                    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    if (manager != null) {
+                        manager.cancel(Tags.not_tag, Tags.not_id);
 
-                        }
-                    }, 1);
-        }
+                    }
+                }, 1);
+
         roomFkModel = (RoomModel.RoomFkModel) intent.getSerializableExtra("data");
     }
 

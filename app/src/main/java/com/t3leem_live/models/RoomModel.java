@@ -47,6 +47,10 @@ public class RoomModel implements Serializable {
             this.room_type = room_type;
         }
 
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
         public int getId() {
             return id;
         }

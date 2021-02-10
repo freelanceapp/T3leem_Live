@@ -179,7 +179,7 @@
     <string name="add">إضافة</string>
     <string name="request_sent">تم ارسال طلب الصداقة من قبل</string>
     <string name="reqest_sent_pls_wait">لقد تم إرسال طلب الصداقة برجاء انتظار الموافقة علية</string>
-    <string name="new_request">طلب صداقة جديد</string>
+    <string name="new_request">طلب متابعة جديد</string>
     <string name="no_notification">لا توجد إشعارات لعرضها</string>
     <string name="rate">التقييم</string>
     <string name="Test2">الإختبارات</string>
@@ -243,5 +243,8 @@
     <string name="share_techer">مشاركة مدرس</string>
     <string name="share_center">مشاركة مركز</string>
     <string name="new_exam">إمتحان جيد</string>
+    <string name="voice_uploaded">تم إرفاق ملف صوتي</string>
+    <string name="image_uploaded">تم إرفاق صورة</string>
+    <string name="download_file">تحميل الملف</string>
 
 </resources>
