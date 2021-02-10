@@ -100,6 +100,9 @@ public class ChatRoomsActivity extends AppCompatActivity {
         } else {
             type = "normal";
         }
+
+        binding.swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        binding.swipeRefresh.setOnRefreshListener(this::getRooms);
         getRooms();
 
     }
@@ -110,6 +113,7 @@ public class ChatRoomsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<RoomDataModel> call, Response<RoomDataModel> response) {
                         binding.progBar.setVisibility(View.GONE);
+                        binding.swipeRefresh.setRefreshing(false);
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
                                 roomModelList.clear();
@@ -128,6 +132,8 @@ public class ChatRoomsActivity extends AppCompatActivity {
 
                             }
                         } else {
+                            binding.swipeRefresh.setRefreshing(false);
+
                             binding.progBar.setVisibility(View.GONE);
                             try {
                                 Log.e("error_code", response.code() + response.errorBody().string());
@@ -142,6 +148,8 @@ public class ChatRoomsActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<RoomDataModel> call, Throwable t) {
                         binding.progBar.setVisibility(View.GONE);
+                        binding.swipeRefresh.setRefreshing(false);
+
                         try {
                             if (t.getMessage() != null) {
                                 Log.e("error", t.getMessage() + "__");
